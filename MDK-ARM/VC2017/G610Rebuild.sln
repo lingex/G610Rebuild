@@ -1,16 +1,16 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.960
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "G610Rebuild","G610Rebuild.vcxproj", "{b5972db9-7f86-4da3-bfe4-4264e69d4492}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "G610Rebuild", "G610Rebuild.vcxproj", "{B5972DB9-7F86-4DA3-BFE4-4264E69D4492}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		G610Rebuild|x86 = G610Rebuild|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{b5972db9-7f86-4da3-bfe4-4264e69d4492}.G610Rebuild|x86.ActiveCfg = G610Rebuild|Win32
-		{b5972db9-7f86-4da3-bfe4-4264e69d4492}.G610Rebuild|x86.Build.0 = G610Rebuild|Win32
+		{B5972DB9-7F86-4DA3-BFE4-4264E69D4492}.G610Rebuild|x86.ActiveCfg = Release|Win32
+		{B5972DB9-7F86-4DA3-BFE4-4264E69D4492}.G610Rebuild|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
