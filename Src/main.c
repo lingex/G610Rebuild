@@ -46,9 +46,11 @@ SPI_HandleTypeDef hspi2;
 
 UART_HandleTypeDef huart1;
 
-USBD_HandleTypeDef usb1;
-
 /* USER CODE BEGIN PV */
+
+extern USBD_HandleTypeDef hUsbDeviceFS;
+
+
 uint8_t idleBuffer[8] = { 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00 };
 
 uint8_t	sendBuffer[8] = { 0x00,0x00,0x2c,0x00,0x00,0x00,0x00,0x00 };
@@ -109,9 +111,9 @@ int main(void)
 	while (1)
 	{
     /* USER CODE END WHILE */
-		USBD_HID_SendReport(&usb1, sendBuffer, 8);
+		USBD_HID_SendReport(&hUsbDeviceFS, sendBuffer, 8);
 		HAL_Delay(500);
-		USBD_HID_SendReport(&usb1, idleBuffer, 8);
+		USBD_HID_SendReport(&hUsbDeviceFS, idleBuffer, 8);
 		HAL_Delay(1000);
     /* USER CODE BEGIN 3 */
 	}
