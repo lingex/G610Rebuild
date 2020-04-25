@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="G610Rebuild\Application/MDK-ARM">
+      <UniqueIdentifier>{eef70144-3002-4160-8234-ac0819fe831b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="G610Rebuild\Application/User">
+      <UniqueIdentifier>{f615eedb-9970-4f32-ab6f-811647c55fd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="G610Rebuild\Drivers/STM32L1xx_HAL_Driver">
+      <UniqueIdentifier>{e72a423d-00e9-4d41-93c8-b60eae1db31e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="G610Rebuild\Drivers/CMSIS">
+      <UniqueIdentifier>{3918f381-a8a1-4198-9830-b82738c61d5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="G610Rebuild\Middlewares/USB_Device_Library">
+      <UniqueIdentifier>{a15afa47-f0bc-4919-b238-679370433e45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="G610Rebuild">
+      <UniqueIdentifier>{674adc60-3990-48ab-bf62-9983f9d3c699}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\startup_stm32l100xb.s">
+      <Filter>G610Rebuild\Application/MDK-ARM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Src/main.c">
+      <Filter>G610Rebuild\Application/User</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Src/usb_device.c">
+      <Filter>G610Rebuild\Application/User</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Src/usbd_conf.c">
+      <Filter>G610Rebuild\Application/User</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Src/usbd_desc.c">
+      <Filter>G610Rebuild\Application/User</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Src/stm32l1xx_it.c">
+      <Filter>G610Rebuild\Application/User</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Src/stm32l1xx_hal_msp.c">
+      <Filter>G610Rebuild\Application/User</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_pcd.c">
+      <Filter>G610Rebuild\Drivers/STM32L1xx_HAL_Driver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_pcd_ex.c">
+      <Filter>G610Rebuild\Drivers/STM32L1xx_HAL_Driver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_ll_usb.c">
+      <Filter>G610Rebuild\Drivers/STM32L1xx_HAL_Driver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal.c">
+      <Filter>G610Rebuild\Drivers/STM32L1xx_HAL_Driver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_rcc.c">
+      <Filter>G610Rebuild\Drivers/STM32L1xx_HAL_Driver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_rcc_ex.c">
+      <Filter>G610Rebuild\Drivers/STM32L1xx_HAL_Driver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_flash.c">
+      <Filter>G610Rebuild\Drivers/STM32L1xx_HAL_Driver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_flash_ex.c">
+      <Filter>G610Rebuild\Drivers/STM32L1xx_HAL_Driver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_flash_ramfunc.c">
+      <Filter>G610Rebuild\Drivers/STM32L1xx_HAL_Driver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_gpio.c">
+      <Filter>G610Rebuild\Drivers/STM32L1xx_HAL_Driver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_dma.c">
+      <Filter>G610Rebuild\Drivers/STM32L1xx_HAL_Driver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_pwr.c">
+      <Filter>G610Rebuild\Drivers/STM32L1xx_HAL_Driver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_pwr_ex.c">
+      <Filter>G610Rebuild\Drivers/STM32L1xx_HAL_Driver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_cortex.c">
+      <Filter>G610Rebuild\Drivers/STM32L1xx_HAL_Driver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_spi.c">
+      <Filter>G610Rebuild\Drivers/STM32L1xx_HAL_Driver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_tim.c">
+      <Filter>G610Rebuild\Drivers/STM32L1xx_HAL_Driver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_tim_ex.c">
+      <Filter>G610Rebuild\Drivers/STM32L1xx_HAL_Driver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_uart.c">
+      <Filter>G610Rebuild\Drivers/STM32L1xx_HAL_Driver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Src/system_stm32l1xx.c">
+      <Filter>G610Rebuild\Drivers/CMSIS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c">
+      <Filter>G610Rebuild\Middlewares/USB_Device_Library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c">
+      <Filter>G610Rebuild\Middlewares/USB_Device_Library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c">
+      <Filter>G610Rebuild\Middlewares/USB_Device_Library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\../Middlewares/ST/STM32_USB_Device_Library/Class/HID/Src/usbd_hid.c">
+      <Filter>G610Rebuild\Middlewares/USB_Device_Library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\::CMSIS">
+      <Filter>G610Rebuild</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
