@@ -1,4 +1,4 @@
-/**
+﻿/**
   ******************************************************************************
   * @file    usbd_hid.h
   * @author  MCD Application Team
@@ -17,48 +17,56 @@
   ******************************************************************************
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/
+  /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __USB_HID_H
 #define __USB_HID_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
-/* Includes ------------------------------------------------------------------*/
+	/* Includes ------------------------------------------------------------------*/
 #include  "usbd_ioreq.h"
 
 /** @addtogroup STM32_USB_DEVICE_LIBRARY
   * @{
   */
 
-/** @defgroup USBD_HID
-  * @brief This file is the Header file for usbd_hid.c
-  * @{
-  */
+  /** @defgroup USBD_HID
+	* @brief This file is the Header file for usbd_hid.c
+	* @{
+	*/
 
 
-/** @defgroup USBD_HID_Exported_Defines
-  * @{
-  */
+	/** @defgroup USBD_HID_Exported_Defines
+	  * @{
+	  */
 #define HID_EPIN_ADDR                 0x81U
-#define HID_EPIN_SIZE                 0x04U
+	  //#define HID_EPIN_SIZE                 0x04U
+#define HID_EPIN_SIZE                 0x08
 
-#define USB_HID_CONFIG_DESC_SIZ       34U
+//define the OUT Endpoint
+#define HID_EPOUT_ADDR              0x01
+#define HID_EPOUT_SIZE              0x01
+
+
+//#define USB_HID_CONFIG_DESC_SIZ       34U
+#define USB_HID_CONFIG_DESC_SIZ       41U
 #define USB_HID_DESC_SIZ              9U
 #define HID_MOUSE_REPORT_DESC_SIZE    74U
-#define HID_KEYBOARD_REPORT_DESC_SIZE 63U
+//#define HID_KEYBOARD_REPORT_DESC_SIZE 63U
+#define HID_KEYBOARD_REPORT_DESC_SIZE 65U
 
 
 #define HID_DESCRIPTOR_TYPE           0x21U
 #define HID_REPORT_DESC               0x22U
 
 #ifndef HID_HS_BINTERVAL
-  #define HID_HS_BINTERVAL            0x07U
+#define HID_HS_BINTERVAL            0x07U
 #endif /* HID_HS_BINTERVAL */
 
 #ifndef HID_FS_BINTERVAL
-  #define HID_FS_BINTERVAL            0x0AU
+#define HID_FS_BINTERVAL            0x0AU
 #endif /* HID_FS_BINTERVAL */
 
 #define HID_REQ_SET_PROTOCOL          0x0BU
@@ -74,61 +82,63 @@
   */
 
 
-/** @defgroup USBD_CORE_Exported_TypesDefinitions
-  * @{
-  */
-typedef enum
-{
-  HID_IDLE = 0,
-  HID_BUSY,
-}
-HID_StateTypeDef;
+  /** @defgroup USBD_CORE_Exported_TypesDefinitions
+	* @{
+	*/
+	typedef enum
+	{
+		HID_IDLE = 0,
+		HID_BUSY,
+	}
+	HID_StateTypeDef;
 
 
-typedef struct
-{
-  uint32_t             Protocol;
-  uint32_t             IdleState;
-  uint32_t             AltSetting;
-  HID_StateTypeDef     state;
-}
-USBD_HID_HandleTypeDef;
-/**
-  * @}
-  */
+	typedef struct
+	{
+		uint32_t             Protocol;
+		uint32_t             IdleState;
+		uint32_t             AltSetting;
+		HID_StateTypeDef     state;
+	}
+	USBD_HID_HandleTypeDef;
+	/**
+	  * @}
+	  */
+
+	static uint8_t rx_buf;
+	extern USBD_HandleTypeDef hUsbDeviceFS;
 
 
+	/** @defgroup USBD_CORE_Exported_Macros
+	  * @{
+	  */
 
-/** @defgroup USBD_CORE_Exported_Macros
-  * @{
-  */
+	  /**
+		* @}
+		*/
 
-/**
-  * @}
-  */
+		/** @defgroup USBD_CORE_Exported_Variables
+		  * @{
+		  */
 
-/** @defgroup USBD_CORE_Exported_Variables
-  * @{
-  */
-
-extern USBD_ClassTypeDef  USBD_HID;
+	extern USBD_ClassTypeDef  USBD_HID;
 #define USBD_HID_CLASS    &USBD_HID
-/**
-  * @}
-  */
+	/**
+	  * @}
+	  */
 
-/** @defgroup USB_CORE_Exported_Functions
-  * @{
-  */
-uint8_t USBD_HID_SendReport (USBD_HandleTypeDef *pdev,
-                                 uint8_t *report,
-                                 uint16_t len);
+	  /** @defgroup USB_CORE_Exported_Functions
+		* @{
+		*/
+	uint8_t USBD_HID_SendReport(USBD_HandleTypeDef *pdev,
+		uint8_t *report,
+		uint16_t len);
 
-uint32_t USBD_HID_GetPollingInterval (USBD_HandleTypeDef *pdev);
+	uint32_t USBD_HID_GetPollingInterval(USBD_HandleTypeDef *pdev);
 
-/**
-  * @}
-  */
+	/**
+	  * @}
+	  */
 
 #ifdef __cplusplus
 }
@@ -139,8 +149,8 @@ uint32_t USBD_HID_GetPollingInterval (USBD_HandleTypeDef *pdev);
   * @}
   */
 
-/**
-  * @}
-  */
+  /**
+	* @}
+	*/
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+	/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

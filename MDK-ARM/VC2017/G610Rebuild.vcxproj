@@ -69,7 +69,7 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -123,36 +123,39 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\startup_stm32l100xb.s" /> 
-    <ClCompile Include="..\../Src/main.c" /> 
-    <ClCompile Include="..\../Src/usb_device.c" /> 
-    <ClCompile Include="..\../Src/usbd_conf.c" /> 
-    <ClCompile Include="..\../Src/usbd_desc.c" /> 
-    <ClCompile Include="..\../Src/stm32l1xx_it.c" /> 
-    <ClCompile Include="..\../Src/stm32l1xx_hal_msp.c" /> 
-    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_pcd.c" /> 
-    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_pcd_ex.c" /> 
-    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_ll_usb.c" /> 
-    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal.c" /> 
-    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_rcc.c" /> 
-    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_rcc_ex.c" /> 
-    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_flash.c" /> 
-    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_flash_ex.c" /> 
-    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_flash_ramfunc.c" /> 
-    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_gpio.c" /> 
-    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_dma.c" /> 
-    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_pwr.c" /> 
-    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_pwr_ex.c" /> 
-    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_cortex.c" /> 
-    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_spi.c" /> 
-    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_tim.c" /> 
-    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_tim_ex.c" /> 
-    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_uart.c" /> 
-    <ClCompile Include="..\../Src/system_stm32l1xx.c" /> 
-    <ClCompile Include="..\../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c" /> 
-    <ClCompile Include="..\../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c" /> 
-    <ClCompile Include="..\../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c" /> 
-    <ClCompile Include="..\../Middlewares/ST/STM32_USB_Device_Library/Class/HID/Src/usbd_hid.c" /> 
+    <ClCompile Include="..\..\Src\keyboard.c" />
+    <ClCompile Include="..\..\Src\matrix_led.c" />
+    <ClCompile Include="..\..\Src\state_led.c" />
+    <ClCompile Include="..\startup_stm32l100xb.s" />
+    <ClCompile Include="..\../Src/main.c" />
+    <ClCompile Include="..\../Src/usb_device.c" />
+    <ClCompile Include="..\../Src/usbd_conf.c" />
+    <ClCompile Include="..\../Src/usbd_desc.c" />
+    <ClCompile Include="..\../Src/stm32l1xx_it.c" />
+    <ClCompile Include="..\../Src/stm32l1xx_hal_msp.c" />
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_pcd.c" />
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_pcd_ex.c" />
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_ll_usb.c" />
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal.c" />
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_rcc.c" />
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_rcc_ex.c" />
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_flash.c" />
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_flash_ex.c" />
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_flash_ramfunc.c" />
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_gpio.c" />
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_dma.c" />
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_pwr.c" />
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_pwr_ex.c" />
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_cortex.c" />
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_spi.c" />
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_tim.c" />
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_tim_ex.c" />
+    <ClCompile Include="..\../Drivers/STM32L1xx_HAL_Driver/Src/stm32l1xx_hal_uart.c" />
+    <ClCompile Include="..\../Src/system_stm32l1xx.c" />
+    <ClCompile Include="..\../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c" />
+    <ClCompile Include="..\../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c" />
+    <ClCompile Include="..\../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c" />
+    <ClCompile Include="..\../Middlewares/ST/STM32_USB_Device_Library/Class/HID/Src/usbd_hid.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

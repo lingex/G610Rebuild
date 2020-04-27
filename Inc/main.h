@@ -1,4 +1,4 @@
-/* USER CODE BEGIN Header */
+﻿/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file           : main.h
@@ -17,9 +17,9 @@
   *
   ******************************************************************************
   */
-/* USER CODE END Header */
+  /* USER CODE END Header */
 
-/* Define to prevent recursive inclusion -------------------------------------*/
+  /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __MAIN_H
 #define __MAIN_H
 
@@ -27,7 +27,7 @@
 extern "C" {
 #endif
 
-/* Includes ------------------------------------------------------------------*/
+	/* Includes ------------------------------------------------------------------*/
 #include "stm32l1xx_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -50,14 +50,16 @@ extern "C" {
 
 /* USER CODE END EM */
 
-/* Exported functions prototypes ---------------------------------------------*/
-void Error_Handler(void);
+	void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
-/* USER CODE BEGIN EFP */
+	/* Exported functions prototypes ---------------------------------------------*/
+	void Error_Handler(void);
 
-/* USER CODE END EFP */
+	/* USER CODE BEGIN EFP */
 
-/* Private defines -----------------------------------------------------------*/
+	/* USER CODE END EFP */
+
+	/* Private defines -----------------------------------------------------------*/
 #define ROW13_Pin GPIO_PIN_13
 #define ROW13_GPIO_Port GPIOC
 #define ROW14_Pin GPIO_PIN_14
@@ -92,8 +94,16 @@ void Error_Handler(void);
 #define ROW4_GPIO_Port GPIOC
 #define ROW5_Pin GPIO_PIN_5
 #define ROW5_GPIO_Port GPIOC
-#define LED_CS_Pin GPIO_PIN_2
-#define LED_CS_GPIO_Port GPIOB
+#define CAP_LED_Pin GPIO_PIN_0
+#define CAP_LED_GPIO_Port GPIOB
+#define SCR_LED_Pin GPIO_PIN_1
+#define SCR_LED_GPIO_Port GPIOB
+#define LED_X3_Pin GPIO_PIN_2
+#define LED_X3_GPIO_Port GPIOB
+#define NUM_LED_Pin GPIO_PIN_10
+#define NUM_LED_GPIO_Port GPIOB
+#define MODE_LED_Pin GPIO_PIN_11
+#define MODE_LED_GPIO_Port GPIOB
 #define LED_SCK_Pin GPIO_PIN_13
 #define LED_SCK_GPIO_Port GPIOB
 #define LED_MISO_Pin GPIO_PIN_14
@@ -122,11 +132,33 @@ void Error_Handler(void);
 #define ROW11_GPIO_Port GPIOC
 #define ROW12_Pin GPIO_PIN_12
 #define ROW12_GPIO_Port GPIOC
+#define LED_X2_Pin GPIO_PIN_2
+#define LED_X2_GPIO_Port GPIOD
+#define LED_X1_Pin GPIO_PIN_3
+#define LED_X1_GPIO_Port GPIOB
+#define LOGO_LED_Pin GPIO_PIN_5
+#define LOGO_LED_GPIO_Port GPIOB
 #define EC_B_Pin GPIO_PIN_8
 #define EC_B_GPIO_Port GPIOB
 #define EC_A_Pin GPIO_PIN_9
 #define EC_A_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
+
+#define COL_GPIO_Port GPIOA
+#define ROW_GPIO_Port GPIOC
+
+
+
+#define MAX_COL		9
+#define MAX_ROW		16
+
+#define EEPROM_BASE_ADDR	0x08080000
+#define EEPROM_BYTE_SIZE		0x07FF
+
+#define BL_SETTING_ADDR				(EEPROM_BASE_ADDR + 0x00)
+#define MODE_SETTING_ADDR			(EEPROM_BASE_ADDR + 0x04)
+#define INSERT_SETTING_ADDR		(EEPROM_BASE_ADDR + 0x08)
+
 
 /* USER CODE END Private defines */
 
