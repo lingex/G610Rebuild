@@ -1,5 +1,7 @@
 ﻿#include "matrix_led.h"
 #include "state_led.h"
+#include "usbhid.h"
+//#include <stdio.h>
 
 void MatrixInit(void)
 {
@@ -14,13 +16,24 @@ void MatrixInit(void)
 
 
 	//clear
-	//len = 3;
-	//tmpSpiBuff[0] = ST524_CMD_WRITE_CTL_REG;
-	//tmpSpiBuff[1] = 0x00;	//from address
-	//tmpSpiBuff[2] = 0x80;	//all reg default
-	//HAL_SPI_Transmit(&hspi2, tmpSpiBuff, len, 500 * len);
+	len = 3;
+	uint8_t cmdBuff[3];
+	cmdBuff[0] = ST524_CMD_WRITE_CTL_REG;
+	cmdBuff[1] = 0x00;	//from address
+	cmdBuff[2] = 0x83;	//all reg default
+	HAL_SPI_Transmit(&hspi2, cmdBuff, len, SPI_TIMEOUT_PA * len);
+	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_SET);
 	//HAL_Delay(5);
 
+	for (uint16_t i = 0; i < PATTERN_SIZE; i++)
+	{
+		matrixBuff[i] = brightness;
+	}
+	if (insertEnable < 1)
+	{
+		//turn of insert
+		matrixBuff[INDEX_OF_KEY_INSERT] = 0x00;
+	}
 
 	//display on
 	//len = 4;
@@ -43,64 +56,116 @@ void MatrixInit(void)
 
 void MatrixSetBrightness(uint8_t val)
 {
-	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_RESET);
-	//HAL_Delay(1);
-
-	//write data to pattern 1
-	len = PATTERN_SIZE + 2;
-	matrixBuff[0] = ST524_CMD_WRITE_P1_REG;
-	matrixBuff[1] = 0x00; //from address
-	for (uint16_t i = 2; i <= PATTERN_SIZE; i++)
+	len = PATTERN_SIZE + 1;
+	for (uint8_t i = 0; i < PATTERN_SIZE; i++)
 	{
 		matrixBuff[i] = val;
 	}
-
-	HAL_SPI_Transmit(&hspi2, matrixBuff, len, SPI_TIMEOUT_PA * len);
-
-	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_SET);
-	//	HAL_Delay(1);
+	if (insertEnable < 1)
+	{
+		//turn of insert
+		matrixBuff[INDEX_OF_KEY_INSERT] = 0x00;
+	}
 }
 
 void MatrixOn(void)
 {
 	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_RESET);
-	//HAL_Delay(1);
 
 	len = 4;
-	matrixBuff[0] = ST524_CMD_WRITE_CTL_REG;
-	matrixBuff[1] = ST524_ADDR_SWCTL;	//from address
-	matrixBuff[2] = 0x01;	//swctl en
-	matrixBuff[3] = 0x01;	//disp p1 en
+	uint8_t cmdBuff[4];
+	cmdBuff[0] = ST524_CMD_WRITE_CTL_REG;
+	cmdBuff[1] = ST524_ADDR_SWCTL;	//from address
+	cmdBuff[2] = 0x01;	//swctl en
+	cmdBuff[3] = 0x01;	//disp p1 en
+	HAL_SPI_Transmit(&hspi2, cmdBuff, len, SPI_TIMEOUT_PA * len);
+
+	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_SET);
+	SetLogoLED(brightness);
+}
+
+void MatrixSyncBuff(void)
+{
+	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_RESET);
+
+	//write data to pattern 1
+	len = 2;
+	uint8_t cmdBuff[2];
+	cmdBuff[0] = ST524_CMD_WRITE_P1_REG;
+	cmdBuff[1] = 0x00; //address
+	HAL_SPI_Transmit(&hspi2, cmdBuff, len, SPI_TIMEOUT_PA * len);
+
+	len = PATTERN_SIZE;
 	HAL_SPI_Transmit(&hspi2, matrixBuff, len, SPI_TIMEOUT_PA * len);
 
 	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_SET);
-	//	HAL_Delay(1);
-	SetLogoLED(backlight);
+}
+
+void MatrixSyncByte(uint8_t regAddr, uint8_t val)
+{
+	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_RESET);
+
+	//write data to pattern 1
+	len = 3;
+	uint8_t cmdBuff[3];
+	cmdBuff[0] = ST524_CMD_WRITE_P1_REG;
+	cmdBuff[1] = regAddr; //address
+	cmdBuff[2] = val;
+	HAL_SPI_Transmit(&hspi2, cmdBuff, len, SPI_TIMEOUT_PA * len);
+
+	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_SET);
+}
+
+void MatrixOnKeyPressed(uint8_t x, uint8_t y, uint8_t keyVal)
+{
+	if (keyVal == KC_INSERT_SW)
+	{
+		uint8_t index = KEYBOARD_LED_Map[x][y];
+		//if (index == INDEX_OF_KEY_INSERT)
+		{
+			if (insertEnable)
+			{
+				matrixBuff[index] = brightness;
+			}
+			else
+			{
+				matrixBuff[index] = 0;
+			}
+		}
+		MatrixSyncByte(index, matrixBuff[index]);
+		//MatrixSyncBuff();
+	}
+	//TODO something else
 }
 
 void MatrixBrightnessChange(void)
 {
-	switch (backlight)
+	switch (brightness)
 	{
 	case BL_VAL_0:
-		backlight = BL_VAL_1;
+		brightness = BL_VAL_1;
 		break;
 	case BL_VAL_1:
-		backlight = BL_VAL_2;
+		brightness = BL_VAL_2;
 		break;
 	case BL_VAL_2:
-		backlight = BL_VAL_3;
+		brightness = BL_VAL_3;
 		break;
 	case BL_VAL_3:
-		backlight = BL_VAL_4;
+		brightness = BL_VAL_4;
+		break;
+	case BL_VAL_4:
+		brightness = BL_VAL_5;
 		break;
 	default:
-		backlight = BL_VAL_0;
+		brightness = BL_VAL_0;
 		break;
 	}
 
-	SetLogoLED(backlight);
+	SetLogoLED(brightness);
 
-	MatrixSetBrightness(backlight);
-	WriteEEPROM(BL_SETTING_ADDR, backlight);
+	MatrixSetBrightness(brightness);
+	MatrixSyncBuff();
+
+	WriteEEPROM(BL_SETTING_ADDR, brightness);
 }

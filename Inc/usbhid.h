@@ -167,4 +167,5 @@ enum {
 	//	customize keys
 	KC_GAME = 0xf0,
 	KC_BACKLIGHT = 0xf1,
+	KC_INSERT_SW = 0xf2,
 };

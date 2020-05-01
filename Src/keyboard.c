@@ -2,7 +2,7 @@
 #include "usbhid.h"
 #include "state_led.h"
 #include "matrix_led.h"
-
+//#include <stdio.h>
 
 uint8_t KeyCheck(void)
 {
@@ -19,7 +19,7 @@ uint8_t KeyCheck(void)
 	uint8_t fnPressed = 0;
 
 	//const char *keyName = NULL;
-	//char debugBuff[64] = {'0'};
+	//char debugBuff[64] = { '0' };
 
 
 	for (uint8_t i = 0; i < 8; i++)
@@ -48,6 +48,12 @@ uint8_t KeyCheck(void)
 					{
 						pressed = 1;
 						keyVal = KEYBOARD_Value_Map[x][y];
+
+						if (*debounce == 5)
+						{
+							MatrixOnKeyPressed(x, y, keyVal);
+						}
+
 						switch (keyVal)
 						{
 						case KC_MODIFIER_LEFT_ALT:
@@ -104,6 +110,7 @@ uint8_t KeyCheck(void)
 									if (*debounce == 5)
 									{
 										InsertEnableSw();
+										MatrixOnKeyPressed(x, y, KC_INSERT_SW);
 									}
 									continue;
 								}
@@ -138,7 +145,6 @@ uint8_t KeyCheck(void)
 						//keyName = KEYBOARD_Name_Map[x][y];
 						//sprintf(debugBuff, "x=%u,y=%u,,name=%s,val=%x\n", x, y, keyName, keyVal);
 						//HAL_UART_Transmit(&huart1, (uint8_t *)debugBuff, 64, 100);
-						//sprintf(debugBuff, "x=%u", x);
 					}
 				}
 				else

@@ -51,22 +51,29 @@ extern "C" {
 #define ST524_CMD_READ_P1_REG 0x03
 #define ST524_CMD_READ_P2_REG 0x05
 
-#define PATTERN_SIZE 0xEF
+#define PATTERN_SIZE (0xEF + 1)
+
+#define INDEX_OF_KEY_INSERT		142
 
 	enum BRIGHTNESS_VALS
 	{
 		BL_VAL_0 = 0,
-		BL_VAL_1 = 35,
-		BL_VAL_2 = 100,
-		BL_VAL_3 = 180,
-		BL_VAL_4 = 255,
+		BL_VAL_1 = 30,
+		BL_VAL_2 = 90,
+		BL_VAL_3 = 135,
+		BL_VAL_4 = 180,
+		BL_VAL_5 = 245,
 	};
 
 	static uint16_t len = 0;
-	static uint8_t  matrixBuff[PATTERN_SIZE] = { 0 };
-	extern uint8_t backlight;
+	static uint8_t  matrixBuff[255] = { 0 };		//led buff
+	extern uint8_t brightness;
+	extern uint8_t insertEnable;
+
+	extern const unsigned char KEYBOARD_LED_Map[MAX_COL][MAX_ROW];
 
 	extern SPI_HandleTypeDef hspi2;
+	extern UART_HandleTypeDef huart1;
 
 	extern void WriteEEPROM(uint32_t addr, uint32_t val);
 
@@ -76,6 +83,12 @@ extern "C" {
 	void MatrixSetBrightness(uint8_t val);
 
 	void MatrixOn(void);
+
+	void MatrixSyncBuff(void);
+
+	void MatrixSyncByte(uint8_t regAddr, uint8_t val);
+
+	void MatrixOnKeyPressed(uint8_t x, uint8_t y, uint8_t keyVal);
 
 	void MatrixBrightnessChange(void);
 
