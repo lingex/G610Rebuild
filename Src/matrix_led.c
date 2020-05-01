@@ -3,9 +3,9 @@
 
 void MatrixInit(void)
 {
-	HAL_GPIO_WritePin(LED_X1_GPIO_Port, LED_X1_Pin, GPIO_PIN_SET);			//RESET PIN
-	HAL_GPIO_WritePin(LED_X2_GPIO_Port, LED_X2_Pin, GPIO_PIN_RESET);		//SYNC
-	HAL_GPIO_WritePin(LED_X3_GPIO_Port, LED_X3_Pin, GPIO_PIN_RESET);		//SS
+	HAL_GPIO_WritePin(MATRIX_RST_GPIO_Port, MATRIX_RST_Pin, GPIO_PIN_SET);				//RESET PIN
+	HAL_GPIO_WritePin(MATRIX_SYNC_GPIO_Port, MATRIX_SYNC_Pin, GPIO_PIN_RESET);		//SYNC
+	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_RESET);				//SS
 	HAL_Delay(5);		//wait for the chip reset
 
 	//TODO fixme check if chip exist
@@ -43,7 +43,7 @@ void MatrixInit(void)
 
 void MatrixSetBrightness(uint8_t val)
 {
-	HAL_GPIO_WritePin(LED_X3_GPIO_Port, LED_X3_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_RESET);
 	//HAL_Delay(1);
 
 	//write data to pattern 1
@@ -57,13 +57,13 @@ void MatrixSetBrightness(uint8_t val)
 
 	HAL_SPI_Transmit(&hspi2, matrixBuff, len, SPI_TIMEOUT_PA * len);
 
-	HAL_GPIO_WritePin(LED_X3_GPIO_Port, LED_X3_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_SET);
 	//	HAL_Delay(1);
 }
 
 void MatrixOn(void)
 {
-	HAL_GPIO_WritePin(LED_X3_GPIO_Port, LED_X3_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_RESET);
 	//HAL_Delay(1);
 
 	len = 4;
@@ -73,7 +73,7 @@ void MatrixOn(void)
 	matrixBuff[3] = 0x01;	//disp p1 en
 	HAL_SPI_Transmit(&hspi2, matrixBuff, len, SPI_TIMEOUT_PA * len);
 
-	HAL_GPIO_WritePin(LED_X3_GPIO_Port, LED_X3_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_SET);
 	//	HAL_Delay(1);
 	SetLogoLED(backlight);
 }

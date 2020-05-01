@@ -1,4 +1,4 @@
-﻿/* USER CODE BEGIN Header */
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file           : main.h
@@ -17,9 +17,9 @@
   *
   ******************************************************************************
   */
-  /* USER CODE END Header */
+/* USER CODE END Header */
 
-  /* Define to prevent recursive inclusion -------------------------------------*/
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __MAIN_H
 #define __MAIN_H
 
@@ -27,7 +27,7 @@
 extern "C" {
 #endif
 
-	/* Includes ------------------------------------------------------------------*/
+/* Includes ------------------------------------------------------------------*/
 #include "stm32l1xx_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -50,16 +50,16 @@ extern "C" {
 
 /* USER CODE END EM */
 
-	void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
+void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
-	/* Exported functions prototypes ---------------------------------------------*/
-	void Error_Handler(void);
+/* Exported functions prototypes ---------------------------------------------*/
+void Error_Handler(void);
 
-	/* USER CODE BEGIN EFP */
+/* USER CODE BEGIN EFP */
 
-	/* USER CODE END EFP */
+/* USER CODE END EFP */
 
-	/* Private defines -----------------------------------------------------------*/
+/* Private defines -----------------------------------------------------------*/
 #define ROW13_Pin GPIO_PIN_13
 #define ROW13_GPIO_Port GPIOC
 #define ROW14_Pin GPIO_PIN_14
@@ -98,18 +98,18 @@ extern "C" {
 #define CAP_LED_GPIO_Port GPIOB
 #define SCR_LED_Pin GPIO_PIN_1
 #define SCR_LED_GPIO_Port GPIOB
-#define LED_X3_Pin GPIO_PIN_2
-#define LED_X3_GPIO_Port GPIOB
+#define MATRIX_SS_Pin GPIO_PIN_2
+#define MATRIX_SS_GPIO_Port GPIOB
 #define NUM_LED_Pin GPIO_PIN_10
 #define NUM_LED_GPIO_Port GPIOB
 #define MODE_LED_Pin GPIO_PIN_11
 #define MODE_LED_GPIO_Port GPIOB
-#define LED_SCK_Pin GPIO_PIN_13
-#define LED_SCK_GPIO_Port GPIOB
-#define LED_MISO_Pin GPIO_PIN_14
-#define LED_MISO_GPIO_Port GPIOB
-#define LED_MOSI_Pin GPIO_PIN_15
-#define LED_MOSI_GPIO_Port GPIOB
+#define MATRIX_SCK_Pin GPIO_PIN_13
+#define MATRIX_SCK_GPIO_Port GPIOB
+#define MATRIX_MISO_Pin GPIO_PIN_14
+#define MATRIX_MISO_GPIO_Port GPIOB
+#define MATRIX_MOSI_Pin GPIO_PIN_15
+#define MATRIX_MOSI_GPIO_Port GPIOB
 #define ROW6_Pin GPIO_PIN_6
 #define ROW6_GPIO_Port GPIOC
 #define ROW7_Pin GPIO_PIN_7
@@ -132,10 +132,10 @@ extern "C" {
 #define ROW11_GPIO_Port GPIOC
 #define ROW12_Pin GPIO_PIN_12
 #define ROW12_GPIO_Port GPIOC
-#define LED_X2_Pin GPIO_PIN_2
-#define LED_X2_GPIO_Port GPIOD
-#define LED_X1_Pin GPIO_PIN_3
-#define LED_X1_GPIO_Port GPIOB
+#define MATRIX_SYNC_Pin GPIO_PIN_2
+#define MATRIX_SYNC_GPIO_Port GPIOD
+#define MATRIX_RST_Pin GPIO_PIN_3
+#define MATRIX_RST_GPIO_Port GPIOB
 #define LOGO_LED_Pin GPIO_PIN_5
 #define LOGO_LED_GPIO_Port GPIOB
 #define EC_B_Pin GPIO_PIN_8
