@@ -138,6 +138,8 @@ void Error_Handler(void);
 #define MATRIX_RST_GPIO_Port GPIOB
 #define LOGO_LED_Pin GPIO_PIN_5
 #define LOGO_LED_GPIO_Port GPIOB
+#define PWR_EN_Pin GPIO_PIN_7
+#define PWR_EN_GPIO_Port GPIOB
 #define EC_B_Pin GPIO_PIN_8
 #define EC_B_GPIO_Port GPIOB
 #define EC_A_Pin GPIO_PIN_9
