@@ -137,8 +137,9 @@ void InsertEnableSw(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+	SCB->VTOR = (FLASH_BASE | 0x5000);
+	
 		//char debugBuff[64] = {'0'};
-
 
   /* USER CODE END 1 */
   
@@ -167,8 +168,14 @@ int main(void)
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
 
-	  //sprintf(debugBuff, "x=%u,y=%u,name=%s,val=%x\n", 1, 2, "ax", 9);
-	  //HAL_UART_Transmit(&huart1, (uint8_t *)debugBuff, 64, 100);
+	//wait connection OK
+	while(hUsbDeviceFS.dev_address == 0)
+	{
+		SetLogoLED(50);
+	}	
+
+	//sprintf(debugBuff, "x=%u,y=%u,name=%s,val=%x\n", 1, 2, "ax", 9);
+	//HAL_UART_Transmit(&huart1, (uint8_t *)debugBuff, 64, 100);
 
 	brightness = *(uint32_t*)BL_SETTING_ADDR;
 	gameMode = *(uint32_t*)MODE_SETTING_ADDR;
