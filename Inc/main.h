@@ -149,7 +149,7 @@ void Error_Handler(void);
 #define COL_GPIO_Port GPIOA
 #define ROW_GPIO_Port GPIOC
 
-
+#define REPORT_SIZE 9
 
 #define MAX_COL		9
 #define MAX_ROW		16
@@ -158,6 +158,14 @@ void Error_Handler(void);
 #define MODE_SETTING_ADDR			(FLASH_EEPROM_BASE + 0x04)
 #define INSERT_SETTING_ADDR		(FLASH_EEPROM_BASE + 0x08)
 
+
+enum MEDIA_KEY_STATE
+{
+	MK_STATE_NONE = 0,
+	MK_STATE_DOWN,
+	MK_STATE_REPORTED,
+	MK_STATE_UP,
+};
 
 /* USER CODE END Private defines */
 

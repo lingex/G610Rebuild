@@ -1,4 +1,4 @@
-﻿/* Define to prevent recursive inclusion -------------------------------------*/
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __KEYBOARD_H
 #define __KEYBOARD_H
 
@@ -12,13 +12,16 @@ extern "C" {
 	extern uint8_t gameMode;
 	extern uint8_t insertEnable;
 	extern uint8_t keyChange;
-	extern uint8_t	keyBuff[8];
+	extern uint8_t keyBuff[REPORT_SIZE];
+	extern uint8_t mediaKeyState;
+	extern uint8_t mediaKeyVal;
 	extern const char * KEYBOARD_Name_Map[MAX_COL][MAX_ROW];
 	extern const unsigned char KEYBOARD_Value_Map[MAX_COL][MAX_ROW];
 	extern UART_HandleTypeDef huart1;
 
 	extern void GameModeSw(void);
 	extern void InsertEnableSw(void);
+	extern void MediaKeyDown(uint8_t keyVal);
 
 	uint8_t KeyCheck(void);
 	uint32_t ReadGpioPort(GPIO_TypeDef* GPIOx);

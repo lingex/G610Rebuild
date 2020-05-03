@@ -48,7 +48,7 @@
 
 const unsigned char KEYBOARD_Value_Map[MAX_COL][MAX_ROW] =
 {
-  0           ,0        ,0                   ,0          ,0             ,0           ,0             ,0          ,KC_GAME  ,KC_BACKLIGHT,KC_MEDIA_PAUSE,KC_MEDIA_STOP,KC_MEDIA_SCAN_NEXT,KC_MEDIA_SCAN_PREV,KC_KP_MINUS     ,KC_MUTE     ,
+  0           ,0        ,0                   ,0          ,0             ,0           ,0             ,0          ,KC_GAME  ,KC_BACKLIGHT,KC_MEDIA_PLAY ,KC_MEDIA_STOP,KC_MEDIA_SCAN_NEXT,KC_MEDIA_SCAN_PREV,KC_KP_MINUS     ,KC_MEDIA_MUTE     ,
   KC_ESCAPE   ,KC_F1    ,KC_F2               ,KC_F3      ,KC_F4         ,KC_F5       ,KC_F6         ,KC_F7      ,KC_F8    ,KC_F9       ,KC_F10        ,KC_F11       ,KC_F12            ,KC_PRINTSCREEN    ,KC_SCROLL_LOCK  ,KC_PAUSE    ,
   0           ,0        ,KC_TILDE            ,KC_1       ,KC_2          ,KC_3        ,KC_4          ,KC_5       ,KC_6     ,KC_7        ,KC_8          ,KC_9         ,KC_0              ,KC_UNDERSCORE     ,KC_PLUS         ,0           ,
   0           ,0        ,KC_TAB              ,KC_Q       ,KC_W          ,KC_E        ,KC_R          ,KC_T       ,KC_Y     ,KC_U        ,KC_I          ,KC_O         ,KC_P              ,KC_OPEN_BRACKET   ,KC_CLOSE_BRACKET,KC_BACKSLASH,
@@ -87,7 +87,10 @@ extern uint8_t KeyCheck(void);
 extern USBD_HandleTypeDef hUsbDeviceFS;
 
 uint8_t keyChange = 0;
-uint8_t	keyBuff[8] = { 0 };
+uint8_t	keyBuff[REPORT_SIZE] = { 0 };
+
+uint8_t mediaKeyState = MK_STATE_NONE;
+uint8_t	mediaKeyVal = 0;
 
 uint8_t brightness = 0;
 uint8_t gameMode = 0;
@@ -107,6 +110,9 @@ void WriteEEPROM(uint32_t addr, uint32_t val);
 
 void GameModeSw(void);
 void InsertEnableSw(void);
+void MediaKeyDown(uint8_t key);
+void MediaKeyUp(void);
+
 
 /* USER CODE END PFP */
 
@@ -183,9 +189,20 @@ int main(void)
 		if (keyChange != 0)
 		{
 			keyChange = 0;
-			USBD_HID_SendReport(&hUsbDeviceFS, keyBuff, 8);
+			keyBuff[0] = 1;		//report id
+			USBD_HID_SendReport(&hUsbDeviceFS, keyBuff, REPORT_SIZE);
 		}
 		KeyCheck();
+		if (mediaKeyState == MK_STATE_DOWN && mediaKeyVal != 0)
+		{
+			MediaKeyDown(mediaKeyVal);
+			mediaKeyState = MK_STATE_REPORTED;
+		}
+		if (mediaKeyState == MK_STATE_UP)
+		{
+			MediaKeyUp();
+			mediaKeyState = MK_STATE_NONE;
+		}
 		HAL_Delay(1);
 	}
   /* USER CODE END 3 */
@@ -461,11 +478,48 @@ void GameModeSw(void)
 	WriteEEPROM(MODE_SETTING_ADDR, gameMode);
 }
 
+void MediaKeyDown(uint8_t key)
+{
+	uint8_t report[3];
+  report[0]= HID_MEDIA_REPORT;
+  report[1]= key;
+  report[2]= 0x00;
+  USBD_HID_SendReport(&hUsbDeviceFS, report, 3);
+}
+
+void MediaKeyUp(void)
+{
+	uint8_t report[3];
+  report[0]= HID_MEDIA_REPORT;
+  report[1]= 0x00;
+  report[2]= 0x00;
+  USBD_HID_SendReport(&hUsbDeviceFS, report, 3);
+}
+
 void InsertEnableSw(void)
 {
 	insertEnable = insertEnable > 0 ? 0 : 1;
 
 	WriteEEPROM(INSERT_SETTING_ADDR, insertEnable);
+}
+
+void USBD_HID_GetReport(uint8_t * report, int len)
+{
+  // see from http://www.microchip.com/forums/m433757.aspx
+  // report[0] is the report id
+  // report[1] is the led bit filed
+  // D0: NUM lock
+  // D1: CAPS lock
+  // D2: SCROLL lock
+  // D3: Compose
+  // D4: Kana
+  if ( report[0]==1 )
+	{
+		// report id 1 is "led" refer to report id in hid report des
+    SetNumLockLED(report[1] & 0x01);
+		SetCapsLockLED(report[1] & 0x02);
+		SetScrollLockLED(report[1] & 0x04);
+  }
 }
 
 /* USER CODE END 4 */

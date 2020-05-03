@@ -15,14 +15,14 @@ uint8_t KeyCheck(void)
 	uint8_t pressed = 0;
 	uint16_t lastSum = 0;
 	uint16_t keySum = 0;
-	uint8_t modifyVal = keyBuff[0];
+	uint8_t modifyVal = keyBuff[1];
 	uint8_t fnPressed = 0;
+	uint8_t mediaKeyDown = 0;
 
-	//const char *keyName = NULL;
 	//char debugBuff[64] = { '0' };
 
 
-	for (uint8_t i = 0; i < 8; i++)
+	for (uint8_t i = 0; i < REPORT_SIZE; i++)
 	{
 		lastSum += keyBuff[i];
 		keyBuff[i] = 0;
@@ -57,28 +57,28 @@ uint8_t KeyCheck(void)
 						switch (keyVal)
 						{
 						case KC_LALT:
-							keyBuff[0] |= KC_LALT_VAL;
+							keyBuff[1] |= KC_LALT_VAL;
 							break;
 						case KC_LSHIFT:
-							keyBuff[0] |= KC_LSHIFT_VAL;
+							keyBuff[1] |= KC_LSHIFT_VAL;
 							break;
 						case KC_LCTRL:
-							keyBuff[0] |= KC_LCTRL_VAL;
+							keyBuff[1] |= KC_LCTRL_VAL;
 							break;
 						case KC_LGUI:
-							keyBuff[0] |= gameMode == 1 ? 0x00 : KC_LGUI_VAL;
+							keyBuff[1] |= gameMode == 1 ? 0x00 : KC_LGUI_VAL;
 							break;
 						case KC_RALT:
-							keyBuff[0] |= KC_RALT_VAL;
+							keyBuff[1] |= KC_RALT_VAL;
 							break;
 						case KC_RSHIFT:
-							keyBuff[0] |= KC_RSHIFT_VAL;
+							keyBuff[1] |= KC_RSHIFT_VAL;
 							break;
 						case KC_RCTRL:
-							keyBuff[0] |= KC_RCTRL_VAL;
+							keyBuff[1] |= KC_RCTRL_VAL;
 							break;
 						case KC_RGUI:
-							keyBuff[0] |= gameMode == 1 ? 0x00 : KC_RGUI_VAL;
+							keyBuff[1] |= gameMode == 1 ? 0x00 : KC_RGUI_VAL;
 							break;
 						case KC_GAME:
 						{
@@ -101,6 +101,42 @@ uint8_t KeyCheck(void)
 							fnPressed = 1;
 						}
 						break;
+						case KC_MEDIA_PLAY:
+						case KC_MEDIA_STOP:
+						case KC_MEDIA_SCAN_NEXT:
+						case KC_MEDIA_SCAN_PREV:
+						case KC_MEDIA_MUTE:
+						//case KC_MEDIA_VOLUME_UP:
+						//case KC_MEDIA_VOLUME_DOWN:
+						{
+							mediaKeyDown = 1;
+							if (*debounce == 5)
+							{
+								mediaKeyState = MK_STATE_DOWN;
+								switch (keyVal)
+								{
+								case KC_MEDIA_PLAY:
+									mediaKeyVal = KC_MEDIA_PLAY_VAL;
+									break;
+								case KC_MEDIA_STOP:
+									mediaKeyVal = KC_MEDIA_STOP_VAL;
+									break;
+								case KC_MEDIA_SCAN_NEXT:
+									mediaKeyVal = KC_MEDIA_SCAN_NEXT_VAL;
+									break;
+								case KC_MEDIA_SCAN_PREV:
+									mediaKeyVal = KC_MEDIA_SCAN_PREV_VAL;
+									break;
+								case KC_MEDIA_MUTE:
+									mediaKeyVal = KC_MEDIA_MUTE_VAL;
+									break;
+								default:
+									break;
+								}
+							}
+						}
+						break;
+
 						default:
 						{
 							if (keyVal == KC_INSERT)
@@ -121,7 +157,7 @@ uint8_t KeyCheck(void)
 								}
 							}
 
-							for (uint8_t i = 2; i < 8; i++)
+							for (uint8_t i = 3; i < REPORT_SIZE; i++)
 							{
 								if (keyBuff[i] == 0)
 								{
@@ -133,7 +169,7 @@ uint8_t KeyCheck(void)
 							//if(*debounce == 5)
 							{
 								keyBuff[nKeyCount] = keyVal;
-								if (nKeyCount < 7)
+								if (nKeyCount < 8)
 								{
 									nKeyCount++;
 								}
@@ -142,8 +178,7 @@ uint8_t KeyCheck(void)
 						break;
 						}
 
-						//keyName = KEYBOARD_Name_Map[x][y];
-						//sprintf(debugBuff, "x=%u,y=%u,,name=%s,val=%x\n", x, y, keyName, keyVal);
+						//sprintf(debugBuff, "x=%u,y=%u,val=%x\n", x, y, keyVal);
 						//HAL_UART_Transmit(&huart1, (uint8_t *)debugBuff, 64, 100);
 					}
 				}
@@ -155,13 +190,17 @@ uint8_t KeyCheck(void)
 		}
 	}
 
-	for (uint8_t i = 0; i < 8; i++)
+	for (uint8_t i = 0; i < REPORT_SIZE; i++)
 	{
 		keySum += keyBuff[i];
 	}
-	if (keySum != lastSum || modifyVal != keyBuff[0])
+	if (keySum != lastSum || modifyVal != keyBuff[1])
 	{
 		keyChange = 1;
+	}
+	if (mediaKeyState == MK_STATE_REPORTED && mediaKeyDown == 0)
+	{
+		mediaKeyState = MK_STATE_UP;
 	}
 
 	return pressed;
