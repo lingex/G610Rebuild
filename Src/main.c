@@ -123,7 +123,6 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 	SCB->VTOR = (FLASH_BASE | 0x5000);
-
 		//char debugBuff[64] = {'0'};
 
   /* USER CODE END 1 */
@@ -166,10 +165,10 @@ int main(void)
 	gameMode = *(uint32_t*)MODE_SETTING_ADDR;
 	insertEnable = *(uint32_t*)INSERT_SETTING_ADDR;
 
-	MatrixInit();
 	SetModeLED(gameMode);
-	MatrixSyncBuff();
-	MatrixOn();
+
+	MatrixInit();
+	MatrixDisplayOn(1);
 
   /* USER CODE END 2 */
 

@@ -8,14 +8,11 @@ void MatrixInit(void)
 	HAL_GPIO_WritePin(MATRIX_RST_GPIO_Port, MATRIX_RST_Pin, GPIO_PIN_SET);				//RESET PIN
 	HAL_GPIO_WritePin(MATRIX_SYNC_GPIO_Port, MATRIX_SYNC_Pin, GPIO_PIN_RESET);		//SYNC
 	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_RESET);				//SS
-	HAL_Delay(5);		//wait for the chip reset
-
-	//TODO fixme check if chip exist
+	HAL_Delay(1);		//wait for the chip reset
 
 	//HAL_SPI_Receive(SPI_HandleTypeDef *hspi, uint8_t *pData, uint16_t Size, uint32_t Timeout);
 
-
-	//clear
+	//clear all reg
 	len = 3;
 	uint8_t cmdBuff[3];
 	cmdBuff[0] = ST524_CMD_WRITE_CTL_REG;
@@ -23,53 +20,48 @@ void MatrixInit(void)
 	cmdBuff[2] = 0x83;	//all reg default
 	HAL_SPI_Transmit(&hspi2, cmdBuff, len, SPI_TIMEOUT_PA * len);
 	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_SET);
-	//HAL_Delay(5);
 
-	for (uint16_t i = 0; i < PATTERN_SIZE; i++)
+	//clear buff
+	for (uint16_t i = 0; i < PATTERN_SIZE; i+=2)
 	{
-		matrixBuff[i] = brightness;
+		matrixBuff[i] = DEFAULT_DIMMING;	//this value will also control the brightness
 	}
 	if (insertEnable < 1)
 	{
 		//turn of insert
 		matrixBuff[INDEX_OF_KEY_INSERT] = 0x00;
 	}
+	MatrixSyncBuff(DISP_P1);
 
-	//display on
-	//len = 4;
-	//matrixBuff[0] = ST524_CMD_WRITE_CTL_REG;
-	//matrixBuff[1] = ST524_ADDR_SWCTL;	//from address
-	//matrixBuff[2] = 0x01;	//swctl en
-	//matrixBuff[3] = 0x01;	//disp p1 en
-	//HAL_SPI_Transmit(&hspi2, matrixBuff, len, SPI_TIMEOUT_PA * len);
-	//HAL_Delay(1);
-
-	//enable pwm
-	//len = 4;
-	//tmpSpiBuff[0] = ST524_CMD_WRITE_CTL_REG;
-	//tmpSpiBuff[1] = ST524_ADDR_DSP_VISUAL;	//from address
-	//tmpSpiBuff[2] = 0x02;	//disp visual ctrl reg
-	//tmpSpiBuff[3] = 0x0f;	//pwm ctrl reg
-	//HAL_SPI_Transmit(&hspi2, tmpSpiBuff, len, SPI_TIMEOUT_PA * len);
-	//HAL_Delay(1);
+	MatrixSetBrightness(brightness);
 }
 
 void MatrixSetBrightness(uint8_t val)
 {
-	len = PATTERN_SIZE + 1;
-	for (uint8_t i = 0; i < PATTERN_SIZE; i++)
-	{
-		matrixBuff[i] = val;
-	}
-	if (insertEnable < 1)
-	{
-		//turn of insert
-		matrixBuff[INDEX_OF_KEY_INSERT] = 0x00;
-	}
+	//set pwm reg
+	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_RESET);
+
+	len = 4;
+	uint8_t cmdBuff[4];
+	cmdBuff[0] = ST524_CMD_WRITE_CTL_REG;
+	cmdBuff[1] = ST524_ADDR_DSP_VISUAL;	//from address
+	cmdBuff[2] = 0x02;	//swctl en
+	cmdBuff[3] = val;	//pwm reg
+	HAL_SPI_Transmit(&hspi2, cmdBuff, len, SPI_TIMEOUT_PA * len);
+
+	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_SET);
+
+	SetLogoLED(brightness);
 }
 
-void MatrixOn(void)
+
+void MatrixDisplayOn(uint8_t p)
 {
+	if (p != DISP_P1 && p != DISP_P2)
+	{
+		return;
+	}
+
 	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_RESET);
 
 	len = 4;
@@ -77,21 +69,39 @@ void MatrixOn(void)
 	cmdBuff[0] = ST524_CMD_WRITE_CTL_REG;
 	cmdBuff[1] = ST524_ADDR_SWCTL;	//from address
 	cmdBuff[2] = 0x01;	//swctl en
-	cmdBuff[3] = 0x01;	//disp p1 en
+	cmdBuff[3] = p;
 	HAL_SPI_Transmit(&hspi2, cmdBuff, len, SPI_TIMEOUT_PA * len);
 
 	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_SET);
-	SetLogoLED(brightness);
 }
 
-void MatrixSyncBuff(void)
+void MatrixDisplayOff(void)
 {
+	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_RESET);
+
+	len = 3;
+	uint8_t cmdBuff[4];
+	cmdBuff[0] = ST524_CMD_WRITE_CTL_REG;
+	cmdBuff[1] = ST524_ADDR_SWCTL;	//from address
+	cmdBuff[2] = 0x00;	//swctl en=0
+	HAL_SPI_Transmit(&hspi2, cmdBuff, len, SPI_TIMEOUT_PA * len);
+
+	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_SET);
+}
+
+void MatrixSyncBuff(uint8_t p)
+{
+	if (p != DISP_P1 && p != DISP_P2)
+	{
+		return;
+	}
+
 	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_RESET);
 
 	//write data to pattern 1
 	len = 2;
 	uint8_t cmdBuff[2];
-	cmdBuff[0] = ST524_CMD_WRITE_P1_REG;
+	cmdBuff[0] = p == DISP_P1 ? ST524_CMD_WRITE_P1_REG : ST524_CMD_WRITE_P2_REG;;
 	cmdBuff[1] = 0x00; //address
 	HAL_SPI_Transmit(&hspi2, cmdBuff, len, SPI_TIMEOUT_PA * len);
 
@@ -101,7 +111,7 @@ void MatrixSyncBuff(void)
 	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_SET);
 }
 
-void MatrixSyncByte(uint8_t regAddr, uint8_t val)
+void MatrixSyncByte(uint8_t p, uint8_t regAddr, uint8_t val)
 {
 	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_RESET);
 
@@ -125,14 +135,14 @@ void MatrixOnKeyPressed(uint8_t x, uint8_t y, uint8_t keyVal)
 		{
 			if (insertEnable)
 			{
-				matrixBuff[index] = brightness;
+				matrixBuff[index] = DEFAULT_DIMMING;
 			}
 			else
 			{
 				matrixBuff[index] = 0;
 			}
 		}
-		MatrixSyncByte(index, matrixBuff[index]);
+		MatrixSyncByte(DISP_P1, index, matrixBuff[index]);
 		//MatrixSyncBuff();
 	}
 	//TODO something else
@@ -165,7 +175,8 @@ void MatrixBrightnessChange(void)
 	SetLogoLED(brightness);
 
 	MatrixSetBrightness(brightness);
-	MatrixSyncBuff();
+
+	MatrixSyncBuff(DISP_P1);
 
 	WriteEEPROM(BL_SETTING_ADDR, brightness);
 }
