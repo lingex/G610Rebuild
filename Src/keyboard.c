@@ -44,7 +44,7 @@ uint8_t KeyCheck(void)
 					{
 						(*debounce)++;
 					}
-					if (*debounce >= 5)		//debounce 
+					if (*debounce >= 5)		//debounce
 					{
 						pressed = 1;
 						keyVal = KEYBOARD_Value_Map[x][y];
@@ -56,29 +56,29 @@ uint8_t KeyCheck(void)
 
 						switch (keyVal)
 						{
-						case KC_MODIFIER_LEFT_ALT:
-							keyBuff[0] |= KC_MODIFIER_LEFT_ALT_VAL;
+						case KC_LALT:
+							keyBuff[0] |= KC_LALT_VAL;
 							break;
-						case KC_MODIFIER_LEFT_SHIFT:
-							keyBuff[0] |= KC_MODIFIER_LEFT_SHIFT_VAL;
+						case KC_LSHIFT:
+							keyBuff[0] |= KC_LSHIFT_VAL;
 							break;
-						case KC_MODIFIER_LEFT_CTRL:
-							keyBuff[0] |= KC_MODIFIER_LEFT_CTRL_VAL;
+						case KC_LCTRL:
+							keyBuff[0] |= KC_LCTRL_VAL;
 							break;
-						case KC_MODIFIER_LEFT_UI:
-							keyBuff[0] |= gameMode == 1 ? 0x00 : KC_MODIFIER_LEFT_UI_VAL;
+						case KC_LGUI:
+							keyBuff[0] |= gameMode == 1 ? 0x00 : KC_LGUI_VAL;
 							break;
-						case KC_MODIFIER_RIGHT_ALT:
-							keyBuff[0] |= KC_MODIFIER_RIGHT_ALT_VAL;
+						case KC_RALT:
+							keyBuff[0] |= KC_RALT_VAL;
 							break;
-						case KC_MODIFIER_RIGHT_SHIFT:
-							keyBuff[0] |= KC_MODIFIER_RIGHT_SHIFT_VAL;
+						case KC_RSHIFT:
+							keyBuff[0] |= KC_RSHIFT_VAL;
 							break;
-						case KC_MODIFIER_RIGHT_CTRL:
-							keyBuff[0] |= KC_MODIFIER_RIGHT_CTRL_VAL;
+						case KC_RCTRL:
+							keyBuff[0] |= KC_RCTRL_VAL;
 							break;
-						case KC_MODIFIER_RIGHT_UI:
-							keyBuff[0] |= gameMode == 1 ? 0x00 : KC_MODIFIER_RIGHT_UI_VAL;
+						case KC_RGUI:
+							keyBuff[0] |= gameMode == 1 ? 0x00 : KC_RGUI_VAL;
 							break;
 						case KC_GAME:
 						{
@@ -96,7 +96,7 @@ uint8_t KeyCheck(void)
 							}
 						}
 						break;
-						case KC_APPLICATION:		//as fn key
+						case KC_FN:
 						{
 							fnPressed = 1;
 						}

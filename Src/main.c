@@ -46,42 +46,27 @@
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
 
-//debug only
-const char * KEYBOARD_Name_Map[MAX_COL][MAX_ROW] =
-{
-	"",					"",				"",					"",					"",				"",					"",				"",				"GAME",		"BL",			"PLAY",			"STOP", 	"NEXT",		"PREV",		"K_-",				"MUTE",
-	"ESC",			"F1",			"F2",				"F3",				"F4",			"F5",				"F6",			"F7",			"F8",			"F9",			"F10",			"F11",		"F12",		"Pause",	"ScrollLock",	"Pscr",
-	"",					"",				"~",				"!", 				"@", 			"#", 				"$",			"%",			"^",			"&",			"*",				"(",			")",			"_",			"+",					"",
-	"",					"",				"Tab",			"Q", 				"W",			"E", 				"R", 			"T", 			"Y", 			"U", 			"I", 				"O", 			"P", 			"{", 			"}", 					"|",
-	"",					"",				"CapsLock", "A", 				"S", 			"D", 				"F", 			"G", 			"H", 			"J", 			"K", 				"L", 			";", 			"'", 			"",						"Enter",
-	"",					"",				"LShift", 	"",					"Z", 			"X",	 			"C", 			"V", 			"B", 			"N", 			"M", 				",", 			".", 			"?",			"",						"RShift",
-	"",					"",				"LCtrl", 		"LGUI", 		"LAlt", 	"",					"",				"Space", 	"",				"",				"",					"RAlt", 	"RGUI", 	"APP",	 	"RCtrl",			"Left",
-	"BACKSPACE","Insert",	"Home", 		"PageUp", 	"NumLock","K_/", 			"K_*", 		"K_+"			"Delete",	"End", 		"PageDown",	"K_7", 		"K_8", 		"K_9",		"K_4",				"K_5",
-	"Right",		"K_0",		"K_.",			"K_Enter",	"K_1",		"K_2",			"K_6",		"K_3",		"Down",		"Up",			"",					"",				"",				"",				"",						"",
-};
-
-
 const unsigned char KEYBOARD_Value_Map[MAX_COL][MAX_ROW] =
 {
-	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,KC_GAME,KC_BACKLIGHT,KC_MEDIA_PAUSE,KC_MEDIA_STOP,KC_MEDIA_SCAN_NEXT,KC_MEDIA_SCAN_PREV,KC_KP_MINUS,KC_MUTE,
-	KC_ESCAPE,KC_F1,KC_F2,KC_F3,KC_F4,KC_F5,KC_F6,KC_F7,KC_F8,KC_F9,KC_F10,KC_F11,KC_F12,KC_PRINTSCREEN,KC_SCROLL_LOCK,KC_PAUSE,
-	0x00,0x00,KC_TILDE,KC_1,KC_2,KC_3,KC_4,KC_5,KC_6,KC_7,KC_8,KC_9,KC_0,KC_UNDERSCORE,KC_PLUS,0x00,
-	0x00,0x00,KC_TAB,KC_Q,KC_W,KC_E,KC_R,KC_T,KC_Y,KC_U,KC_I,KC_O,KC_P,KC_OPEN_BRACKET,KC_CLOSE_BRACKET,KC_BACKSLASH,
-	0x00,0x00,KC_CAPS_LOCK,KC_A,KC_S,KC_D,KC_F,KC_G,KC_H,KC_J,KC_K,KC_L,KC_COLON,KC_QUOTE,0x00,KC_ENTER,
-	0x00,0x00,KC_MODIFIER_LEFT_SHIFT,0x00,KC_Z,KC_X,KC_C,KC_V,KC_B,KC_N,KC_M,KC_COMMA,KC_DOT,KC_SLASH,0x00,KC_MODIFIER_RIGHT_SHIFT,
-	0x00,0x00,KC_MODIFIER_LEFT_CTRL,KC_MODIFIER_LEFT_UI,KC_MODIFIER_LEFT_ALT,0X00,0X00,KC_SPACEBAR,0x00,0x00,0x00,KC_MODIFIER_RIGHT_ALT,KC_MODIFIER_RIGHT_UI,KC_APPLICATION,KC_MODIFIER_RIGHT_CTRL,KC_LEFT,
-	KC_BACKSPACE,KC_INSERT,KC_HOME,KC_PAGEUP,KC_KP_NUM_LOCK,KC_KP_DIVIDE,KC_KP_MULTIPLY,KC_KP_PLUS,KC_DELETE,KC_END,KC_PAGEDOWN,KC_KP_7,KC_KP_8,KC_KP_9,KC_KP_4,KC_KP_5,
-	KC_RIGHT,KC_KP_0,KC_KP_DOT_AND_DELETE,KC_KP_ENTER,KC_KP_1,KC_KP_2,KC_KP_6,KC_KP_3,KC_DOWN,KC_UP,0x00,0x00,0x00,0x00,0x00,0x00,
+  0           ,0        ,0                   ,0          ,0             ,0           ,0             ,0          ,KC_GAME  ,KC_BACKLIGHT,KC_MEDIA_PAUSE,KC_MEDIA_STOP,KC_MEDIA_SCAN_NEXT,KC_MEDIA_SCAN_PREV,KC_KP_MINUS     ,KC_MUTE     ,
+  KC_ESCAPE   ,KC_F1    ,KC_F2               ,KC_F3      ,KC_F4         ,KC_F5       ,KC_F6         ,KC_F7      ,KC_F8    ,KC_F9       ,KC_F10        ,KC_F11       ,KC_F12            ,KC_PRINTSCREEN    ,KC_SCROLL_LOCK  ,KC_PAUSE    ,
+  0           ,0        ,KC_TILDE            ,KC_1       ,KC_2          ,KC_3        ,KC_4          ,KC_5       ,KC_6     ,KC_7        ,KC_8          ,KC_9         ,KC_0              ,KC_UNDERSCORE     ,KC_PLUS         ,0           ,
+  0           ,0        ,KC_TAB              ,KC_Q       ,KC_W          ,KC_E        ,KC_R          ,KC_T       ,KC_Y     ,KC_U        ,KC_I          ,KC_O         ,KC_P              ,KC_OPEN_BRACKET   ,KC_CLOSE_BRACKET,KC_BACKSLASH,
+  0           ,0        ,KC_CAPS_LOCK        ,KC_A       ,KC_S          ,KC_D        ,KC_F          ,KC_G       ,KC_H     ,KC_J        ,KC_K          ,KC_L         ,KC_COLON          ,KC_QUOTE          ,0               ,KC_ENTER    ,
+  0           ,0        ,KC_LSHIFT           ,0          ,KC_Z          ,KC_X        ,KC_C          ,KC_V       ,KC_B     ,KC_N        ,KC_M          ,KC_COMMA     ,KC_DOT            ,KC_SLASH          ,0               ,KC_RSHIFT   ,
+  0           ,0        ,KC_LCTRL            ,KC_LGUI    ,KC_LALT       ,0           ,0             ,KC_SPACEBAR,0        ,0           ,0             ,KC_RALT      ,KC_RGUI           ,KC_FN             ,KC_RCTRL        ,KC_LEFT     ,
+  KC_BACKSPACE,KC_INSERT,KC_HOME             ,KC_PAGEUP  ,KC_KP_NUM_LOCK,KC_KP_DIVIDE,KC_KP_MULTIPLY,KC_KP_PLUS ,KC_DELETE,KC_END      ,KC_PAGEDOWN   ,KC_KP_7      ,KC_KP_8           ,KC_KP_9           ,KC_KP_4         ,KC_KP_5     ,
+  KC_RIGHT    ,KC_KP_0  ,KC_KP_DOT           ,KC_KP_ENTER,KC_KP_1       ,KC_KP_2     ,KC_KP_6       ,KC_KP_3    ,KC_DOWN  ,KC_UP       ,0             ,0            ,0                 ,0                 ,0               ,0           ,
 };
 
 const unsigned char KEYBOARD_LED_Map[MAX_COL][MAX_ROW] =
 {
 	0,			0,			0,			0,			0,			0,			0,			0,			0,			150,		162,		170,		220,		180,		226,		160,
-	0,			10,		20,		30,		40,		50,		60,		70,		80,		90,		100,		110,		120,		140,		154,		152,
-	0,			0,			2,			12,		22,		32,		42,		52,		62,		72,		82,		92,		102,		112,		122,		0,
-	0,			0,			4,			14,		24,		34,		44,		54,		64,		74,		84,		94,		104,		114,		124,		134,
-	0,			0,			6,			16,		26,		36,		46,		56,		66,		76,		86,		96,		106,		116,		0,			136,
-	0,			0,			8,			18,		28,		38,		48,		58,		68,		78,		88,		98,		108,		118,		0,			138,
+	0,			10,		  20,		  30,		  40,		  50,		  60,		  70,		  80,		  90,		  100,		110,		120,		140,		154,		152,
+	0,			0,			2,			12,		  22,		  32,		  42,		  52,		  62,		  72,		  82,		  92,		  102,		112,		122,		0,
+	0,			0,			4,			14,		  24,		  34,		  44,		  54,		  64,		  74,		  84,		  94,		  104,		114,		124,		134,
+	0,			0,			6,			16,		  26,		  36,		  46,		  56,		  66,		  76,		  86,		  96,		  106,		116,		0,			136,
+	0,			0,			8,			18,		  28,		  38,		  48,		  58,		  68,		  78,		  88,		  98,		  108,		118,		0,			138,
 	0,			0,			190,		192,		194,		0,			0,			198,		0,			0,			0,			202,		204,		206,		208,		210,
 	132,		142,		146,		156,		166,		176,		186,		224,		144,		148,		158,		164,		174,		184,		168,		172,
 	216,		218,		228,		222,		236,		178,		182,		188,		214,		212,		0,			0,			0,			0,			0,			0,
@@ -138,11 +123,11 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 	SCB->VTOR = (FLASH_BASE | 0x5000);
-	
+
 		//char debugBuff[64] = {'0'};
 
   /* USER CODE END 1 */
-  
+
 
   /* MCU Configuration--------------------------------------------------------*/
 
@@ -172,7 +157,7 @@ int main(void)
 	while(hUsbDeviceFS.dev_address == 0)
 	{
 		SetLogoLED(50);
-	}	
+	}
 
 	//sprintf(debugBuff, "x=%u,y=%u,name=%s,val=%x\n", 1, 2, "ax", 9);
 	//HAL_UART_Transmit(&huart1, (uint8_t *)debugBuff, 64, 100);
@@ -216,10 +201,10 @@ void SystemClock_Config(void)
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
-  /** Configure the main internal regulator output voltage 
+  /** Configure the main internal regulator output voltage
   */
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
-  /** Initializes the CPU, AHB and APB busses clocks 
+  /** Initializes the CPU, AHB and APB busses clocks
   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
@@ -233,7 +218,7 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  /** Initializes the CPU, AHB and APB busses clocks 
+  /** Initializes the CPU, AHB and APB busses clocks
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
@@ -385,12 +370,12 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, COL0_Pin|COL1_Pin|COL2_Pin|COL3_Pin 
-                          |COL4_Pin|COL5_Pin|COL6_Pin|COL7_Pin 
+  HAL_GPIO_WritePin(GPIOA, COL0_Pin|COL1_Pin|COL2_Pin|COL3_Pin
+                          |COL4_Pin|COL5_Pin|COL6_Pin|COL7_Pin
                           |COL8_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, CAP_LED_Pin|SCR_LED_Pin|NUM_LED_Pin|MODE_LED_Pin 
+  HAL_GPIO_WritePin(GPIOB, CAP_LED_Pin|SCR_LED_Pin|NUM_LED_Pin|MODE_LED_Pin
                           |MATRIX_RST_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
@@ -402,32 +387,32 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(MATRIX_SYNC_GPIO_Port, MATRIX_SYNC_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : ROW13_Pin ROW14_Pin ROW15_Pin ROW0_Pin 
-                           ROW1_Pin ROW2_Pin ROW3_Pin ROW4_Pin 
-                           ROW5_Pin ROW6_Pin ROW7_Pin ROW8_Pin 
+  /*Configure GPIO pins : ROW13_Pin ROW14_Pin ROW15_Pin ROW0_Pin
+                           ROW1_Pin ROW2_Pin ROW3_Pin ROW4_Pin
+                           ROW5_Pin ROW6_Pin ROW7_Pin ROW8_Pin
                            ROW9_Pin ROW10_Pin ROW11_Pin ROW12_Pin */
-  GPIO_InitStruct.Pin = ROW13_Pin|ROW14_Pin|ROW15_Pin|ROW0_Pin 
-                          |ROW1_Pin|ROW2_Pin|ROW3_Pin|ROW4_Pin 
-                          |ROW5_Pin|ROW6_Pin|ROW7_Pin|ROW8_Pin 
+  GPIO_InitStruct.Pin = ROW13_Pin|ROW14_Pin|ROW15_Pin|ROW0_Pin
+                          |ROW1_Pin|ROW2_Pin|ROW3_Pin|ROW4_Pin
+                          |ROW5_Pin|ROW6_Pin|ROW7_Pin|ROW8_Pin
                           |ROW9_Pin|ROW10_Pin|ROW11_Pin|ROW12_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : COL0_Pin COL1_Pin COL2_Pin COL3_Pin 
-                           COL4_Pin COL5_Pin COL6_Pin COL7_Pin 
+  /*Configure GPIO pins : COL0_Pin COL1_Pin COL2_Pin COL3_Pin
+                           COL4_Pin COL5_Pin COL6_Pin COL7_Pin
                            COL8_Pin */
-  GPIO_InitStruct.Pin = COL0_Pin|COL1_Pin|COL2_Pin|COL3_Pin 
-                          |COL4_Pin|COL5_Pin|COL6_Pin|COL7_Pin 
+  GPIO_InitStruct.Pin = COL0_Pin|COL1_Pin|COL2_Pin|COL3_Pin
+                          |COL4_Pin|COL5_Pin|COL6_Pin|COL7_Pin
                           |COL8_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : CAP_LED_Pin SCR_LED_Pin MATRIX_SS_Pin NUM_LED_Pin 
+  /*Configure GPIO pins : CAP_LED_Pin SCR_LED_Pin MATRIX_SS_Pin NUM_LED_Pin
                            MODE_LED_Pin MATRIX_RST_Pin PWR_EN_Pin */
-  GPIO_InitStruct.Pin = CAP_LED_Pin|SCR_LED_Pin|MATRIX_SS_Pin|NUM_LED_Pin 
+  GPIO_InitStruct.Pin = CAP_LED_Pin|SCR_LED_Pin|MATRIX_SS_Pin|NUM_LED_Pin
                           |MODE_LED_Pin|MATRIX_RST_Pin|PWR_EN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -507,7 +492,7 @@ void Error_Handler(void)
   * @retval None
   */
 void assert_failed(uint8_t *file, uint32_t line)
-{ 
+{
   /* USER CODE BEGIN 6 */
 		/* User can add his own implementation to report the file name and line number,
 		   tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
