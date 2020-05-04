@@ -142,8 +142,10 @@ void Error_Handler(void);
 #define PWR_EN_GPIO_Port GPIOB
 #define EC_B_Pin GPIO_PIN_8
 #define EC_B_GPIO_Port GPIOB
+#define EC_B_EXTI_IRQn EXTI9_5_IRQn
 #define EC_A_Pin GPIO_PIN_9
 #define EC_A_GPIO_Port GPIOB
+#define EC_A_EXTI_IRQn EXTI9_5_IRQn
 /* USER CODE BEGIN Private defines */
 
 #define COL_GPIO_Port GPIOA
@@ -154,10 +156,19 @@ void Error_Handler(void);
 #define MAX_COL		9
 #define MAX_ROW		16
 
-#define BL_SETTING_ADDR				(FLASH_EEPROM_BASE + 0x00)
-#define MODE_SETTING_ADDR			(FLASH_EEPROM_BASE + 0x04)
-#define INSERT_SETTING_ADDR		(FLASH_EEPROM_BASE + 0x08)
+#define BL_SETTING_ADDR				  (FLASH_EEPROM_BASE + 0x00)
+#define MODE_SETTING_ADDR			  (FLASH_EEPROM_BASE + 0x04)
+#define INSERT_SETTING_ADDR		  (FLASH_EEPROM_BASE + 0x08)
 
+
+struct kbReportSt
+{
+  uint8_t id;
+  uint8_t modify;
+  uint8_t reserved;
+  uint8_t keys[6];
+};
+extern struct kbReportSt kbReport;
 
 enum MEDIA_KEY_STATE
 {

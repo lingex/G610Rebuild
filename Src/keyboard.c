@@ -1,8 +1,11 @@
-﻿#include "keyboard.h"
+#include "keyboard.h"
 #include "usbhid.h"
 #include "state_led.h"
 #include "matrix_led.h"
 //#include <stdio.h>
+
+
+extern struct kbReportSt kbReport;
 
 uint8_t KeyCheck(void)
 {
@@ -11,28 +14,28 @@ uint8_t KeyCheck(void)
 	uint16_t checkingRow = 0;
 	uint8_t keyVal = 0;
 	uint8_t *debounce = NULL;
-	uint8_t nKeyCount = 2;
+	uint8_t nKeyCount = 0;
 	uint8_t pressed = 0;
 	uint16_t lastSum = 0;
 	uint16_t keySum = 0;
-	uint8_t modifyVal = keyBuff[1];
+	uint8_t modifyVal = kbReport.modify;
 	uint8_t fnPressed = 0;
 	uint8_t mediaKeyDown = 0;
 
 	//char debugBuff[64] = { '0' };
 
-
-	for (uint8_t i = 0; i < REPORT_SIZE; i++)
+	kbReport.modify = 0;
+	for (uint8_t i = 0; i < 6; i++)
 	{
-		lastSum += keyBuff[i];
-		keyBuff[i] = 0;
+		lastSum += kbReport.keys[i];
+		kbReport.keys[i] = 0;
 	}
 
 	for (uint8_t x = 0; x < MAX_COL; x++)
 	{
 		KeyColPrepare(x);
 		portVal = ~ReadGpioPort(ROW_GPIO_Port);
-		//		if (portVal > 0)
+		//if (portVal > 0)
 		{
 			for (uint8_t y = 0; y < MAX_ROW; y++)
 			{
@@ -44,12 +47,12 @@ uint8_t KeyCheck(void)
 					{
 						(*debounce)++;
 					}
-					if (*debounce >= 5)		//debounce
+					if (*debounce >= DEBOUNCE_MS)		//debounce
 					{
 						pressed = 1;
 						keyVal = KEYBOARD_Value_Map[x][y];
 
-						if (*debounce == 5)
+						if (*debounce == DEBOUNCE_MS)
 						{
 							MatrixOnKeyPressed(x, y, keyVal);
 						}
@@ -57,32 +60,32 @@ uint8_t KeyCheck(void)
 						switch (keyVal)
 						{
 						case KC_LALT:
-							keyBuff[1] |= KC_LALT_VAL;
+							kbReport.modify |= KC_LALT_VAL;
 							break;
 						case KC_LSHIFT:
-							keyBuff[1] |= KC_LSHIFT_VAL;
+							kbReport.modify |= KC_LSHIFT_VAL;
 							break;
 						case KC_LCTRL:
-							keyBuff[1] |= KC_LCTRL_VAL;
+							kbReport.modify |= KC_LCTRL_VAL;
 							break;
 						case KC_LGUI:
-							keyBuff[1] |= gameMode == 1 ? 0x00 : KC_LGUI_VAL;
+							kbReport.modify |= gameMode == 1 ? 0x00 : KC_LGUI_VAL;
 							break;
 						case KC_RALT:
-							keyBuff[1] |= KC_RALT_VAL;
+							kbReport.modify |= KC_RALT_VAL;
 							break;
 						case KC_RSHIFT:
-							keyBuff[1] |= KC_RSHIFT_VAL;
+							kbReport.modify |= KC_RSHIFT_VAL;
 							break;
 						case KC_RCTRL:
-							keyBuff[1] |= KC_RCTRL_VAL;
+							kbReport.modify |= KC_RCTRL_VAL;
 							break;
 						case KC_RGUI:
-							keyBuff[1] |= gameMode == 1 ? 0x00 : KC_RGUI_VAL;
+							kbReport.modify |= gameMode == 1 ? 0x00 : KC_RGUI_VAL;
 							break;
 						case KC_GAME:
 						{
-							if (*debounce == 5)
+							if (*debounce == DEBOUNCE_MS)
 							{
 								GameModeSw();
 							}
@@ -90,7 +93,7 @@ uint8_t KeyCheck(void)
 						break;
 						case KC_BACKLIGHT:
 						{
-							if (*debounce == 5)
+							if (*debounce == DEBOUNCE_MS)
 							{
 								MatrixBrightnessChange();
 							}
@@ -110,7 +113,7 @@ uint8_t KeyCheck(void)
 						//case KC_MEDIA_VOLUME_DOWN:
 						{
 							mediaKeyDown = 1;
-							if (*debounce == 5)
+							if (*debounce == DEBOUNCE_MS)
 							{
 								mediaKeyState = MK_STATE_DOWN;
 								switch (keyVal)
@@ -143,32 +146,38 @@ uint8_t KeyCheck(void)
 							{
 								if (fnPressed > 0)
 								{
-									if (*debounce == 5)
+									if (*debounce == DEBOUNCE_MS)
 									{
 										InsertEnableSw();
 										MatrixOnKeyPressed(x, y, KC_INSERT_SW);
 									}
 									continue;
 								}
-								else if (insertEnable < 1 && keyBuff[0] == 0)
+								else if (insertEnable < 1 && kbReport.modify == 0)
 								{
 									//key insert is disable and none modify key is pressed
 									continue;
 								}
 							}
 
-							for (uint8_t i = 3; i < REPORT_SIZE; i++)
+							uint8_t pressing = 0;
+							for (uint8_t i = 0; i < 6; i++)
 							{
-								if (keyBuff[i] == 0)
+								if (kbReport.keys[i] == 0)
 								{
-									keyBuff[i] = keyVal;
+									kbReport.keys[i] = keyVal;
+									pressing = 1;
 									break;
 								}
 							}
-
-							//if(*debounce == 5)
+							if (pressing == 1)
 							{
-								keyBuff[nKeyCount] = keyVal;
+								continue;
+							}
+
+							//if(*debounce == DEBOUNCE)
+							{
+								kbReport.keys[nKeyCount] = keyVal;
 								if (nKeyCount < 8)
 								{
 									nKeyCount++;
@@ -190,11 +199,11 @@ uint8_t KeyCheck(void)
 		}
 	}
 
-	for (uint8_t i = 0; i < REPORT_SIZE; i++)
+	for (uint8_t i = 0; i < 6; i++)
 	{
-		keySum += keyBuff[i];
+		keySum += kbReport.keys[i];
 	}
-	if (keySum != lastSum || modifyVal != keyBuff[1])
+	if (keySum != lastSum || modifyVal != kbReport.modify)
 	{
 		keyChange = 1;
 	}

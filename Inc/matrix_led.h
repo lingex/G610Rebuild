@@ -54,15 +54,17 @@ extern "C"
 #define DEFAULT_DIMMING 0xf0
 
 #define INDEX_OF_KEY_INSERT 142
+#define INDEX_OF_KEY_LGUI 	192
+#define INDEX_OF_KEY_RGUI 	204
 
 	enum BRIGHTNESS_VALS
 	{
 		BL_VAL_0 = 0,
-		BL_VAL_1 = 20,
-		BL_VAL_2 = 80,
+		BL_VAL_1 = 50,
+		BL_VAL_2 = 85,
 		BL_VAL_3 = 125,
-		BL_VAL_4 = 175,
-		BL_VAL_5 = 235,
+		BL_VAL_4 = 185,
+		BL_VAL_5 = 250,
 	};
 
 	enum DISPLAY_PATTERNS
@@ -89,13 +91,14 @@ extern "C"
 
 	extern uint8_t brightness;
 	extern uint8_t insertEnable;
+	extern uint8_t gameMode;
 
 	extern const unsigned char KEYBOARD_LED_Map[MAX_COL][MAX_ROW];
 
 	extern SPI_HandleTypeDef hspi2;
 	extern UART_HandleTypeDef huart1;
 
-	extern void WriteEEPROM(uint32_t addr, uint32_t val);
+	extern void BrightnessSave(void);
 
 	void MatrixInit(void);
 

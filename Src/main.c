@@ -29,6 +29,7 @@
 #include "state_led.h"
 #include "keyboard.h"
 #include "matrix_led.h"
+#include "ztask.h"
 
 /* USER CODE END Includes */
 
@@ -72,6 +73,12 @@ const unsigned char KEYBOARD_LED_Map[MAX_COL][MAX_ROW] =
 	216,		218,		228,		222,		236,		178,		182,		188,		214,		212,		0,			0,			0,			0,			0,			0,
 };
 
+
+const uint8_t Encoder_Value_Tab[2] =
+{
+	KC_MEDIA_VOLUME_DOWN_VAL,  KC_MEDIA_VOLUME_UP_VAL,
+};
+
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -87,7 +94,8 @@ extern uint8_t KeyCheck(void);
 extern USBD_HandleTypeDef hUsbDeviceFS;
 
 uint8_t keyChange = 0;
-uint8_t	keyBuff[REPORT_SIZE] = { 0 };
+
+struct kbReportSt kbReport;
 
 uint8_t mediaKeyState = MK_STATE_NONE;
 uint8_t	mediaKeyVal = 0;
@@ -110,14 +118,24 @@ void WriteEEPROM(uint32_t addr, uint32_t val);
 
 void GameModeSw(void);
 void InsertEnableSw(void);
+void BrightnessSave(void);
 void MediaKeyDown(uint8_t key);
 void MediaKeyUp(void);
 
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
+
+void EncoderIntRestore(void);
+
+void SetConfigSaveTask(void);
+
+void ConfigSave(void);
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+int zt_bindIdEncoder = 0; //encoder task restore bind id
+int zt_bindIdCfgSave = 0;
 
 /* USER CODE END 0 */
 
@@ -176,6 +194,9 @@ int main(void)
 	MatrixInit();
 	MatrixDisplayOn(1);
 
+	zt_bindIdEncoder =  zt_bind(EncoderIntRestore, 5, 0);
+	zt_bindIdCfgSave =  zt_bind(ConfigSave, 5000, 0);    //configs save delay when changed
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -186,11 +207,12 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
+
 		if (keyChange != 0)
 		{
 			keyChange = 0;
-			keyBuff[0] = 1;		//report id
-			USBD_HID_SendReport(&hUsbDeviceFS, keyBuff, REPORT_SIZE);
+			kbReport.id = 1;		//report id
+			USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*)&kbReport, 9);
 		}
 		KeyCheck();
 		if (mediaKeyState == MK_STATE_DOWN && mediaKeyVal != 0)
@@ -203,7 +225,11 @@ int main(void)
 			MediaKeyUp();
 			mediaKeyState = MK_STATE_NONE;
 		}
+
+    zt_poll();
+
 		HAL_Delay(1);
+    zt_tick();
 	}
   /* USER CODE END 3 */
 }
@@ -330,7 +356,7 @@ static void MX_TIM3_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN TIM3_Init 2 */
-
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
   /* USER CODE END TIM3_Init 2 */
   HAL_TIM_MspPostInit(&htim3);
 
@@ -451,9 +477,13 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pins : EC_B_Pin EC_A_Pin */
   GPIO_InitStruct.Pin = EC_B_Pin|EC_A_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 4, 0);
+  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 
 }
 
@@ -475,7 +505,22 @@ void GameModeSw(void)
 	gameMode = gameMode > 0 ? 0 : 1;
 
 	SetModeLED(gameMode);
-	WriteEEPROM(MODE_SETTING_ADDR, gameMode);
+	//WriteEEPROM(MODE_SETTING_ADDR, gameMode);
+  SetConfigSaveTask();
+}
+
+void InsertEnableSw(void)
+{
+	insertEnable = insertEnable > 0 ? 0 : 1;
+
+	//WriteEEPROM(INSERT_SETTING_ADDR, insertEnable);
+  SetConfigSaveTask();
+}
+
+void BrightnessSave(void)
+{
+  //WriteEEPROM(BL_SETTING_ADDR, brightness);
+  SetConfigSaveTask();
 }
 
 void MediaKeyDown(uint8_t key)
@@ -496,11 +541,37 @@ void MediaKeyUp(void)
   USBD_HID_SendReport(&hUsbDeviceFS, report, 3);
 }
 
-void InsertEnableSw(void)
+void VolumeKey(uint8_t key)
 {
-	insertEnable = insertEnable > 0 ? 0 : 1;
+	MediaKeyDown(key);
 
-	WriteEEPROM(INSERT_SETTING_ADDR, insertEnable);
+  zt_start(zt_bindIdEncoder);
+  zt_reset(zt_bindIdEncoder);
+  //HAL_Delay(1);
+  MediaKeyUp();
+
+	//HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
+}
+
+void EncoderIntRestore(void)
+{
+  //MediaKeyUp();
+  zt_stop(zt_bindIdEncoder);
+  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
+}
+
+void SetConfigSaveTask(void)
+{
+  zt_start(zt_bindIdCfgSave);
+  zt_reset(zt_bindIdCfgSave);
+}
+
+void ConfigSave(void)
+{
+  zt_stop(zt_bindIdCfgSave);
+  WriteEEPROM(MODE_SETTING_ADDR, gameMode);
+  WriteEEPROM(INSERT_SETTING_ADDR, insertEnable);
+  WriteEEPROM(BL_SETTING_ADDR, brightness);
 }
 
 void USBD_HID_GetReport(uint8_t * report, int len)
@@ -508,11 +579,6 @@ void USBD_HID_GetReport(uint8_t * report, int len)
   // see from http://www.microchip.com/forums/m433757.aspx
   // report[0] is the report id
   // report[1] is the led bit filed
-  // D0: NUM lock
-  // D1: CAPS lock
-  // D2: SCROLL lock
-  // D3: Compose
-  // D4: Kana
   if ( report[0]==1 )
 	{
 		// report id 1 is "led" refer to report id in hid report des
@@ -520,6 +586,41 @@ void USBD_HID_GetReport(uint8_t * report, int len)
 		SetCapsLockLED(report[1] & 0x02);
 		SetScrollLockLED(report[1] & 0x04);
   }
+}
+
+//encoder check
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  uint8_t pinV = 0;
+  static uint8_t debounce;
+
+  HAL_NVIC_DisableIRQ(EXTI9_5_IRQn);
+
+  if (GPIO_Pin == EC_A_Pin)
+  {
+    if (debounce == 0)
+    {
+      zt_start(zt_bindIdEncoder);
+      zt_reset(zt_bindIdEncoder);
+      return;
+    }
+
+    debounce = 0;
+    pinV = HAL_GPIO_ReadPin(EC_B_GPIO_Port, EC_B_Pin) == GPIO_PIN_RESET ? 0 : 1;
+  }
+  else if (GPIO_Pin == EC_B_Pin)
+  {
+    if (debounce == 1)
+    {
+      zt_start(zt_bindIdEncoder);
+      zt_reset(zt_bindIdEncoder);
+      return;
+    }
+
+    debounce = 1;
+    pinV = HAL_GPIO_ReadPin(EC_A_GPIO_Port, EC_A_Pin) == GPIO_PIN_RESET ? 1 : 0;
+  }
+  VolumeKey(Encoder_Value_Tab[pinV]);
 }
 
 /* USER CODE END 4 */

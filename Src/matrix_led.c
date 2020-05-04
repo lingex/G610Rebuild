@@ -31,6 +31,13 @@ void MatrixInit(void)
 		//turn of insert
 		matrixBuff[INDEX_OF_KEY_INSERT] = 0x00;
 	}
+	if (gameMode > 0)
+	{
+		//turn off GUI
+		matrixBuff[INDEX_OF_KEY_LGUI] = 0x00;
+		matrixBuff[INDEX_OF_KEY_RGUI] = 0x00;
+	}
+
 	MatrixSyncBuff(DISP_P1);
 
 	MatrixSetBrightness(brightness);
@@ -128,24 +135,38 @@ void MatrixSyncByte(uint8_t p, uint8_t regAddr, uint8_t val)
 
 void MatrixOnKeyPressed(uint8_t x, uint8_t y, uint8_t keyVal)
 {
-	if (keyVal == KC_INSERT_SW)
+	switch (keyVal)
+	{
+	case KC_INSERT_SW:
 	{
 		uint8_t index = KEYBOARD_LED_Map[x][y];
-		//if (index == INDEX_OF_KEY_INSERT)
-		{
-			if (insertEnable)
-			{
-				matrixBuff[index] = DEFAULT_DIMMING;
-			}
-			else
-			{
-				matrixBuff[index] = 0;
-			}
-		}
+
+		matrixBuff[index] = insertEnable > 0 ? DEFAULT_DIMMING : 0;
+
 		MatrixSyncByte(DISP_P1, index, matrixBuff[index]);
+	}
+		break;
+	case KC_GAME:
+	{
+		if (gameMode > 0)
+		{
+			matrixBuff[INDEX_OF_KEY_LGUI] = DEFAULT_DIMMING;
+			matrixBuff[INDEX_OF_KEY_RGUI] = DEFAULT_DIMMING;
+		}
+		else
+		{
+			matrixBuff[INDEX_OF_KEY_LGUI] = 0;
+			matrixBuff[INDEX_OF_KEY_RGUI] = 0;
+		}
+		MatrixSyncByte(DISP_P1, INDEX_OF_KEY_LGUI, matrixBuff[INDEX_OF_KEY_LGUI]);
+		MatrixSyncByte(DISP_P1, INDEX_OF_KEY_RGUI, matrixBuff[INDEX_OF_KEY_RGUI]);
 		//MatrixSyncBuff();
 	}
-	//TODO something else
+		break;
+
+	default:
+		break;
+	}
 }
 
 void MatrixBrightnessChange(void)
@@ -178,5 +199,5 @@ void MatrixBrightnessChange(void)
 
 	MatrixSyncBuff(DISP_P1);
 
-	WriteEEPROM(BL_SETTING_ADDR, brightness);
+	BrightnessSave();
 }

@@ -23,5 +23,5 @@ void SetModeLED(uint8_t on)
 void SetLogoLED(uint16_t brightVal)
 {
 	__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, brightVal);
-	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
+	//HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
 }

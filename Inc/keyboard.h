@@ -8,11 +8,11 @@ extern "C" {
 
 	/* Includes ------------------------------------------------------------------*/
 #include  "main.h"
+#define DEBOUNCE_MS		10
 
 	extern uint8_t gameMode;
 	extern uint8_t insertEnable;
 	extern uint8_t keyChange;
-	extern uint8_t keyBuff[REPORT_SIZE];
 	extern uint8_t mediaKeyState;
 	extern uint8_t mediaKeyVal;
 	extern const char * KEYBOARD_Name_Map[MAX_COL][MAX_ROW];
@@ -21,6 +21,7 @@ extern "C" {
 
 	extern void GameModeSw(void);
 	extern void InsertEnableSw(void);
+	extern void NumLockEnableSw(void);
 	extern void MediaKeyDown(uint8_t keyVal);
 
 	uint8_t KeyCheck(void);
