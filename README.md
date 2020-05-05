@@ -10,7 +10,7 @@ A non-original firmware of Logitech G610 mechanical keyboard.
 
 
 # TODO:
-1.Volume up and down are not finish yet.
+1.Make volume wheel more stable.
 2."NKRO" support.
 
 

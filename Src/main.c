@@ -121,14 +121,16 @@ void InsertEnableSw(void);
 void BrightnessSave(void);
 void MediaKeyDown(uint8_t key);
 void MediaKeyUp(void);
+void VolumeKeyDown(uint8_t key);
+void VolumeKeyUp(void);
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
-
-void EncoderIntRestore(void);
 
 void SetConfigSaveTask(void);
 
 void ConfigSave(void);
+
+void EncoderCheck(void);
 
 /* USER CODE END PFP */
 
@@ -136,6 +138,8 @@ void ConfigSave(void);
 /* USER CODE BEGIN 0 */
 int zt_bindIdEncoder = 0; //encoder task restore bind id
 int zt_bindIdCfgSave = 0;
+
+int16_t encoderCount = 0;
 
 /* USER CODE END 0 */
 
@@ -146,7 +150,7 @@ int zt_bindIdCfgSave = 0;
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	SCB->VTOR = (FLASH_BASE | 0x5000);
+		SCB->VTOR = APP_ADDR;
 		//char debugBuff[64] = {'0'};
 
   /* USER CODE END 1 */
@@ -194,8 +198,9 @@ int main(void)
 	MatrixInit();
 	MatrixDisplayOn(1);
 
-	zt_bindIdEncoder =  zt_bind(EncoderIntRestore, 5, 0);
-	zt_bindIdCfgSave =  zt_bind(ConfigSave, 5000, 0);    //configs save delay when changed
+	zt_bindIdEncoder =  zt_bind(VolumeKeyUp, 20, 0);		//Volume adj key hold time
+	zt_bindIdCfgSave =  zt_bind(ConfigSave, 5000, 0);   //configs save delay when changed
+	zt_bind(EncoderCheck, 40, 1);
 
   /* USER CODE END 2 */
 
@@ -206,7 +211,6 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-
 
 		if (keyChange != 0)
 		{
@@ -475,11 +479,17 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(MATRIX_SYNC_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : EC_B_Pin EC_A_Pin */
-  GPIO_InitStruct.Pin = EC_B_Pin|EC_A_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  /*Configure GPIO pin : EC_B_Pin */
+  GPIO_InitStruct.Pin = EC_B_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  HAL_GPIO_Init(EC_B_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : EC_A_Pin */
+  GPIO_InitStruct.Pin = EC_A_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(EC_A_GPIO_Port, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI9_5_IRQn, 4, 0);
@@ -523,6 +533,25 @@ void BrightnessSave(void)
   SetConfigSaveTask();
 }
 
+void EncoderCheck(void)
+{
+  if (encoderCount != 0 )
+  {
+    if (encoderCount < 0)
+    {
+      VolumeKeyDown(KC_MEDIA_VOLUME_UP_VAL);
+    }
+    else if (encoderCount > 0)
+    {
+      VolumeKeyDown(KC_MEDIA_VOLUME_DOWN_VAL);
+    }
+
+    zt_start(zt_bindIdEncoder);
+    zt_reset(zt_bindIdEncoder);
+  }
+  encoderCount = 0;
+}
+
 void MediaKeyDown(uint8_t key)
 {
 	uint8_t report[3];
@@ -541,23 +570,17 @@ void MediaKeyUp(void)
   USBD_HID_SendReport(&hUsbDeviceFS, report, 3);
 }
 
-void VolumeKey(uint8_t key)
+void VolumeKeyDown(uint8_t key)
 {
 	MediaKeyDown(key);
-
-  zt_start(zt_bindIdEncoder);
-  zt_reset(zt_bindIdEncoder);
-  //HAL_Delay(1);
-  MediaKeyUp();
-
-	//HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
+	//HAL_NVIC_DisableIRQ(EXTI9_5_IRQn);
 }
 
-void EncoderIntRestore(void)
+void VolumeKeyUp(void)
 {
-  //MediaKeyUp();
+  MediaKeyUp();
   zt_stop(zt_bindIdEncoder);
-  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
+  //HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 }
 
 void SetConfigSaveTask(void)
@@ -579,7 +602,7 @@ void USBD_HID_GetReport(uint8_t * report, int len)
   // see from http://www.microchip.com/forums/m433757.aspx
   // report[0] is the report id
   // report[1] is the led bit filed
-  if ( report[0]==1 )
+  if (report[0] == 1)
 	{
 		// report id 1 is "led" refer to report id in hid report des
     SetNumLockLED(report[1] & 0x01);
@@ -588,39 +611,26 @@ void USBD_HID_GetReport(uint8_t * report, int len)
   }
 }
 
-//encoder check
+//encoder interrupt
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-  uint8_t pinV = 0;
-  static uint8_t debounce;
-
-  HAL_NVIC_DisableIRQ(EXTI9_5_IRQn);
+  //HAL_NVIC_DisableIRQ(EXTI9_5_IRQn);
 
   if (GPIO_Pin == EC_A_Pin)
   {
-    if (debounce == 0)
+    if (HAL_GPIO_ReadPin(EC_A_GPIO_Port, EC_A_Pin) != HAL_GPIO_ReadPin(EC_B_GPIO_Port, EC_B_Pin))
     {
-      zt_start(zt_bindIdEncoder);
-      zt_reset(zt_bindIdEncoder);
-      return;
+      encoderCount++;
     }
-
-    debounce = 0;
-    pinV = HAL_GPIO_ReadPin(EC_B_GPIO_Port, EC_B_Pin) == GPIO_PIN_RESET ? 0 : 1;
+    else
+    {
+      encoderCount--;
+    }
   }
   else if (GPIO_Pin == EC_B_Pin)
   {
-    if (debounce == 1)
-    {
-      zt_start(zt_bindIdEncoder);
-      zt_reset(zt_bindIdEncoder);
-      return;
-    }
 
-    debounce = 1;
-    pinV = HAL_GPIO_ReadPin(EC_A_GPIO_Port, EC_A_Pin) == GPIO_PIN_RESET ? 1 : 0;
   }
-  VolumeKey(Encoder_Value_Tab[pinV]);
 }
 
 /* USER CODE END 4 */
