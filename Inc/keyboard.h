@@ -25,7 +25,7 @@ extern "C"
 	extern void NumLockEnableSw(void);
 	extern void MediaKeyDown(uint8_t keyVal);
 
-	uint8_t KeyCheck(void);
+	void KeyCheck(void);
 	uint32_t ReadGpioPort(GPIO_TypeDef *GPIOx);
 	void KeyColPrepare(uint8_t index);
 

@@ -90,7 +90,7 @@ UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
 
-extern uint8_t KeyCheck(void);
+extern void KeyCheck(void);
 extern USBD_HandleTypeDef hUsbDeviceFS;
 
 uint8_t keyChange = 0;
@@ -201,6 +201,7 @@ int main(void)
 	zt_bindIdEncoder =  zt_bind(VolumeKeyUp, 20, 0);		//Volume adj key hold time
 	zt_bindIdCfgSave =  zt_bind(ConfigSave, 5000, 0);   //configs save delay when changed
 	zt_bind(EncoderCheck, 40, 1);
+	zt_bind(KeyCheck, 1, 1);
 
   /* USER CODE END 2 */
 
@@ -212,7 +213,6 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-    KeyCheck();
 		if (keyChange != 0)
 		{
 			keyChange = 0;
@@ -225,7 +225,7 @@ int main(void)
 
 			HAL_Delay(5); //important
 		}
-		if (mediaKeyState == MK_STATE_DOWN && mediaKeyVal != 0)
+		if (mediaKeyState == MK_STATE_DOWN)
 		{
 			MediaKeyDown(mediaKeyVal);
 			mediaKeyState = MK_STATE_REPORTED;

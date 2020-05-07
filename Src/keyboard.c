@@ -13,7 +13,7 @@ bool keyFnDown = false;
 uint8_t queueBuff[MAX_QUEUE];
 
 
-uint8_t KeyCheck(void)
+void KeyCheck(void)
 {
 	static uint8_t debounceCount[MAX_COL][MAX_ROW];
 	uint16_t portVal = 0;
@@ -60,8 +60,6 @@ uint8_t KeyCheck(void)
 			}
 		}
 	}
-
-	return pressed;
 }
 
 uint32_t ReadGpioPort(GPIO_TypeDef *GPIOx)
