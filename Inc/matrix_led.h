@@ -23,7 +23,6 @@ extern "C"
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
-
 #define SPI_TIMEOUT_PA 2
 
 #define ST524_ADDR_SWCTL 0x00
@@ -54,8 +53,8 @@ extern "C"
 #define DEFAULT_DIMMING 0xf0
 
 #define INDEX_OF_KEY_INSERT 142
-#define INDEX_OF_KEY_LGUI 	192
-#define INDEX_OF_KEY_RGUI 	204
+#define INDEX_OF_KEY_LGUI 192
+#define INDEX_OF_KEY_RGUI 204
 
 	enum BRIGHTNESS_VALS
 	{
@@ -72,22 +71,6 @@ extern "C"
 		DISP_P1 = 1,
 		DISP_P2 = 2,
 	};
-
-	static uint16_t len = 0;
-
-	static uint8_t matrixBuff[255] = {0}; //led buff
-										  /*
-	every 2 bytes controls dimming, slope and delay registers of one dot
-
-	Dimming 			Bit7 Bit6 Bit5 Bit4 Bit3 Bit2 Bit1 Bit0
-	Add = nnh 							Dn_xx[7:0]
-	Default 						value Not defined
-
-	Slope and delay 	Bit7 Bit6 Bit5 Bit4		Bit3 Bit2 		Bit1 Bit0
-	Add = (nn+1)h 		  -	   -    -    -   	PnCYCxx[1:0] 	PnDLYxx[1:0]
-	Default value 		  -    -    -    -      Not defined     Not defined
-
-*/
 
 	extern uint8_t brightness;
 	extern uint8_t insertEnable;

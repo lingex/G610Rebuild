@@ -49,15 +49,15 @@
 
 const unsigned char KEYBOARD_Value_Map[MAX_COL][MAX_ROW] =
 {
-  0           ,0        ,0                   ,0          ,0             ,0           ,0             ,0          ,KC_GAME  ,KC_BACKLIGHT,KC_MEDIA_PLAY ,KC_MEDIA_STOP,KC_MEDIA_SCAN_NEXT,KC_MEDIA_SCAN_PREV,KC_KP_MINUS     ,KC_MEDIA_MUTE     ,
-  KC_ESCAPE   ,KC_F1    ,KC_F2               ,KC_F3      ,KC_F4         ,KC_F5       ,KC_F6         ,KC_F7      ,KC_F8    ,KC_F9       ,KC_F10        ,KC_F11       ,KC_F12            ,KC_PRINTSCREEN    ,KC_SCROLL_LOCK  ,KC_PAUSE    ,
-  0           ,0        ,KC_TILDE            ,KC_1       ,KC_2          ,KC_3        ,KC_4          ,KC_5       ,KC_6     ,KC_7        ,KC_8          ,KC_9         ,KC_0              ,KC_UNDERSCORE     ,KC_PLUS         ,0           ,
-  0           ,0        ,KC_TAB              ,KC_Q       ,KC_W          ,KC_E        ,KC_R          ,KC_T       ,KC_Y     ,KC_U        ,KC_I          ,KC_O         ,KC_P              ,KC_OPEN_BRACKET   ,KC_CLOSE_BRACKET,KC_BACKSLASH,
-  0           ,0        ,KC_CAPS_LOCK        ,KC_A       ,KC_S          ,KC_D        ,KC_F          ,KC_G       ,KC_H     ,KC_J        ,KC_K          ,KC_L         ,KC_COLON          ,KC_QUOTE          ,0               ,KC_ENTER    ,
-  0           ,0        ,KC_LSHIFT           ,0          ,KC_Z          ,KC_X        ,KC_C          ,KC_V       ,KC_B     ,KC_N        ,KC_M          ,KC_COMMA     ,KC_DOT            ,KC_SLASH          ,0               ,KC_RSHIFT   ,
-  0           ,0        ,KC_LCTRL            ,KC_LGUI    ,KC_LALT       ,0           ,0             ,KC_SPACEBAR,0        ,0           ,0             ,KC_RALT      ,KC_RGUI           ,KC_FN             ,KC_RCTRL        ,KC_LEFT     ,
-  KC_BACKSPACE,KC_INSERT,KC_HOME             ,KC_PAGEUP  ,KC_KP_NUM_LOCK,KC_KP_DIVIDE,KC_KP_MULTIPLY,KC_KP_PLUS ,KC_DELETE,KC_END      ,KC_PAGEDOWN   ,KC_KP_7      ,KC_KP_8           ,KC_KP_9           ,KC_KP_4         ,KC_KP_5     ,
-  KC_RIGHT    ,KC_KP_0  ,KC_KP_DOT           ,KC_KP_ENTER,KC_KP_1       ,KC_KP_2     ,KC_KP_6       ,KC_KP_3    ,KC_DOWN  ,KC_UP       ,0             ,0            ,0                 ,0                 ,0               ,0           ,
+  {0           ,0        ,0                   ,0          ,0             ,0           ,0             ,0          ,KC_GAME  ,KC_BACKLIGHT,KC_MEDIA_PLAY ,KC_MEDIA_STOP,KC_MEDIA_SCAN_NEXT,KC_MEDIA_SCAN_PREV,KC_KP_MINUS     ,KC_MEDIA_MUTE,},
+  {KC_ESCAPE   ,KC_F1    ,KC_F2               ,KC_F3      ,KC_F4         ,KC_F5       ,KC_F6         ,KC_F7      ,KC_F8    ,KC_F9       ,KC_F10        ,KC_F11       ,KC_F12            ,KC_PRINTSCREEN    ,KC_SCROLL_LOCK  ,KC_PAUSE    ,},
+  {0           ,0        ,KC_TILDE            ,KC_1       ,KC_2          ,KC_3        ,KC_4          ,KC_5       ,KC_6     ,KC_7        ,KC_8          ,KC_9         ,KC_0              ,KC_UNDERSCORE     ,KC_PLUS         ,0           ,},
+  {0           ,0        ,KC_TAB              ,KC_Q       ,KC_W          ,KC_E        ,KC_R          ,KC_T       ,KC_Y     ,KC_U        ,KC_I          ,KC_O         ,KC_P              ,KC_OPEN_BRACKET   ,KC_CLOSE_BRACKET,KC_BACKSLASH,},
+  {0           ,0        ,KC_CAPS_LOCK        ,KC_A       ,KC_S          ,KC_D        ,KC_F          ,KC_G       ,KC_H     ,KC_J        ,KC_K          ,KC_L         ,KC_COLON          ,KC_QUOTE          ,0               ,KC_ENTER    ,},
+  {0           ,0        ,KC_LSHIFT           ,0          ,KC_Z          ,KC_X        ,KC_C          ,KC_V       ,KC_B     ,KC_N        ,KC_M          ,KC_COMMA     ,KC_DOT            ,KC_SLASH          ,0               ,KC_RSHIFT   ,},
+  {0           ,0        ,KC_LCTRL            ,KC_LGUI    ,KC_LALT       ,0           ,0             ,KC_SPACEBAR,0        ,0           ,0             ,KC_RALT      ,KC_RGUI           ,KC_FN             ,KC_RCTRL        ,KC_LEFT     ,},
+  {KC_BACKSPACE,KC_INSERT,KC_HOME             ,KC_PAGEUP  ,KC_KP_NUM_LOCK,KC_KP_DIVIDE,KC_KP_MULTIPLY,KC_KP_PLUS ,KC_DELETE,KC_END      ,KC_PAGEDOWN   ,KC_KP_7      ,KC_KP_8           ,KC_KP_9           ,KC_KP_4         ,KC_KP_5     ,},
+  {KC_RIGHT    ,KC_KP_0  ,KC_KP_DOT           ,KC_KP_ENTER,KC_KP_1       ,KC_KP_2     ,KC_KP_6       ,KC_KP_3    ,KC_DOWN  ,KC_UP       ,0             ,0            ,0                 ,0                 ,0               ,0           ,},
 };
 
 const unsigned char KEYBOARD_LED_Map[MAX_COL][MAX_ROW] =
@@ -212,13 +212,19 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
+    KeyCheck();
 		if (keyChange != 0)
 		{
 			keyChange = 0;
 			kbReport.id = 1;		//report id
 			USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*)&kbReport, 9);
+
+      //char debugBuff[64];
+      //sprintf(debugBuff, "report modify[%u], [%u][%u][%u][%u][%u][%u]\n", kbReport.modify, kbReport.keys[0], kbReport.keys[1], kbReport.keys[2], kbReport.keys[3], kbReport.keys[4], kbReport.keys[5]);
+	    //HAL_UART_Transmit(&huart1, (uint8_t *)debugBuff, 64, 100);
+
+			HAL_Delay(5); //important
 		}
-		KeyCheck();
 		if (mediaKeyState == MK_STATE_DOWN && mediaKeyVal != 0)
 		{
 			MediaKeyDown(mediaKeyVal);
