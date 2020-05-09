@@ -36,10 +36,17 @@ void zt_stop(int id)
 		g.tasks[id].en = 0;
 }
 
-void zt_start(int id)
+void zt_start(int id, int reset)
 {
 	if (id < ZT_MAX_TASKS)
+	{
 		g.tasks[id].en = 1;
+		if (reset > 0)
+		{
+			g.tasks[id].timeout = g.ticks + g.tasks[id].repeat;
+		}
+
+	}
 }
 
 int zt_bind(zt_func_t func, int repeat, int en)

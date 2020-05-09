@@ -24,7 +24,8 @@
 #define __MAIN_H
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -34,27 +35,27 @@ extern "C" {
 /* USER CODE BEGIN Includes */
 #include "stdint.h"
 #include "stdbool.h"
-/* USER CODE END Includes */
+  /* USER CODE END Includes */
 
-/* Exported types ------------------------------------------------------------*/
-/* USER CODE BEGIN ET */
+  /* Exported types ------------------------------------------------------------*/
+  /* USER CODE BEGIN ET */
 
-/* USER CODE END ET */
+  /* USER CODE END ET */
 
-/* Exported constants --------------------------------------------------------*/
-/* USER CODE BEGIN EC */
+  /* Exported constants --------------------------------------------------------*/
+  /* USER CODE BEGIN EC */
 
-/* USER CODE END EC */
+  /* USER CODE END EC */
 
-/* Exported macro ------------------------------------------------------------*/
-/* USER CODE BEGIN EM */
+  /* Exported macro ------------------------------------------------------------*/
+  /* USER CODE BEGIN EM */
 
-/* USER CODE END EM */
+  /* USER CODE END EM */
 
-void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
+  void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
-/* Exported functions prototypes ---------------------------------------------*/
-void Error_Handler(void);
+  /* Exported functions prototypes ---------------------------------------------*/
+  void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
 
@@ -146,41 +147,42 @@ void Error_Handler(void);
 #define EC_A_Pin GPIO_PIN_9
 #define EC_A_GPIO_Port GPIOB
 #define EC_A_EXTI_IRQn EXTI9_5_IRQn
-/* USER CODE BEGIN Private defines */
+  /* USER CODE BEGIN Private defines */
 
 #define COL_GPIO_Port GPIOA
 #define ROW_GPIO_Port GPIOC
 
 #define REPORT_SIZE 9
 
-#define MAX_COL		9
-#define MAX_ROW		16
+#define MAX_COL 9
+#define MAX_ROW 16
 
-#define APP_ADDR  (FLASH_BASE | 0x3000)
+#define APP_ADDR (FLASH_BASE | 0x3000)
 
-#define BL_SETTING_ADDR				  (FLASH_EEPROM_BASE + 0x00)
-#define MODE_SETTING_ADDR			  (FLASH_EEPROM_BASE + 0x04)
-#define INSERT_SETTING_ADDR		  (FLASH_EEPROM_BASE + 0x08)
+#define BL_SETTING_ADDR (FLASH_EEPROM_BASE + 0x00)
+#define MODE_SETTING_ADDR (FLASH_EEPROM_BASE + 0x04)
+#define INSERT_SETTING_ADDR (FLASH_EEPROM_BASE + 0x08)
 
+#define ENCODER_DEBOUNCE_MS 0
 
-struct kbReportSt
-{
-  uint8_t id;
-  uint8_t modify;
-  uint8_t reserved;
-  uint8_t keys[6];
-};
-extern struct kbReportSt kbReport;
+  struct kbReportSt
+  {
+    uint8_t id;
+    uint8_t modify;
+    uint8_t reserved;
+    uint8_t keys[6];
+  };
+  extern struct kbReportSt kbReport;
 
-enum MEDIA_KEY_STATE
-{
-	MK_STATE_NONE = 0,
-	MK_STATE_DOWN,
-	MK_STATE_REPORTED,
-	MK_STATE_UP,
-};
+  enum MEDIA_KEY_STATE
+  {
+    MK_STATE_NONE = 0,
+    MK_STATE_DOWN,
+    MK_STATE_REPORTED,
+    MK_STATE_UP,
+  };
 
-/* USER CODE END Private defines */
+  /* USER CODE END Private defines */
 
 #ifdef __cplusplus
 }

@@ -3,7 +3,6 @@
 #include "state_led.h"
 #include "matrix_led.h"
 
-
 extern struct kbReportSt kbReport;
 
 bool keyFnDown = false;
@@ -12,7 +11,6 @@ bool keyFnDown = false;
 
 uint8_t queueBuff[MAX_QUEUE];
 
-
 void KeyCheck(void)
 {
 	static uint8_t debounceCount[MAX_COL][MAX_ROW];
@@ -20,7 +18,6 @@ void KeyCheck(void)
 	uint16_t checkingRow = 0;
 	uint8_t keyVal = 0;
 	uint8_t *debounce = NULL;
-	uint8_t pressed = 0;
 
 	//char debugBuff[64] = { '0' };
 
@@ -37,12 +34,11 @@ void KeyCheck(void)
 				keyVal = KEYBOARD_Value_Map[x][y];
 				if (checkingRow & portVal)
 				{
-					pressed = 1;
 					if (*debounce < 100)
 					{
 						(*debounce)++;
 					}
-					if (*debounce == DEBOUNCE_MS) //debounce		//TODO fixme == only
+					if (*debounce == DEBOUNCE_MS) //debounce
 					{
 						//MatrixOnKeyPressed(x, y, keyVal);
 						OnKeyDown(x, y, keyVal);
@@ -135,6 +131,10 @@ void OnKeyDown(uint8_t x, uint8_t y, uint8_t keyVal)
 		break;
 	case KC_GAME:
 	{
+		if (keyFnDown)
+		{
+			DfuMode();
+		}
 		GameModeSw();
 	}
 	break;
@@ -328,7 +328,6 @@ void OnKeyUp(uint8_t x, uint8_t y, uint8_t keyVal)
 				}
 			}
 		}
-
 	}
 	break;
 	}

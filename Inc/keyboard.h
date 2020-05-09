@@ -24,6 +24,7 @@ extern "C"
 	extern void InsertEnableSw(void);
 	extern void NumLockEnableSw(void);
 	extern void MediaKeyDown(uint8_t keyVal);
+	extern void DfuMode(void);
 
 	void KeyCheck(void);
 	uint32_t ReadGpioPort(GPIO_TypeDef *GPIOx);
