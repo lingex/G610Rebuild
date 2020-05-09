@@ -61,7 +61,8 @@ void MatrixInit(void)
 
 void MatrixSetBrightness(uint8_t val)
 {
-	//set pwm reg
+#if 0
+	//set pwm reg  will cause noise
 	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_RESET);
 
 	len = 4;
@@ -73,6 +74,25 @@ void MatrixSetBrightness(uint8_t val)
 	HAL_SPI_Transmit(&hspi2, cmdBuff, len, SPI_TIMEOUT_PA * len);
 
 	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_SET);
+#endif
+
+	for (uint16_t i = 0; i < PATTERN_SIZE; i += 2)
+	{
+		matrixBuff[i] = val;
+	}
+	if (insertEnable < 1)
+	{
+		//turn of insert
+		matrixBuff[INDEX_OF_KEY_INSERT] = 0x00;
+	}
+	if (gameMode > 0)
+	{
+		//turn off GUI
+		matrixBuff[INDEX_OF_KEY_LGUI] = 0x00;
+		matrixBuff[INDEX_OF_KEY_RGUI] = 0x00;
+	}
+
+	MatrixSyncBuff(DISP_P1);
 
 	SetLogoLED(brightness);
 }
@@ -209,11 +229,11 @@ void MatrixBrightnessChange(void)
 		break;
 	}
 
-	SetLogoLED(brightness);
+	//SetLogoLED(brightness);
 
 	MatrixSetBrightness(brightness);
 
-	MatrixSyncBuff(DISP_P1);
+	//MatrixSyncBuff(DISP_P1);
 
 	BrightnessSave();
 }

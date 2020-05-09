@@ -59,8 +59,8 @@ extern "C"
 	enum BRIGHTNESS_VALS
 	{
 		BL_VAL_0 = 0,
-		BL_VAL_1 = 50,
-		BL_VAL_2 = 85,
+		BL_VAL_1 = 35,
+		BL_VAL_2 = 75,
 		BL_VAL_3 = 125,
 		BL_VAL_4 = 185,
 		BL_VAL_5 = 250,
