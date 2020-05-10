@@ -73,12 +73,6 @@ const unsigned char KEYBOARD_LED_Map[MAX_COL][MAX_ROW] =
 	216,		218,		228,		222,		236,		178,		182,		188,		214,		212,		0,			0,			0,			0,			0,			0,
 };
 
-
-const uint8_t Encoder_Value_Tab[2] =
-{
-	KC_MEDIA_VOLUME_DOWN_VAL,  KC_MEDIA_VOLUME_UP_VAL,
-};
-
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -103,6 +97,8 @@ uint8_t	mediaKeyVal = 0;
 uint8_t brightness = 0;
 uint8_t gameMode = 0;
 uint8_t insertEnable = 0;
+
+uint16_t intPin = 0;
 
 /* USER CODE END PV */
 
@@ -204,10 +200,11 @@ int main(void)
 	zt_bindIdEncoder =  zt_bind(VolumeKeyUp, 20, 0);		//Volume adj key hold time
 	zt_bindIdCfgSave =  zt_bind(ConfigSave, 5000, 0);   //configs save delay when changed
 	zt_bindIdEcDebounce =  zt_bind(EncoderDebounce, 1, 0);
-	zt_bind(EncoderCheck, 50, 1);
+	zt_bind(EncoderCheck, 30, 1);
 	zt_bind(KeyCheck, 1, 1);
 
   /* USER CODE END 2 */
+
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	while (1)
@@ -488,17 +485,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(MATRIX_SYNC_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : EC_B_Pin */
-  GPIO_InitStruct.Pin = EC_B_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(EC_B_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : EC_A_Pin */
-  GPIO_InitStruct.Pin = EC_A_Pin;
+  /*Configure GPIO pins : EC_B_Pin EC_A_Pin */
+  GPIO_InitStruct.Pin = EC_B_Pin|EC_A_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(EC_A_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI9_5_IRQn, 4, 0);
@@ -566,15 +557,29 @@ void EncoderDebounce(void)
   GPIO_PinState pinA = HAL_GPIO_ReadPin(EC_A_GPIO_Port, EC_A_Pin);
   GPIO_PinState pinB = HAL_GPIO_ReadPin(EC_B_GPIO_Port, EC_B_Pin);
 
-  if (pinA != pinB)
+  if (intPin == EC_A_Pin)
   {
-     encoderCount--;
-   }
-   else
-   {
-     encoderCount++;
-   }
-
+    if (pinB == GPIO_PIN_SET)
+    {
+      encoderCount++;
+    }
+    else
+    {
+      encoderCount--;
+    }
+  }
+  if (intPin == EC_B_Pin)
+  {
+    if (pinA == GPIO_PIN_SET)
+    {
+      encoderCount++;
+    }
+    else
+    {
+      encoderCount--;
+    }
+  }
+  intPin = 0;
   HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 }
 
@@ -648,37 +653,24 @@ void USBD_HID_GetReport(uint8_t * report, int len)
 //encoder interrupt
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-  static uint32_t triggerT;
-  if (HAL_GetTick() - triggerT < ENCODER_DEBOUNCE_MS)
-  {
-    return;
-  }
-  HAL_NVIC_DisableIRQ(EXTI9_5_IRQn);
-  zt_start(zt_bindIdEcDebounce, 1);
-  triggerT = HAL_GetTick();
-
-#if 0
-	HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
-
   GPIO_PinState pinA = HAL_GPIO_ReadPin(EC_A_GPIO_Port, EC_A_Pin);
   GPIO_PinState pinB = HAL_GPIO_ReadPin(EC_B_GPIO_Port, EC_B_Pin);
 
-  if (GPIO_Pin == EC_A_Pin)
+  if (GPIO_Pin == EC_A_Pin && pinA != GPIO_PIN_SET)
   {
-    if (pinA != pinB)
-    {
-      encoderCount--;
-    }
-    else
-    {
-      encoderCount++;
-    }
+    //not rising
+    return;
   }
-  else if (GPIO_Pin == EC_B_Pin)
+  if (GPIO_Pin == EC_B_Pin && pinB != GPIO_PIN_RESET)
   {
+    //not falling
+    return;
+  }
 
-  }
-#endif
+  intPin = GPIO_Pin;
+
+  HAL_NVIC_DisableIRQ(EXTI9_5_IRQn);
+  zt_start(zt_bindIdEcDebounce, 1);
 }
 
 /* USER CODE END 4 */
