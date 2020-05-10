@@ -35,3 +35,5 @@ https://github.com/sfyip/STM32F103_MSD_BOOTLOADER.git
 ztask
 https://www.amobbs.com/thread-5722920-1-1.html
 
+hex2dfu
+https://github.com/nanoframework/hex2dfu
