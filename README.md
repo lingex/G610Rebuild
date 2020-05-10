@@ -6,12 +6,12 @@ A non-original firmware of Logitech G610 mechanical keyboard.
 2.Game mode will turn off the two LED of the GUI key.
 3.Menu(Application) key turn into be a "FN" key now.
 4.Switchable Insert key, by pressing CTRL + INSERT, the LED will show the status.
-5.MSD update by pressing the 'Game mode' key before plug in the USB cable, then copy the firmware (.bin) to the simulation USB drive.
+5.Dfu upgrade mode, by pressing FN(Menu) + Game Mode.
 
 
 # TODO:
-1.Make volume wheel more stable.
-2."NKRO" support.
+1."NKRO" support.
+2. some backlight effects.
 
 
 
@@ -28,9 +28,6 @@ https://github.com/lingex/STM32L10X_MSD_BOOTLOADER.git
 
 media keys
 https://github.com/diabolo38/HidKbd.git
-
-bootloader
-https://github.com/sfyip/STM32F103_MSD_BOOTLOADER.git
 
 ztask
 https://www.amobbs.com/thread-5722920-1-1.html
