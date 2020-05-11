@@ -153,32 +153,29 @@ void OnKeyDown(uint8_t x, uint8_t y, uint8_t keyVal)
 	case KC_MEDIA_SCAN_NEXT:
 	case KC_MEDIA_SCAN_PREV:
 	case KC_MEDIA_MUTE:
-		//case KC_MEDIA_VOLUME_UP:
-		//case KC_MEDIA_VOLUME_DOWN:
+	{
+		switch (keyVal)
 		{
-			mediaKeyState = MK_STATE_DOWN;
-			switch (keyVal)
-			{
-			case KC_MEDIA_PLAY:
-				mediaKeyVal = KC_MEDIA_PLAY_VAL;
-				break;
-			case KC_MEDIA_STOP:
-				mediaKeyVal = KC_MEDIA_STOP_VAL;
-				break;
-			case KC_MEDIA_SCAN_NEXT:
-				mediaKeyVal = KC_MEDIA_SCAN_NEXT_VAL;
-				break;
-			case KC_MEDIA_SCAN_PREV:
-				mediaKeyVal = KC_MEDIA_SCAN_PREV_VAL;
-				break;
-			case KC_MEDIA_MUTE:
-				mediaKeyVal = KC_MEDIA_MUTE_VAL;
-				break;
-			default:
-				break;
-			}
+		case KC_MEDIA_PLAY:
+			MediaKeyDown(KC_MEDIA_PLAY_VAL);
+			break;
+		case KC_MEDIA_STOP:
+			MediaKeyDown(KC_MEDIA_STOP_VAL);
+			break;
+		case KC_MEDIA_SCAN_NEXT:
+			MediaKeyDown(KC_MEDIA_SCAN_NEXT_VAL);
+			break;
+		case KC_MEDIA_SCAN_PREV:
+			MediaKeyDown(KC_MEDIA_SCAN_PREV_VAL);
+			break;
+		case KC_MEDIA_MUTE:
+			MediaKeyDown(KC_MEDIA_MUTE_VAL);
+			break;
+		default:
+			break;
 		}
-		break;
+	}
+	break;
 
 	default:
 	{
@@ -284,12 +281,10 @@ void OnKeyUp(uint8_t x, uint8_t y, uint8_t keyVal)
 	case KC_MEDIA_SCAN_NEXT:
 	case KC_MEDIA_SCAN_PREV:
 	case KC_MEDIA_MUTE:
-		//case KC_MEDIA_VOLUME_UP:
-		//case KC_MEDIA_VOLUME_DOWN:
-		{
-			mediaKeyState = MK_STATE_UP;
-		}
-		break;
+	{
+		MediaKeyUp();
+	}
+	break;
 
 	default:
 	{

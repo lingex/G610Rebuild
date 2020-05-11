@@ -91,9 +91,6 @@ uint8_t keyChange = 0;
 
 struct kbReportSt kbReport;
 
-uint8_t mediaKeyState = MK_STATE_NONE;
-uint8_t	mediaKeyVal = 0;
-
 uint8_t brightness = 0;
 uint8_t gameMode = 0;
 uint8_t insertEnable = 0;
@@ -224,16 +221,6 @@ int main(void)
 	    //HAL_UART_Transmit(&huart1, (uint8_t *)debugBuff, 64, 100);
 
 			HAL_Delay(5); //important TODO fixme
-		}
-		if (mediaKeyState == MK_STATE_DOWN)
-		{
-			MediaKeyDown(mediaKeyVal);
-			mediaKeyState = MK_STATE_REPORTED;
-		}
-		if (mediaKeyState == MK_STATE_UP)
-		{
-			MediaKeyUp();
-			mediaKeyState = MK_STATE_NONE;
 		}
 
     zt_poll();

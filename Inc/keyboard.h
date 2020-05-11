@@ -14,8 +14,6 @@ extern "C"
 	extern uint8_t gameMode;
 	extern uint8_t insertEnable;
 	extern uint8_t keyChange;
-	extern uint8_t mediaKeyState;
-	extern uint8_t mediaKeyVal;
 	extern const char *KEYBOARD_Name_Map[MAX_COL][MAX_ROW];
 	extern const unsigned char KEYBOARD_Value_Map[MAX_COL][MAX_ROW];
 	extern UART_HandleTypeDef huart1;
@@ -24,6 +22,7 @@ extern "C"
 	extern void InsertEnableSw(void);
 	extern void NumLockEnableSw(void);
 	extern void MediaKeyDown(uint8_t keyVal);
+	extern void MediaKeyUp(void);
 	extern void DfuMode(void);
 
 	void KeyCheck(void);
