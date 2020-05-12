@@ -51,7 +51,7 @@
 #define HID_LED_SUPPORT 1
 #endif
 
- /**  define  VOLUME_REPORT  to tehr eport ID to use for volume or 0 if not support*/
+ /**  define  VOLUME_REPORT  to the report ID to use for volume or 0 if not support*/
 #define  HID_MEDIA_REPORT  2
 #ifdef   HID_MEDIA_REPORT
 #   define HID_MEDIA_SIZE    25
@@ -60,7 +60,7 @@
 #endif
 
 #if HID_MEDIA_REPORT == 1
-#     error "volume report can't be 1 already sued for stad report"
+#     error "volume report can't be 1 already used for stad report"
 #endif
 
 /** @defgroup USBD_HID_Exported_Defines
@@ -101,7 +101,8 @@
 #define HID_DESCRIPTOR_TYPE           0x21
 #define HID_REPORT_DESC               0x22
 
-#define HID_HS_BINTERVAL               0x07
+//#define HID_HS_BINTERVAL               0x07
+#define HID_HS_BINTERVAL               0x01 //lingex
 #define HID_FS_BINTERVAL               0x0A
 #define HID_POLLING_INTERVAL           0x0A
 

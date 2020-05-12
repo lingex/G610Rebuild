@@ -294,7 +294,6 @@ void OnKeyUp(uint8_t x, uint8_t y, uint8_t keyVal)
 		{
 			if (kbReport.keys[i] == keyVal)
 			{
-				keyChange = 1;
 				for (uint8_t j = 0; j < MAX_QUEUE; j++)
 				{
 					if (queueBuff[j] > 0)

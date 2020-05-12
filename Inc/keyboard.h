@@ -9,7 +9,7 @@ extern "C"
 
 	/* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#define DEBOUNCE_MS 10
+#define DEBOUNCE_MS 8
 
 	extern uint8_t gameMode;
 	extern uint8_t insertEnable;

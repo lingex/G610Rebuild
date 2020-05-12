@@ -79,6 +79,7 @@ const unsigned char KEYBOARD_LED_Map[MAX_COL][MAX_ROW] =
 SPI_HandleTypeDef hspi2;
 
 TIM_HandleTypeDef htim3;
+TIM_HandleTypeDef htim6;
 
 UART_HandleTypeDef huart1;
 
@@ -105,6 +106,7 @@ static void MX_GPIO_Init(void);
 static void MX_SPI2_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_TIM3_Init(void);
+static void MX_TIM6_Init(void);
 /* USER CODE BEGIN PFP */
 
 void WriteEEPROM(uint32_t addr, uint32_t val);
@@ -126,16 +128,19 @@ void ConfigSave(void);
 void EncoderCheck(void);
 void EncoderDebounce(void);
 void DfuMode(void);
+void MatrixTimer(void);
+void ReportCheck(void);
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+volatile int16_t encoderCount = 0;
+
 int zt_bindIdEncoder = 0; //encoder task restore bind id
 int zt_bindIdCfgSave = 0;
 int zt_bindIdEcDebounce = 0;
-
-volatile int16_t encoderCount = 0;
 
 /* USER CODE END 0 */
 
@@ -174,6 +179,7 @@ int main(void)
   MX_SPI2_Init();
   MX_USART1_UART_Init();
   MX_TIM3_Init();
+  MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
 
 	//wait connection OK
@@ -199,6 +205,9 @@ int main(void)
 	zt_bindIdEcDebounce =  zt_bind(EncoderDebounce, 1, 0);
 	zt_bind(EncoderCheck, 30, 1);
 	zt_bind(KeyCheck, 1, 1);
+	//zt_bind(ReportCheck, 10, 1);
+
+	//zt_bind(MatrixTimer, 100, 1);
 
   /* USER CODE END 2 */
 
@@ -206,10 +215,10 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 	while (1)
 	{
+    zt_poll();    //task execute
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-
 		if (keyChange != 0)
 		{
 			keyChange = 0;
@@ -219,14 +228,7 @@ int main(void)
       //char debugBuff[64];
       //sprintf(debugBuff, "report modify[%u], [%u][%u][%u][%u][%u][%u]\n", kbReport.modify, kbReport.keys[0], kbReport.keys[1], kbReport.keys[2], kbReport.keys[3], kbReport.keys[4], kbReport.keys[5]);
 	    //HAL_UART_Transmit(&huart1, (uint8_t *)debugBuff, 64, 100);
-
-			HAL_Delay(5); //important TODO fixme
 		}
-
-    zt_poll();
-
-		HAL_Delay(1);
-    zt_tick();
 	}
   /* USER CODE END 3 */
 }
@@ -356,6 +358,44 @@ static void MX_TIM3_Init(void)
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
   /* USER CODE END TIM3_Init 2 */
   HAL_TIM_MspPostInit(&htim3);
+
+}
+
+/**
+  * @brief TIM6 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM6_Init(void)
+{
+
+  /* USER CODE BEGIN TIM6_Init 0 */
+
+  /* USER CODE END TIM6_Init 0 */
+
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM6_Init 1 */
+
+  /* USER CODE END TIM6_Init 1 */
+  htim6.Instance = TIM6;
+  htim6.Init.Prescaler = 15;
+  htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim6.Init.Period = 999;
+  htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim6, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM6_Init 2 */
+  HAL_TIM_Base_Start_IT(&htim6);
+  /* USER CODE END TIM6_Init 2 */
 
 }
 
@@ -579,6 +619,11 @@ void DfuMode(void)
 	NVIC_SystemReset();
 }
 
+void MatrixTimer(void)
+{
+  MatrixEffectTimer(HAL_GetTick());
+}
+
 void MediaKeyDown(uint8_t key)
 {
 	uint8_t report[3];
@@ -586,6 +631,20 @@ void MediaKeyDown(uint8_t key)
   report[1]= key;
   report[2]= 0x00;
   USBD_HID_SendReport(&hUsbDeviceFS, report, 3);
+}
+
+void ReportCheck(void)
+{
+  //if (keyChange != 0)
+	{
+		keyChange = 0;
+		kbReport.id = 1;		//report id
+  	USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*)&kbReport, 9);
+    //char debugBuff[64];
+    //sprintf(debugBuff, "report modify[%u], [%u][%u][%u][%u][%u][%u]\n", kbReport.modify, kbReport.keys[0], kbReport.keys[1], kbReport.keys[2], kbReport.keys[3], kbReport.keys[4], kbReport.keys[5]);
+    //HAL_UART_Transmit(&huart1, (uint8_t *)debugBuff, 64, 100);
+	  //HAL_Delay(10); //important TODO fixme
+	}
 }
 
 void MediaKeyUp(void)
@@ -659,6 +718,16 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   HAL_NVIC_DisableIRQ(EXTI9_5_IRQn);
   zt_start(zt_bindIdEcDebounce, 1);
 }
+
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  if (htim->Instance == htim6.Instance)
+  {
+      zt_tick();
+  }
+}
+
 
 /* USER CODE END 4 */
 
