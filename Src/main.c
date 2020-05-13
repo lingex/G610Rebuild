@@ -49,9 +49,9 @@
 
 const unsigned char KEYBOARD_Value_Map[MAX_COL][MAX_ROW] =
 {
-  {0,           0        ,0                   ,0          ,0             ,0           ,0             ,0          ,KC_GAME  ,KC_BACKLIGHT,KC_MEDIA_PLAY ,KC_MEDIA_STOP,KC_MEDIA_SCAN_NEXT,KC_MEDIA_SCAN_PREV,KC_KP_MINUS     ,KC_MEDIA_MUTE,},
-  {KC_ESCAPE,   KC_F1    ,KC_F2               ,KC_F3      ,KC_F4         ,KC_F5       ,KC_F6         ,KC_F7      ,KC_F8    ,KC_F9       ,KC_F10        ,KC_F11       ,KC_F12            ,KC_PRINTSCREEN    ,KC_SCROLL_LOCK  ,KC_PAUSE    ,},
-  {0,           0        ,KC_TILDE            ,KC_1       ,KC_2          ,KC_3        ,KC_4          ,KC_5       ,KC_6     ,KC_7        ,KC_8          ,KC_9         ,KC_0              ,KC_UNDERSCORE     ,KC_PLUS         ,0           ,},
+  {0           ,0        ,0                   ,0          ,0             ,0           ,0             ,0          ,KC_GAME  ,KC_BACKLIGHT,KC_MEDIA_PLAY ,KC_MEDIA_STOP,KC_MEDIA_SCAN_NEXT,KC_MEDIA_SCAN_PREV,KC_KP_MINUS     ,KC_MEDIA_MUTE,},
+  {KC_ESCAPE   ,KC_F1    ,KC_F2               ,KC_F3      ,KC_F4         ,KC_F5       ,KC_F6         ,KC_F7      ,KC_F8    ,KC_F9       ,KC_F10        ,KC_F11       ,KC_F12            ,KC_PRINTSCREEN    ,KC_SCROLL_LOCK  ,KC_PAUSE    ,},
+  {0           ,0        ,KC_TILDE            ,KC_1       ,KC_2          ,KC_3        ,KC_4          ,KC_5       ,KC_6     ,KC_7        ,KC_8          ,KC_9         ,KC_0              ,KC_UNDERSCORE     ,KC_PLUS         ,0           ,},
   {0           ,0        ,KC_TAB              ,KC_Q       ,KC_W          ,KC_E        ,KC_R          ,KC_T       ,KC_Y     ,KC_U        ,KC_I          ,KC_O         ,KC_P              ,KC_OPEN_BRACKET   ,KC_CLOSE_BRACKET,KC_BACKSLASH,},
   {0           ,0        ,KC_CAPS_LOCK        ,KC_A       ,KC_S          ,KC_D        ,KC_F          ,KC_G       ,KC_H     ,KC_J        ,KC_K          ,KC_L         ,KC_COLON          ,KC_QUOTE          ,0               ,KC_ENTER    ,},
   {0           ,0        ,KC_LSHIFT           ,0          ,KC_Z          ,KC_X        ,KC_C          ,KC_V       ,KC_B     ,KC_N        ,KC_M          ,KC_COMMA     ,KC_DOT            ,KC_SLASH          ,0               ,KC_RSHIFT   ,},
@@ -60,18 +60,6 @@ const unsigned char KEYBOARD_Value_Map[MAX_COL][MAX_ROW] =
   {KC_RIGHT    ,KC_KP_0  ,KC_KP_DOT           ,KC_KP_ENTER,KC_KP_1       ,KC_KP_2     ,KC_KP_6       ,KC_KP_3    ,KC_DOWN  ,KC_UP       ,0             ,0            ,0                 ,0                 ,0               ,0           ,},
 };
 
-const unsigned char KEYBOARD_LED_Map[MAX_COL][MAX_ROW] =
-{
-	0,			0,			0,			0,			0,			0,			0,			0,			0,			150,		162,		170,		220,		180,		226,		160,
-	0,			10,		  20,		  30,		  40,		  50,		  60,		  70,		  80,		  90,		  100,		110,		120,		140,		154,		152,
-	0,			0,			2,			12,		  22,		  32,		  42,		  52,		  62,		  72,		  82,		  92,		  102,		112,		122,		0,
-	0,			0,			4,			14,		  24,		  34,		  44,		  54,		  64,		  74,		  84,		  94,		  104,		114,		124,		134,
-	0,			0,			6,			16,		  26,		  36,		  46,		  56,		  66,		  76,		  86,		  96,		  106,		116,		0,			136,
-	0,			0,			8,			18,		  28,		  38,		  48,		  58,		  68,		  78,		  88,		  98,		  108,		118,		0,			138,
-	0,			0,			190,		192,		194,		0,			0,			198,		0,			0,			0,			202,		204,		206,		208,		210,
-	132,		142,		146,		156,		166,		176,		186,		224,		144,		148,		158,		164,		174,		184,		168,		172,
-	216,		218,		228,		222,		236,		178,		182,		188,		214,		212,		0,			0,			0,			0,			0,			0,
-};
 
 /* USER CODE END PM */
 
@@ -85,7 +73,6 @@ UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
 
-extern void KeyCheck(void);
 extern USBD_HandleTypeDef hUsbDeviceFS;
 
 uint8_t keyChange = 0;
@@ -98,6 +85,12 @@ uint8_t insertEnable = 0;
 
 uint16_t intPin = 0;
 
+volatile int16_t encoderCount = 0;
+
+int zt_bindIdEncoder = 0; //encoder task restore bind id
+int zt_bindIdCfgSave = 0;
+int zt_bindIdEcDebounce = 0;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -108,6 +101,8 @@ static void MX_USART1_UART_Init(void);
 static void MX_TIM3_Init(void);
 static void MX_TIM6_Init(void);
 /* USER CODE BEGIN PFP */
+
+extern void KeyCheck(void);
 
 void WriteEEPROM(uint32_t addr, uint32_t val);
 
@@ -136,11 +131,6 @@ void ReportCheck(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-volatile int16_t encoderCount = 0;
-
-int zt_bindIdEncoder = 0; //encoder task restore bind id
-int zt_bindIdCfgSave = 0;
-int zt_bindIdEcDebounce = 0;
 
 /* USER CODE END 0 */
 
@@ -207,8 +197,10 @@ int main(void)
 	zt_bind(KeyCheck, 1, 1);
 	//zt_bind(ReportCheck, 10, 1);
 
-	//zt_bind(MatrixTimer, 100, 1);
+	zt_bind(MatrixTimer, 100, 1);
 
+  kbReport.id = 1;		//report id
+  
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -221,8 +213,7 @@ int main(void)
     /* USER CODE BEGIN 3 */
 		if (keyChange != 0)
 		{
-			keyChange = 0;
-			kbReport.id = 1;		//report id
+			keyChange = 0;			
 			USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*)&kbReport, 9);
 
       //char debugBuff[64];

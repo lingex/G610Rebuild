@@ -19,6 +19,33 @@ static uint8_t matrixBuff[255] = {0}; //led buff
 
 */
 
+const unsigned char MATRIX_LED_Map[MAX_COL][MAX_ROW] =
+{
+	{0,				0,			0,				0,				0,				0,				0,					0,				0,			MLI_BL,		MLI_PLAY,		MLI_STOP,	MLI_NEXT,	MLI_PREV,			MLI_KP_MINUS,		MLI_MUTE,},
+	{MLI_ESC,		MLI_F1,		MLI_F2,		    MLI_F3,			MLI_F4,			MLI_F5,			MLI_F6,				MLI_F7,			MLI_F8,		MLI_F9,		MLI_F10,		MLI_F11,	MLI_F12,	MLI_PSR,			MLI_SCRLOCK,		MLI_PAUSE,},
+	{0,				0,			MLI_TILDE,	    MLI_1,			MLI_2,			MLI_3,			MLI_4,				MLI_5,			MLI_6,		MLI_7,		MLI_8,			MLI_9,		MLI_0,		MLI_UNDERSCORE,		MLI_PLUS,			0,},
+	{0,				0,			MLI_TAB,		MLI_Q,			MLI_W,			MLI_E,			MLI_R,				MLI_T,			MLI_Y,		MLI_U,		MLI_I,			MLI_O,		MLI_P,		MLI_OPEN_BRACKET,	MLI_CLOSE_BRACKET,	MLI_OPEN_BACKSLASH,},
+	{0,				0,			MLI_CAPS_LOCK,	MLI_A,			MLI_S,			MLI_D,			MLI_F,				MLI_G,			MLI_H,		MLI_J,		MLI_K,			MLI_L,		MLI_COLON,	MLI_QUOTE,		    0,					MLI_ENTER,},
+	{0,				0,			MLI_LSHIFT,		0,				MLI_Z,			MLI_X,			MLI_C,				MLI_V,			MLI_B,		MLI_N,		MLI_M,			MLI_COMMA,	MLI_DOT,	MLI_SLASH,		    0,					MLI_RSHIFT,},
+	{0,				0,			MLI_LCTRL,		MLI_LGUI,		MLI_LALT,		0,				0,					MLI_SPACEBAR,	0,			0,			0,				MLI_RALT,	MLI_RGUI,	MLI_FN,				MLI_RCTRL,			MLI_LEFT,},
+	{MLI_BACKSPACE,	MLI_INSERT,	MLI_HOME,		MLI_PAGEUP,		MLI_NUM_LOCK,	MLI_KP_DIVIDE,	MLI_KP_MULTIPLY,	MLI_KP_PLUS,	MLI_DELETE,	MLI_END,	MLI_PAGEDOWN,	MLI_KP_7,	MLI_KP_8,	MLI_KP_9,			MLI_KP_4,			MLI_KP_5,},
+	{MLI_RIGHT,		MLI_KP_0,	MLI_KP_DOT,		MLI_KP_ENTER,	MLI_KP_1,		MLI_KP_2,		MLI_KP_6,			MLI_KP_3,		MLI_DOWN,	MLI_UP,		0,				0,			0,			0,					0,					0,},
+};
+
+const unsigned char MATRIX_Abs_Map[7][22] =
+{
+	{MLI_NONE,		MLI_NONE,	MLI_NONE,	MLI_NONE,		MLI_NONE,		MLI_NONE,		MLI_NONE,		MLI_NONE,		MLI_NONE,		MLI_BL,		MLI_NONE,	MLI_NONE,			MLI_NONE,			MLI_NONE,			MLI_NONE,		MLI_MUTE,	MLI_NONE,		MLI_NONE,	MLI_NONE,		MLI_NONE,		MLI_NONE,		MLI_NONE,},
+	{MLI_ESC,		MLI_F1,		MLI_F2,		MLI_F3,			MLI_F4,			MLI_F5,			MLI_F6,			MLI_F7,			MLI_F8,			MLI_F9,		MLI_F10,	MLI_F11,			MLI_F12,			MLI_PSR,			MLI_SCRLOCK,	MLI_PAUSE,	MLI_PLAY,		MLI_STOP,	MLI_PREV,		MLI_NEXT,		MLI_NONE,		MLI_NONE,},
+	{MLI_TILDE,	    MLI_1,		MLI_2,		MLI_3,			MLI_4,			MLI_5,			MLI_6,			MLI_7,			MLI_8,			MLI_9,		MLI_0,		MLI_UNDERSCORE,		MLI_PLUS,			MLI_BACKSPACE,		MLI_BACKSPACE,	MLI_INSERT,	MLI_HOME,		MLI_PAGEUP,	MLI_NUM_LOCK, 	MLI_KP_DIVIDE,	MLI_KP_MULTIPLY,MLI_KP_MINUS,},
+	{MLI_TAB,		MLI_Q,		MLI_W,		MLI_E,			MLI_R,			MLI_T,			MLI_Y,			MLI_U,			MLI_I,			MLI_O,		MLI_P,		MLI_OPEN_BRACKET,	MLI_CLOSE_BRACKET,	MLI_OPEN_BACKSLASH,	MLI_DELETE,		MLI_END,	MLI_PAGEDOWN,	MLI_KP_7,	MLI_KP_8,		MLI_KP_9,		MLI_KP_PLUS,	MLI_NONE,},
+	{MLI_CAPS_LOCK,	MLI_A,		MLI_S,		MLI_D,			MLI_F,			MLI_G,			MLI_H,			MLI_J,			MLI_K,			MLI_L,		MLI_COLON,	MLI_QUOTE,		    MLI_ENTER,			MLI_ENTER,			MLI_NONE,		MLI_NONE,	MLI_NONE,		MLI_KP_4,	MLI_KP_5,		MLI_KP_6,		MLI_KP_PLUS,	MLI_NONE,},
+	{MLI_LSHIFT,	MLI_LSHIFT,	MLI_Z,		MLI_X,			MLI_C,			MLI_V,			MLI_B,			MLI_N,			MLI_M,			MLI_COMMA,	MLI_DOT,	MLI_SLASH,	    	MLI_RSHIFT,			MLI_RSHIFT,			MLI_NONE,		MLI_UP,		MLI_NONE,		MLI_KP_1,	MLI_KP_2,		MLI_KP_3,		MLI_KP_ENTER,	MLI_NONE,},
+	{MLI_LCTRL,		MLI_LGUI,	MLI_LALT,	MLI_SPACEBAR,	MLI_SPACEBAR,	MLI_SPACEBAR,	MLI_SPACEBAR,	MLI_SPACEBAR,	MLI_SPACEBAR,	MLI_RALT,	MLI_RGUI,	MLI_FN,				MLI_RCTRL,			MLI_LEFT,			MLI_DOWN,		MLI_RIGHT,	MLI_KP_0,		MLI_KP_0,	MLI_KP_DOT,		MLI_KP_ENTER,	MLI_NONE,		MLI_NONE,},
+};
+
+
+WaveEffectTypeDef waveTask[MAX_EFFECT_TASK];
+
 void MatrixInit(void)
 {
 	HAL_GPIO_WritePin(MATRIX_RST_GPIO_Port, MATRIX_RST_Pin, GPIO_PIN_SET);	   //RESET PIN
@@ -37,6 +64,7 @@ void MatrixInit(void)
 	HAL_SPI_Transmit(&hspi2, cmdBuff, len, SPI_TIMEOUT_PA * len);
 	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_SET);
 
+#if 0
 	//clear buff
 	for (uint16_t i = 0; i < PATTERN_SIZE; i += 2)
 	{
@@ -45,16 +73,17 @@ void MatrixInit(void)
 	if (insertEnable < 1)
 	{
 		//turn of insert
-		matrixBuff[INDEX_OF_KEY_INSERT] = 0x00;
+		matrixBuff[MLI_INSERT] = 0x00;
 	}
 	if (gameMode > 0)
 	{
 		//turn off GUI
-		matrixBuff[INDEX_OF_KEY_LGUI] = 0x00;
-		matrixBuff[INDEX_OF_KEY_RGUI] = 0x00;
+		matrixBuff[MLI_LGUI] = 0x00;
+		matrixBuff[MLI_RGUI] = 0x00;
 	}
+#endif
 
-	MatrixSyncBuff(DISP_P1);
+	//MatrixSyncBuff(DISP_P1);
 
 	MatrixSetBrightness(brightness);
 }
@@ -83,13 +112,13 @@ void MatrixSetBrightness(uint8_t val)
 	if (insertEnable < 1)
 	{
 		//turn of insert
-		matrixBuff[INDEX_OF_KEY_INSERT] = 0x00;
+		matrixBuff[MLI_INSERT] = 0x00;
 	}
 	if (gameMode > 0)
 	{
 		//turn off GUI
-		matrixBuff[INDEX_OF_KEY_LGUI] = 0x00;
-		matrixBuff[INDEX_OF_KEY_RGUI] = 0x00;
+		matrixBuff[MLI_LGUI] = 0x00;
+		matrixBuff[MLI_RGUI] = 0x00;
 	}
 
 	MatrixSyncBuff(DISP_P1);
@@ -144,7 +173,6 @@ void MatrixSyncBuff(uint8_t p)
 	len = 2;
 	uint8_t cmdBuff[2];
 	cmdBuff[0] = p == DISP_P1 ? ST524_CMD_WRITE_P1_REG : ST524_CMD_WRITE_P2_REG;
-	;
 	cmdBuff[1] = 0x00; //address
 	HAL_SPI_Transmit(&hspi2, cmdBuff, len, SPI_TIMEOUT_PA * len);
 
@@ -175,27 +203,28 @@ void MatrixOnKeyPressed(uint8_t x, uint8_t y, uint8_t keyVal)
 	{
 	case KC_INSERT_SW:
 	{
-		uint8_t index = KEYBOARD_LED_Map[x][y];
+		//uint8_t index = MATRIX_LED_Map[x][y];
 
-		matrixBuff[index] = insertEnable > 0 ? DEFAULT_DIMMING : 0;
+		//matrixBuff[index] = insertEnable > 0 ? DEFAULT_DIMMING : 0;
+		matrixBuff[MLI_INSERT] = insertEnable > 0 ? DEFAULT_DIMMING : 0;
 
-		MatrixSyncByte(DISP_P1, index, matrixBuff[index]);
+		MatrixSyncByte(DISP_P1, MLI_INSERT, matrixBuff[MLI_INSERT]);
 	}
 	break;
 	case KC_GAME:
 	{
 		if (gameMode == 0)
 		{
-			matrixBuff[INDEX_OF_KEY_LGUI] = DEFAULT_DIMMING;
-			matrixBuff[INDEX_OF_KEY_RGUI] = DEFAULT_DIMMING;
+			matrixBuff[MLI_LGUI] = DEFAULT_DIMMING;
+			matrixBuff[MLI_RGUI] = DEFAULT_DIMMING;
 		}
 		else
 		{
-			matrixBuff[INDEX_OF_KEY_LGUI] = 0;
-			matrixBuff[INDEX_OF_KEY_RGUI] = 0;
+			matrixBuff[MLI_LGUI] = 0;
+			matrixBuff[MLI_RGUI] = 0;
 		}
-		MatrixSyncByte(DISP_P1, INDEX_OF_KEY_LGUI, matrixBuff[INDEX_OF_KEY_LGUI]);
-		MatrixSyncByte(DISP_P1, INDEX_OF_KEY_RGUI, matrixBuff[INDEX_OF_KEY_RGUI]);
+		MatrixSyncByte(DISP_P1, MLI_LGUI, matrixBuff[MLI_LGUI]);
+		MatrixSyncByte(DISP_P1, MLI_RGUI, matrixBuff[MLI_RGUI]);
 		//MatrixSyncBuff();
 	}
 	break;
@@ -236,4 +265,24 @@ void MatrixBrightnessChange(void)
 	//MatrixSyncBuff(DISP_P1);
 
 	BrightnessSave();
+}
+
+void MatrixEffectTimer(uint32_t timeTick)
+{
+	WaveEffectTypeDef* pEffect = NULL;
+
+	for (uint8_t i = 0; i < MAX_EFFECT_TASK; i++)
+	{
+		pEffect = &waveTask[i];
+
+		if (pEffect->nextTick > 0 && timeTick >= pEffect->nextTick)
+		{
+			MatrixEffectNextMove(pEffect, timeTick);
+		}
+	}
+}
+
+void MatrixEffectNextMove(WaveEffectTypeDef* pEffect, uint32_t timeTick)
+{
+
 }
