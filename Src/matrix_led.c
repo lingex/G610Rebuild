@@ -64,6 +64,13 @@ void MatrixInit(void)
 	HAL_SPI_Transmit(&hspi2, cmdBuff, len, SPI_TIMEOUT_PA * len);
 	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_SET);
 
+	WaveEffectTypeDef* pEffect = NULL;
+	for (uint8_t i = 0; i < MAX_EFFECT_TASK; i++)
+	{
+		pEffect = &waveTask[i];
+		pEffect->nextTick = 0;
+	}
+
 #if 0
 	//clear buff
 	for (uint16_t i = 0; i < PATTERN_SIZE; i += 2)
@@ -199,6 +206,29 @@ void MatrixSyncByte(uint8_t p, uint8_t regAddr, uint8_t val)
 
 void MatrixOnKeyPressed(uint8_t x, uint8_t y, uint8_t keyVal)
 {
+	WaveEffectTypeDef* pEffect = NULL;
+	uint8_t index = MATRIX_LED_Map[x][y];
+
+	for (uint8_t i = 0; i < MAX_EFFECT_TASK; i++)
+	{
+		pEffect = &waveTask[i];
+		if (pEffect->nextTick == 0)
+		{
+			pEffect->nextTick = HAL_GetTick() + MAX_EFFECT_INTERVAL;
+			pEffect->step = 0;
+			pEffect->x = x;
+			pEffect->y = y;
+			pEffect->dotIndex = index;
+
+			MatrixSyncByte(DISP_P1, index, 0xff);
+			break;
+		}
+		else if (pEffect->dotIndex == index)
+		{
+			pEffect->step = 0;
+		}
+	}
+
 	switch (keyVal)
 	{
 	case KC_INSERT_SW:
@@ -284,5 +314,16 @@ void MatrixEffectTimer(uint32_t timeTick)
 
 void MatrixEffectNextMove(WaveEffectTypeDef* pEffect, uint32_t timeTick)
 {
-
+	if (pEffect->step >= MAX_EFFECT_STEP)
+	{
+		//restore
+		MatrixSyncByte(DISP_P1, pEffect->dotIndex, matrixBuff[pEffect->dotIndex]);
+		pEffect->nextTick = 0;
+	}
+	else
+	{
+		pEffect->step++;
+		pEffect->nextTick = HAL_GetTick() + MAX_EFFECT_INTERVAL;
+		MatrixSyncByte(DISP_P1, pEffect->dotIndex, (EFFECT_VAL_HI - pEffect->step * EFFECT_STEP_VAL));
+	}
 }
