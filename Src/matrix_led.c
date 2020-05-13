@@ -21,7 +21,7 @@ static uint8_t matrixBuff[255] = {0}; //led buff
 
 const unsigned char MATRIX_LED_Map[MAX_COL][MAX_ROW] =
 {
-	{0,				0,			0,				0,				0,				0,				0,					0,				0,			MLI_BL,		MLI_PLAY,		MLI_STOP,	MLI_NEXT,	MLI_PREV,			MLI_KP_MINUS,		MLI_MUTE,},
+	{0,				0,			0,				0,				0,				0,				0,					0,				MLI_NONE,	MLI_BL,		MLI_PLAY,		MLI_STOP,	MLI_NEXT,	MLI_PREV,			MLI_KP_MINUS,		MLI_MUTE,},
 	{MLI_ESC,		MLI_F1,		MLI_F2,		    MLI_F3,			MLI_F4,			MLI_F5,			MLI_F6,				MLI_F7,			MLI_F8,		MLI_F9,		MLI_F10,		MLI_F11,	MLI_F12,	MLI_PSR,			MLI_SCRLOCK,		MLI_PAUSE,},
 	{0,				0,			MLI_TILDE,	    MLI_1,			MLI_2,			MLI_3,			MLI_4,				MLI_5,			MLI_6,		MLI_7,		MLI_8,			MLI_9,		MLI_0,		MLI_UNDERSCORE,		MLI_PLUS,			0,},
 	{0,				0,			MLI_TAB,		MLI_Q,			MLI_W,			MLI_E,			MLI_R,				MLI_T,			MLI_Y,		MLI_U,		MLI_I,			MLI_O,		MLI_P,		MLI_OPEN_BRACKET,	MLI_CLOSE_BRACKET,	MLI_OPEN_BACKSLASH,},
