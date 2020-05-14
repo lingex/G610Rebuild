@@ -157,7 +157,8 @@ void Error_Handler(void);
 #define MAX_COL 9
 #define MAX_ROW 16
 
-#define APP_ADDR (FLASH_BASE | 0x3000)
+#define APP_ADDR (FLASH_BASE | 0x10000)
+#define OFFICIAL_ADDR (FLASH_BASE | 0x3000)
 
 #define BL_SETTING_ADDR (FLASH_EEPROM_BASE + 0x00)
 #define MODE_SETTING_ADDR (FLASH_EEPROM_BASE + 0x04)

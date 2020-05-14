@@ -82,6 +82,7 @@ struct kbReportSt kbReport;
 uint8_t brightness = 0;
 uint8_t gameMode = 0;
 uint8_t insertEnable = 0;
+volatile bool time_1ms = false;
 
 uint16_t intPin = 0;
 
@@ -90,6 +91,10 @@ volatile int16_t encoderCount = 0;
 int zt_bindIdEncoder = 0; //encoder task restore bind id
 int zt_bindIdCfgSave = 0;
 int zt_bindIdEcDebounce = 0;
+
+typedef void (*pFunction)(void); 
+pFunction JumpToApplication;
+uint32_t JumpAddress;
 
 /* USER CODE END PV */
 
@@ -125,6 +130,7 @@ void EncoderDebounce(void);
 void DfuMode(void);
 void MatrixTimer(void);
 void ReportCheck(void);
+void RunOfficialApp(void);
 
 /* USER CODE END PFP */
 
@@ -207,7 +213,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 	while (1)
 	{
-    zt_poll();    //task execute
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -220,6 +225,11 @@ int main(void)
       //sprintf(debugBuff, "report modify[%u], [%u][%u][%u][%u][%u][%u]\n", kbReport.modify, kbReport.keys[0], kbReport.keys[1], kbReport.keys[2], kbReport.keys[3], kbReport.keys[4], kbReport.keys[5]);
 	    //HAL_UART_Transmit(&huart1, (uint8_t *)debugBuff, 64, 100);
 		}
+    if (time_1ms)
+    {
+      time_1ms = false;
+      zt_poll();    //task execute
+    }    
 	}
   /* USER CODE END 3 */
 }
@@ -636,6 +646,45 @@ void ReportCheck(void)
 	}
 }
 
+void RunOfficialApp(void)
+{
+#if 0
+  JumpAddress = *(__IO uint32_t*)(OFFICIAL_ADDR +4);
+	JumpToApplication = (pFunction) JumpAddress;
+					
+	__set_MSP(*(__IO uint32_t*)OFFICIAL_ADDR);
+	JumpToApplication();
+  while (1); // never reached
+#else
+  uint32_t appStack;
+	pFunction appEntry;
+ 
+	//__disable_irq();		//won't work when this execute 
+  //HAL_NVIC_ClearPendingIRQ(SysTick_IRQn);
+ 
+	// get the application stack pointer (1st entry in the app vector table)
+	appStack = (uint32_t)*((__IO uint32_t*)OFFICIAL_ADDR);
+ 
+	// Get the app entry point (2nd entry in the app vector table
+	appEntry = (pFunction)*(__IO uint32_t*)(OFFICIAL_ADDR + 4);
+ 
+	HAL_RCC_DeInit();
+	HAL_DeInit();
+ 
+	SysTick->CTRL = 0;
+	SysTick->LOAD = 0;
+	SysTick->VAL  = 0;
+ 
+	// Reconfigure vector table offset to match the app location
+	SCB->VTOR = OFFICIAL_ADDR;
+	__set_MSP(appStack); // Set app stack pointer
+	appEntry(); // Start the app
+ 
+	while (1); // never reached
+  
+#endif
+}
+
 void MediaKeyUp(void)
 {
 	uint8_t report[3];
@@ -714,6 +763,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   if (htim->Instance == htim6.Instance)
   {
       zt_tick();
+      time_1ms = true;
   }
 }
 
