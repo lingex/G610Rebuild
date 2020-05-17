@@ -92,7 +92,7 @@ int zt_bindIdEncoder = 0; //encoder task restore bind id
 int zt_bindIdCfgSave = 0;
 int zt_bindIdEcDebounce = 0;
 
-typedef void (*pFunction)(void); 
+typedef void (*pFunction)(void);
 pFunction JumpToApplication;
 uint32_t JumpAddress;
 
@@ -229,7 +229,7 @@ int main(void)
     {
       time_1ms = false;
       zt_poll();    //task execute
-    }    
+    }
 	}
   /* USER CODE END 3 */
 }
@@ -651,37 +651,37 @@ void RunOfficialApp(void)
 #if 0
   JumpAddress = *(__IO uint32_t*)(OFFICIAL_ADDR +4);
 	JumpToApplication = (pFunction) JumpAddress;
-					
+
 	__set_MSP(*(__IO uint32_t*)OFFICIAL_ADDR);
 	JumpToApplication();
   while (1); // never reached
 #else
   uint32_t appStack;
 	pFunction appEntry;
- 
-	//__disable_irq();		//won't work when this execute 
+
+	//__disable_irq();		//won't work when this execute
   //HAL_NVIC_ClearPendingIRQ(SysTick_IRQn);
- 
+
 	// get the application stack pointer (1st entry in the app vector table)
 	appStack = (uint32_t)*((__IO uint32_t*)OFFICIAL_ADDR);
- 
+
 	// Get the app entry point (2nd entry in the app vector table
 	appEntry = (pFunction)*(__IO uint32_t*)(OFFICIAL_ADDR + 4);
- 
+
 	HAL_RCC_DeInit();
 	HAL_DeInit();
- 
+
 	SysTick->CTRL = 0;
 	SysTick->LOAD = 0;
 	SysTick->VAL  = 0;
- 
+
 	// Reconfigure vector table offset to match the app location
 	SCB->VTOR = OFFICIAL_ADDR;
 	__set_MSP(appStack); // Set app stack pointer
 	appEntry(); // Start the app
- 
+
 	while (1); // never reached
-  
+
 #endif
 }
 
@@ -740,21 +740,12 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   GPIO_PinState pinA = HAL_GPIO_ReadPin(EC_A_GPIO_Port, EC_A_Pin);
   GPIO_PinState pinB = HAL_GPIO_ReadPin(EC_B_GPIO_Port, EC_B_Pin);
 
-  if (GPIO_Pin == EC_A_Pin && pinA != GPIO_PIN_SET)
+  if ((GPIO_Pin == EC_A_Pin && pinA == GPIO_PIN_SET)||(GPIO_Pin == EC_B_Pin && pinB == GPIO_PIN_RESET))
   {
-    //not rising
-    return;
+    intPin = GPIO_Pin;
+    HAL_NVIC_DisableIRQ(EXTI9_5_IRQn);
+    zt_start(zt_bindIdEcDebounce, 1);
   }
-  if (GPIO_Pin == EC_B_Pin && pinB != GPIO_PIN_RESET)
-  {
-    //not falling
-    return;
-  }
-
-  intPin = GPIO_Pin;
-
-  HAL_NVIC_DisableIRQ(EXTI9_5_IRQn);
-  zt_start(zt_bindIdEcDebounce, 1);
 }
 
 
