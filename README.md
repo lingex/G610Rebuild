@@ -16,8 +16,6 @@ A non-original firmware of Logitech G610 mechanical keyboard.
 # TODO:
 1."NKRO" support.
 
-2. some backlight effects.
-
 
 
 # Note:
@@ -28,7 +26,17 @@ coz every time the cubemx regenerate code they will be overwrite;
 And don't forget to remove ./Middlewares/ST/STM32_USB_Device_Library/Class/HID/Src/usbd_hid.c from MDK source list
 
 Bootloader:
-TODO to be edit
+
+https://github.com/lingex/STM32L_DFU_Solution/tree/Branch_128k
+
+#Important
+This branch is a non-standard use of STM32L100R8, by using the 64k~128k internal flash, to keep both official firmware and this firmware
+inside, can not download into device directly using MDK, st-link utility and dfu  are feasible.
+
+
+Default load is this firmware, two ways to switch to official firmware:
+1.press and hold backlight then plug in the usb cable,
+2.press Fn (menu) + F1 when running this firmware.
 
 
 # Thanks to:
