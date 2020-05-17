@@ -29,7 +29,7 @@ Bootloader:
 
 https://github.com/lingex/STM32L_DFU_Solution/tree/Branch_128k
 
-# Important
+# Important:
 This branch is a non-standard use of STM32L100R8, by using the 64k~128k internal flash, to keep both official firmware and this firmware
 inside, can not download into device directly using MDK, st-link utility and dfu  are feasible.
 
