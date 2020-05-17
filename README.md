@@ -28,7 +28,9 @@ coz every time the cubemx regenerate code they will be overwrite;
 And don't forget to remove ./Middlewares/ST/STM32_USB_Device_Library/Class/HID/Src/usbd_hid.c from MDK source list
 
 Bootloader:
-TODO to be edit
+
+https://github.com/lingex/STM32L_DFU_Solution
+
 
 
 # Thanks to:
