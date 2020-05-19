@@ -16,7 +16,7 @@ A non-original firmware of Logitech G610 mechanical keyboard.
 # TODO:
 1."NKRO" support.
 
-2. some backlight effects.
+2.more backlight effects (maybe).
 
 
 
