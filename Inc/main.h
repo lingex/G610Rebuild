@@ -181,6 +181,8 @@ void Error_Handler(void);
     MK_STATE_UP,
   };
 
+#define TAILING_EFFECT 0
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

@@ -129,6 +129,7 @@ void EncoderCheck(void);
 void EncoderDebounce(void);
 void DfuMode(void);
 void MatrixTimer(void);
+
 void ReportCheck(void);
 void RunOfficialApp(void);
 
@@ -203,7 +204,9 @@ int main(void)
 	zt_bind(KeyCheck, 1, 1);
 	//zt_bind(ReportCheck, 10, 1);
 
+#if TAILING_EFFECT
 	zt_bind(MatrixTimer, 10, 1);
+#endif
 
   kbReport.id = 1;		//report id
 
@@ -620,7 +623,9 @@ void DfuMode(void)
 
 void MatrixTimer(void)
 {
+ #if TAILING_EFFECT
   MatrixEffectTimer(HAL_GetTick());
+#endif
 }
 
 void MediaKeyDown(uint8_t key)
