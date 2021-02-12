@@ -149,6 +149,9 @@ void Error_Handler(void);
 #define EC_A_EXTI_IRQn EXTI9_5_IRQn
 /* USER CODE BEGIN Private defines */
 
+#define EC_UP_PIN		EC_A_Pin
+#define EC_DOWN_PIN	EC_B_Pin
+
 #define COL_GPIO_Port GPIOA
 #define ROW_GPIO_Port GPIOC
 
@@ -181,7 +184,7 @@ void Error_Handler(void);
     MK_STATE_UP,
   };
 
-#define TAILING_EFFECT 0
+#define TAILING_EFFECT 1
 
 /* USER CODE END Private defines */
 
