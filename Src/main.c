@@ -148,8 +148,27 @@ void RunOfficialApp(void);
 int main(void)
 {
 	/* USER CODE BEGIN 1 */
+
+	/*en: IMPORTANT!
+	if you are not using a bootloader
+	you have to comment the following line: SCB->VTOR = APP_ADDR;
+
+	chs: 重要提示！
+	如果未使用bootloader，必须注释掉下面这行代码: SCB->VTOR = APP_ADDR;
+	*/
 	SCB->VTOR = APP_ADDR;
+
+
 	//char debugBuff[64] = {'0'};
+
+	for (size_t i = 0; i < 6; i++)
+	{
+		kbReport.keys[i] = 0;
+	}
+	for (size_t i = 0; i < 23; i++)
+	{
+		nkroReport.keys[i] = 0;
+	}
 
 	/* USER CODE END 1 */
 
@@ -190,7 +209,7 @@ int main(void)
 	//HAL_UART_Transmit(&huart1, (uint8_t *)debugBuff, 64, 100);
 
 	brightness = *(uint32_t*)BL_SETTING_ADDR;
-	gameMode = *(uint32_t*)MODE_SETTING_ADDR;
+	//gameMode = *(uint32_t*)MODE_SETTING_ADDR;
 	insertEnable = *(uint32_t*)INSERT_SETTING_ADDR;
 
 	SetModeLED(gameMode);
@@ -569,7 +588,7 @@ void GameModeSw(void)
 
 	SetModeLED(gameMode);
 	//WriteEEPROM(MODE_SETTING_ADDR, gameMode);
-	SetConfigSaveTask();
+	//SetConfigSaveTask();
 }
 
 void InsertEnableSw(void)
