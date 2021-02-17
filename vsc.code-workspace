@@ -1,0 +1,29 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"xutility": "c",
+			"main.h": "c",
+			"keyboard.h": "c",
+			"matrix_led.h": "c",
+			"stm32l1xx_hal.h": "c",
+			"limits": "c",
+			"memory": "c"
+		},
+		"C_Cpp.default.compilerPath": "/bin/arm-none-eabi-gcc.exe",
+		"C_Cpp.default.defines": [],
+		"C_Cpp.default.includePath": [
+			"Drivers/STM32L1xx_HAL_Driver/Inc",
+			"Drivers/CMSIS/Include",
+			"Drivers/CMSIS/Core/Include",
+			"Drivers/CMSIS/Device/ST/STM32L1xx/Include",
+			"Middlewares/ST/STM32_USB_Device_Library/Class/HID/Inc",
+			"Middlewares/ST/STM32_USB_Device_Library/Core/Inc",
+			"Inc",
+		]
+	}
+}
