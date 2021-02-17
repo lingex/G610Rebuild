@@ -1,78 +1,78 @@
 ## G610Rebuild
 
 ## CHS:
-这是适用于罗技G610机械键盘的非官方固件(注意: 刷入第三方固件可能会损坏你的键盘，如果你的键盘是健康的/你对它没什么不满的话不建议尝试)。
+�����������޼�G610��е���̵ķǹٷ��̼�(ע��: ˢ��������̼����ܻ�����ļ��̣������ļ����ǽ�����/�����ûʲô�����Ļ������鳢��)��
 
 
 
-# 特性:
+# ����:
 
-1.五档背光亮度调节，带记忆，设置完毕5S后保存。
+1.�嵵�������ȵ��ڣ������䣬�������5S�󱣴档
 
-2.游戏模式下GUI键(WIN键)将背光将被关闭，同时启用nkro模式。
+2.��Ϸģʽ��GUI��(WIN��)�����⽫���رգ�ͬʱ����nkroģʽ��
 
-3.Menu键功能取消了，作为 FN 功能键。
+3.Menu������ȡ���ˣ���Ϊ FN ���ܼ���
 
-4.Insert键可开关，通过按住 FN + Insert 键切换，关闭状态下不影响组合键(如 Ctrl + Insert)的使用。
+4.Insert���ɿ��أ�ͨ����ס FN + Insert ���л����ر�״̬�²�Ӱ����ϼ�(�� Ctrl + Insert)��ʹ�á�
 
-5.DFU升级功能，通过按住FN + GAMEMODE键进入。
+5.DFU�������ܣ�ͨ����סFN + GAMEMODE�����롣
 
-6.与官方固件并存，FN + F1可切换到官方固件，当然这时想要再切回我们的固件就需要重新插拔键盘了。
+6.��ٷ��̼����棬FN + F1���л����ٷ��̼�����Ȼ��ʱ��Ҫ���л����ǵĹ̼�����Ҫ���²�μ����ˡ�
 
-7.按住GAMEMODE键上电，键盘直接进入DFU升级模式。
+7.��סGAMEMODE���ϵ磬����ֱ�ӽ���DFU����ģʽ��
 
-8.按住背光键上电，键盘进入官方固件。
+8.��ס������ϵ磬���̽���ٷ��̼���
 
 
-# flash 分配图
+# flash ����ͼ
 ![image](https://github.com/lingex/G610Rebuild/blob/Branch_128k/PIC/flash%20mapping.png)
 
 
-# 注意事项：
+# ע�����
 
-a.使用 ./Src/usbd_hid.c 和 ./Inc/usbd_hid.h 
-文件组合而不是 ./Middlewares/ST/STM32_USB_Device_Library/Class/HID下的同名文件
+a.ʹ�� ./Src/usbd_hid.c �� ./Inc/usbd_hid.h 
+�ļ���϶����� ./Middlewares/ST/STM32_USB_Device_Library/Class/HID�µ�ͬ���ļ�
 
-原因是基础项目是通过cubeMx生成的DEMO，这两个文件需要做很多的修改，每次修改都会被重新覆盖掉
+ԭ���ǻ�����Ŀ��ͨ��cubeMx���ɵ�DEMO���������ļ���Ҫ���ܶ���޸ģ�ÿ���޸Ķ��ᱻ���¸��ǵ�
 
-如果使用MDK编译，需要把./Middlewares/ST/STM32_USB_Device_Library/Class/HID/Src/usbd_hid.c文件从源文件列表中移除
+���ʹ��MDK���룬��Ҫ��./Middlewares/ST/STM32_USB_Device_Library/Class/HID/Src/usbd_hid.c�ļ���Դ�ļ��б����Ƴ�
 
-其他IDE也类似。
+����IDEҲ���ơ�
 
-b.本项目依赖于以下Bootloader:
+b.����Ŀ����������Bootloader:
 
 https://github.com/lingex/STM32L_DFU_Solution/tree/Branch_128k
 
 
-从flash分配图可以看出，这是一种非常规用法，flash标准容量是64KB，实际上采用的是128KB的晶圆，所以总共有128KB的容量可以使用，和产品的角度是不推荐这样使用的。
+��flash����ͼ���Կ���������һ�ַǳ����÷���flash��׼������64KB��ʵ���ϲ��õ���128KB�ľ�Բ�������ܹ���128KB����������ʹ�ã��Ͳ�Ʒ�ĽǶ��ǲ��Ƽ�����ʹ�õġ�
 
 
 
-## 刷机步骤
+## ˢ������
 
-a.刷入bootloader
+a.ˢ��bootloader
 
   STM32 ST-LINK Utility : Bootloader.hex
   
-b.刷入官方固件  
+b.ˢ��ٷ��̼�  
 
-  方法1 STM32 ST-LINK Utility : Official_no_tail.hex
+  ����1 STM32 ST-LINK Utility : Official_no_tail.hex
   
-  方法2 ST DfuSe Demo ：Official_app_only.dfu
+  ����2 ST DfuSe Demo ��Official_app_only.dfu
 
-c.刷入自定义固件
+c.ˢ���Զ���̼�
 
   ST DfuSe Demo : g610App.dfu
 
 
   
-# 恢复回官方固件状态(同时将清除bootloader):
+# �ָ��عٷ��̼�״̬(ͬʱ�����bootloader):
 
-STM32 ST-LINK Utility : Official_bootloader_and_app.bin  (偏移地址: 0x8000000)
+STM32 ST-LINK Utility : Official_bootloader_and_app.bin  (ƫ�Ƶ�ַ: 0x8000000)
 
 
 
-## —————————————————————————————————————
+## ��������������������������������������������������������������������������
 
 
 ## EN:
@@ -128,7 +128,7 @@ b.flash official fw
 
   STM32 ST-LINK Utility : Official_no_tail.hex
   
-  or ST DfuSe Demo ：Official_app_only.dfu
+  or ST DfuSe Demo ��Official_app_only.dfu
 
 c.flash this fw
 
