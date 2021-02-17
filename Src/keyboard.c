@@ -4,6 +4,7 @@
 #include "matrix_led.h"
 
 extern struct kbReportSt kbReport;
+extern struct nkroReportSt nkroReport;
 
 bool keyFnDown = false;
 
@@ -193,8 +194,15 @@ void OnKeyDown(uint8_t x, uint8_t y, uint8_t keyVal)
 				break;
 			}
 		}
+		if (keyFnDown && keyVal == KC_F1)
+		{
+			RunOfficialApp();
+		}
+
 
 		keyChange = 1;
+
+		nkroReport.keys[keyVal / 8] |= (0x01 << keyVal % 8);
 
 		bool inReport = false;
 		for (uint8_t i = 0; i < 6; i++)
@@ -289,6 +297,9 @@ void OnKeyUp(uint8_t x, uint8_t y, uint8_t keyVal)
 	default:
 	{
 		keyChange = 1;
+
+		nkroReport.keys[keyVal / 8] &= ~(0x01 << keyVal % 8);
+
 		bool queueOut = false;
 		for (uint8_t i = 0; i < 6; i++)
 		{

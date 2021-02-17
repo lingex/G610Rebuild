@@ -24,6 +24,7 @@ extern "C"
 	extern void MediaKeyDown(uint8_t keyVal);
 	extern void MediaKeyUp(void);
 	extern void DfuMode(void);
+	extern void RunOfficialApp(void);
 
 	void KeyCheck(void);
 	uint32_t ReadGpioPort(GPIO_TypeDef *GPIOx);
