@@ -1,6 +1,6 @@
 ## G610Rebuild
 
-## chs:
+## CHS:
 这是适用于罗技G610机械键盘的非官方固件(注意: 刷入第三方固件可能会损坏你的键盘，如果你的键盘是健康的/你对它没什么不满的话不建议尝试)。
 
 
@@ -32,46 +32,55 @@
 
 a.使用 ./Src/usbd_hid.c 和 ./Inc/usbd_hid.h 
 文件组合而不是 ./Middlewares/ST/STM32_USB_Device_Library/Class/HID下的同名文件
-原因是基础项目是通过cubeMx生成的DEMO，这两个文件需要做很多的修改，每次修改都会覆盖掉
+
+原因是基础项目是通过cubeMx生成的DEMO，这两个文件需要做很多的修改，每次修改都会被重新覆盖掉
+
 如果使用MDK编译，需要把./Middlewares/ST/STM32_USB_Device_Library/Class/HID/Src/usbd_hid.c文件从源文件列表中移除
+
 其他IDE也类似。
 
 b.本项目依赖于以下Bootloader:
+
 https://github.com/lingex/STM32L_DFU_Solution/tree/Branch_128k
 
-这是一个非常规用法，flash标准容量是64KB，实际上采用的是128KB的晶圆，所以总共有128KB的容量可以使用，当然官方和产品的角度是不推荐这样使用的。
+
+从flash分配图可以看出，这是一种非常规用法，flash标准容量是64KB，实际上采用的是128KB的晶圆，所以总共有128KB的容量可以使用，和产品的角度是不推荐这样使用的。
 
 
 
 ## 刷机步骤
+
 a.刷入bootloader
+
   STM32 ST-LINK Utility : Bootloader.hex
   
 b.刷入官方固件  
+
   方法1 STM32 ST-LINK Utility : Official_no_tail.hex
+  
   方法2 ST DfuSe Demo ：Official_app_only.dfu
 
 c.刷入自定义固件
+
   ST DfuSe Demo : g610App.dfu
 
 
   
 # 恢复回官方固件状态(同时将清除bootloader):
-  STM32 ST-LINK Utility : Official_bootloader_and_app.bin  (偏移地址: 0x8000000)
+
+STM32 ST-LINK Utility : Official_bootloader_and_app.bin  (偏移地址: 0x8000000)
 
 
-  
-  
-  
-  
-  
-  
 
-## en:
+## —————————————————————————————————————
+
+
+## EN:
 
 A non-original firmware of Logitech G610 mechanical keyboard(Using non-original firmware may damage your keyboard).
 
 # Feature:
+
 1.Configs (brightness) save to eeprom.
 
 2.Game mode will turn off the two LED of the GUI key.
@@ -93,6 +102,7 @@ A non-original firmware of Logitech G610 mechanical keyboard(Using non-original 
 
 
 # Note:
+
 Use ./Src/usbd_hid.c and ./Inc/usbd_hid.h instead of the pair in ./Middlewares/ST/STM32_USB_Device_Library/Class/HID
 
 coz every time the cubemx regenerate code they will be overwrite;
@@ -111,18 +121,23 @@ inside, can not download into device directly using MDK, and no debug, st-link u
 # Flash steps
 
 a.flash bootloader
+
   STM32 ST-LINK Utility : Bootloader.hex
   
 b.flash official fw
+
   STM32 ST-LINK Utility : Official_no_tail.hex
+  
   or ST DfuSe Demo ：Official_app_only.dfu
 
 c.flash this fw
+
   ST DfuSe Demo : g610App.dfu
 
 
   
 # flash into official state(will also remove bootloader):
+
   STM32 ST-LINK Utility : Official_bootloader_and_app.bin  (offset: 0x8000000)
 
 
