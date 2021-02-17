@@ -27,7 +27,7 @@
 
 
 # flash 分配图
-![image](https://github.com/lingex/G610Rebuild/blob/Branch_128k/PIC/flash%20mapping.png)
+![image](https://github.com/lingex/G610Rebuild/blob/master/PIC/flash%20mapping.png)
 
 
 # 注意事项：
@@ -103,7 +103,7 @@ A non-original firmware of Logitech G610 mechanical keyboard(Using non-original 
 
 
 # flash mapping
-![image](https://github.com/lingex/G610Rebuild/blob/Branch_128k/PIC/flash%20mapping.png)
+![image](https://github.com/lingex/G610Rebuild/blob/master/PIC/flash%20mapping.png)
 
 
 # Note:
