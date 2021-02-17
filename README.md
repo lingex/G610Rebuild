@@ -24,6 +24,10 @@
 8.按住背光键上电，键盘进入官方固件。
 
 
+# flash 分配图
+![image](https://github.com/lingex/G610Rebuild/blob/Branch_128k/PIC/flash%20mapping.png)
+
+
 # 注意事项：
 
 a.使用 ./Src/usbd_hid.c 和 ./Inc/usbd_hid.h 
@@ -56,6 +60,12 @@ c.刷入自定义固件
   STM32 ST-LINK Utility : Official_bootloader_and_app.bin  (偏移地址: 0x8000000)
 
 
+  
+  
+  
+  
+  
+  
 
 ## en:
 
@@ -77,6 +87,9 @@ A non-original firmware of Logitech G610 mechanical keyboard(Using non-original 
 7.Holding GameMode when plug in the usb cable, will go into DFU mode.
 
 8.Holding backlight when plug in the usb cable, will run the official firmware.
+
+# flash mapping
+![image](https://github.com/lingex/G610Rebuild/blob/Branch_128k/PIC/flash%20mapping.png)
 
 
 # Note:
@@ -109,8 +122,8 @@ c.flash this fw
 
 
   
-# 恢复回官方固件状态(同时将清除bootloader):
-  STM32 ST-LINK Utility : Official_bootloader_and_app.bin  (偏移地址: 0x8000000)
+# flash into official state(will also remove bootloader):
+  STM32 ST-LINK Utility : Official_bootloader_and_app.bin  (offset: 0x8000000)
 
 
 # Thanks to:
