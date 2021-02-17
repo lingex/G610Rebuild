@@ -1,78 +1,80 @@
 ## G610Rebuild
 
 ## CHS:
-ÕâÊÇÊÊÓÃÓÚÂÞ¼¼G610»úÐµ¼üÅÌµÄ·Ç¹Ù·½¹Ì¼þ(×¢Òâ: Ë¢ÈëµÚÈý·½¹Ì¼þ¿ÉÄÜ»áËð»µÄãµÄ¼üÅÌ£¬Èç¹ûÄãµÄ¼üÅÌÊÇ½¡¿µµÄ/Äã¶ÔËüÃ»Ê²Ã´²»ÂúµÄ»°²»½¨Òé³¢ÊÔ)¡£
+è¿™æ˜¯é€‚ç”¨äºŽç½—æŠ€G610æœºæ¢°é”®ç›˜çš„éžå®˜æ–¹å›ºä»¶(æ³¨æ„: åˆ·å…¥ç¬¬ä¸‰æ–¹å›ºä»¶å¯èƒ½ä¼šæŸåä½ çš„é”®ç›˜ï¼Œå¦‚æžœä½ çš„é”®ç›˜æ˜¯å¥åº·çš„/ä½ å¯¹å®ƒæ²¡ä»€ä¹ˆä¸æ»¡çš„è¯ä¸å»ºè®®å°è¯•)ã€‚
 
 
 
-# ÌØÐÔ:
+# ç‰¹æ€§:
 
-1.Îåµµ±³¹âÁÁ¶Èµ÷½Ú£¬´ø¼ÇÒä£¬ÉèÖÃÍê±Ï5Sºó±£´æ¡£
+1.äº”æ¡£èƒŒå…‰äº®åº¦è°ƒèŠ‚ï¼Œå¸¦è®°å¿†ï¼Œè®¾ç½®å®Œæ¯•5SåŽä¿å­˜ã€‚
 
-2.ÓÎÏ·Ä£Ê½ÏÂGUI¼ü(WIN¼ü)½«±³¹â½«±»¹Ø±Õ£¬Í¬Ê±ÆôÓÃnkroÄ£Ê½¡£
+2.æ¸¸æˆæ¨¡å¼ä¸‹GUIé”®(WINé”®)å°†èƒŒå…‰å°†è¢«å…³é—­ï¼ŒåŒæ—¶å¯ç”¨nkroæ¨¡å¼ã€‚
 
-3.Menu¼ü¹¦ÄÜÈ¡ÏûÁË£¬×÷Îª FN ¹¦ÄÜ¼ü¡£
+3.Menué”®åŠŸèƒ½å–æ¶ˆäº†ï¼Œä½œä¸º FN åŠŸèƒ½é”®ã€‚
 
-4.Insert¼ü¿É¿ª¹Ø£¬Í¨¹ý°´×¡ FN + Insert ¼üÇÐ»»£¬¹Ø±Õ×´Ì¬ÏÂ²»Ó°Ïì×éºÏ¼ü(Èç Ctrl + Insert)µÄÊ¹ÓÃ¡£
+4.Inserté”®å¯å¼€å…³ï¼Œé€šè¿‡æŒ‰ä½ FN + Insert é”®åˆ‡æ¢ï¼Œå…³é—­çŠ¶æ€ä¸‹ä¸å½±å“ç»„åˆé”®(å¦‚ Ctrl + Insert)çš„ä½¿ç”¨ã€‚
 
-5.DFUÉý¼¶¹¦ÄÜ£¬Í¨¹ý°´×¡FN + GAMEMODE¼ü½øÈë¡£
+5.DFUå‡çº§åŠŸèƒ½ï¼Œé€šè¿‡æŒ‰ä½FN + GAMEMODEé”®è¿›å…¥ã€‚
 
-6.Óë¹Ù·½¹Ì¼þ²¢´æ£¬FN + F1¿ÉÇÐ»»µ½¹Ù·½¹Ì¼þ£¬µ±È»ÕâÊ±ÏëÒªÔÙÇÐ»ØÎÒÃÇµÄ¹Ì¼þ¾ÍÐèÒªÖØÐÂ²å°Î¼üÅÌÁË¡£
+6.ä¸Žå®˜æ–¹å›ºä»¶å¹¶å­˜ï¼ŒFN + F1å¯åˆ‡æ¢åˆ°å®˜æ–¹å›ºä»¶ï¼Œå½“ç„¶è¿™æ—¶æƒ³è¦å†åˆ‡å›žæˆ‘ä»¬çš„å›ºä»¶å°±éœ€è¦é‡æ–°æ’æ‹”é”®ç›˜äº†ã€‚
 
-7.°´×¡GAMEMODE¼üÉÏµç£¬¼üÅÌÖ±½Ó½øÈëDFUÉý¼¶Ä£Ê½¡£
+7.æŒ‰ä½GAMEMODEé”®ä¸Šç”µï¼Œé”®ç›˜ç›´æŽ¥è¿›å…¥DFUå‡çº§æ¨¡å¼ã€‚
 
-8.°´×¡±³¹â¼üÉÏµç£¬¼üÅÌ½øÈë¹Ù·½¹Ì¼þ¡£
+8.æŒ‰ä½èƒŒå…‰é”®ä¸Šç”µï¼Œé”®ç›˜è¿›å…¥å®˜æ–¹å›ºä»¶ã€‚
+
+9.é»˜è®¤å¼€å¯æ‹–å°¾ç­‰æ•ˆï¼Œå¦‚ä¸éœ€è¦å¯æŠŠ main.h ä¸­ #define TAILING_EFFECT 1 æ”¹ä¸º #define TAILING_EFFECT 0
 
 
-# flash ·ÖÅäÍ¼
+# flash åˆ†é…å›¾
 ![image](https://github.com/lingex/G610Rebuild/blob/Branch_128k/PIC/flash%20mapping.png)
 
 
-# ×¢ÒâÊÂÏî£º
+# æ³¨æ„äº‹é¡¹ï¼š
 
-a.Ê¹ÓÃ ./Src/usbd_hid.c ºÍ ./Inc/usbd_hid.h 
-ÎÄ¼þ×éºÏ¶ø²»ÊÇ ./Middlewares/ST/STM32_USB_Device_Library/Class/HIDÏÂµÄÍ¬ÃûÎÄ¼þ
+a.ä½¿ç”¨ ./Src/usbd_hid.c å’Œ ./Inc/usbd_hid.h 
+æ–‡ä»¶ç»„åˆè€Œä¸æ˜¯ ./Middlewares/ST/STM32_USB_Device_Library/Class/HIDä¸‹çš„åŒåæ–‡ä»¶
 
-Ô­ÒòÊÇ»ù´¡ÏîÄ¿ÊÇÍ¨¹ýcubeMxÉú³ÉµÄDEMO£¬ÕâÁ½¸öÎÄ¼þÐèÒª×öºÜ¶àµÄÐÞ¸Ä£¬Ã¿´ÎÐÞ¸Ä¶¼»á±»ÖØÐÂ¸²¸Çµô
+åŽŸå› æ˜¯åŸºç¡€é¡¹ç›®æ˜¯é€šè¿‡cubeMxç”Ÿæˆçš„DEMOï¼Œè¿™ä¸¤ä¸ªæ–‡ä»¶éœ€è¦åšå¾ˆå¤šçš„ä¿®æ”¹ï¼Œæ¯æ¬¡ä¿®æ”¹éƒ½ä¼šè¢«é‡æ–°è¦†ç›–æŽ‰
 
-Èç¹ûÊ¹ÓÃMDK±àÒë£¬ÐèÒª°Ñ./Middlewares/ST/STM32_USB_Device_Library/Class/HID/Src/usbd_hid.cÎÄ¼þ´ÓÔ´ÎÄ¼þÁÐ±íÖÐÒÆ³ý
+å¦‚æžœä½¿ç”¨MDKç¼–è¯‘ï¼Œéœ€è¦æŠŠ./Middlewares/ST/STM32_USB_Device_Library/Class/HID/Src/usbd_hid.cæ–‡ä»¶ä»Žæºæ–‡ä»¶åˆ—è¡¨ä¸­ç§»é™¤
 
-ÆäËûIDEÒ²ÀàËÆ¡£
+å…¶ä»–IDEä¹Ÿç±»ä¼¼ã€‚
 
-b.±¾ÏîÄ¿ÒÀÀµÓÚÒÔÏÂBootloader:
+b.æœ¬é¡¹ç›®ä¾èµ–äºŽä»¥ä¸‹Bootloader:
 
 https://github.com/lingex/STM32L_DFU_Solution/tree/Branch_128k
 
 
-´Óflash·ÖÅäÍ¼¿ÉÒÔ¿´³ö£¬ÕâÊÇÒ»ÖÖ·Ç³£¹æÓÃ·¨£¬flash±ê×¼ÈÝÁ¿ÊÇ64KB£¬Êµ¼ÊÉÏ²ÉÓÃµÄÊÇ128KBµÄ¾§Ô²£¬ËùÒÔ×Ü¹²ÓÐ128KBµÄÈÝÁ¿¿ÉÒÔÊ¹ÓÃ£¬ºÍ²úÆ·µÄ½Ç¶ÈÊÇ²»ÍÆ¼öÕâÑùÊ¹ÓÃµÄ¡£
+ä»Žflashåˆ†é…å›¾å¯ä»¥çœ‹å‡ºï¼Œè¿™æ˜¯ä¸€ç§éžå¸¸è§„ç”¨æ³•ï¼Œflashæ ‡å‡†å®¹é‡æ˜¯64KBï¼Œå®žé™…ä¸Šé‡‡ç”¨çš„æ˜¯128KBçš„æ™¶åœ†ï¼Œæ‰€ä»¥æ€»å…±æœ‰128KBçš„å®¹é‡å¯ä»¥ä½¿ç”¨ï¼Œå’Œäº§å“çš„è§’åº¦æ˜¯ä¸æŽ¨èè¿™æ ·ä½¿ç”¨çš„ã€‚
 
 
 
-## Ë¢»ú²½Öè
+## åˆ·æœºæ­¥éª¤
 
-a.Ë¢Èëbootloader
+a.åˆ·å…¥bootloader
 
   STM32 ST-LINK Utility : Bootloader.hex
   
-b.Ë¢Èë¹Ù·½¹Ì¼þ  
+b.åˆ·å…¥å®˜æ–¹å›ºä»¶  
 
-  ·½·¨1 STM32 ST-LINK Utility : Official_no_tail.hex
+  æ–¹æ³•1 STM32 ST-LINK Utility : Official_no_tail.hex
   
-  ·½·¨2 ST DfuSe Demo £ºOfficial_app_only.dfu
+  æ–¹æ³•2 ST DfuSe Demo ï¼šOfficial_app_only.dfu
 
-c.Ë¢Èë×Ô¶¨Òå¹Ì¼þ
+c.åˆ·å…¥è‡ªå®šä¹‰å›ºä»¶
 
   ST DfuSe Demo : g610App.dfu
 
 
   
-# »Ö¸´»Ø¹Ù·½¹Ì¼þ×´Ì¬(Í¬Ê±½«Çå³ýbootloader):
+# æ¢å¤å›žå®˜æ–¹å›ºä»¶çŠ¶æ€(åŒæ—¶å°†æ¸…é™¤bootloader):
 
-STM32 ST-LINK Utility : Official_bootloader_and_app.bin  (Æ«ÒÆµØÖ·: 0x8000000)
+STM32 ST-LINK Utility : Official_bootloader_and_app.bin  (åç§»åœ°å€: 0x8000000)
 
 
 
-## ¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª
+## â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”
 
 
 ## EN:
@@ -96,6 +98,9 @@ A non-original firmware of Logitech G610 mechanical keyboard(Using non-original 
 7.Holding GameMode when plug in the usb cable, will go into DFU mode.
 
 8.Holding backlight when plug in the usb cable, will run the official firmware.
+
+9.Using tailing light effect by default, turn off: in main.h : #define TAILING_EFFECT 1 --> #define TAILING_EFFECT 0
+
 
 # flash mapping
 ![image](https://github.com/lingex/G610Rebuild/blob/Branch_128k/PIC/flash%20mapping.png)
@@ -128,7 +133,7 @@ b.flash official fw
 
   STM32 ST-LINK Utility : Official_no_tail.hex
   
-  or ST DfuSe Demo £ºOfficial_app_only.dfu
+  or ST DfuSe Demo ï¼šOfficial_app_only.dfu
 
 c.flash this fw
 
