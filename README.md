@@ -3,9 +3,7 @@
 ## CHS:
 这是适用于罗技G610机械键盘的非官方固件(注意: 刷入第三方固件可能会损坏你的键盘，如果你的键盘是健康的/你对它没什么不满的话不建议尝试)。
 
-不过也不必太担心，只要别搞坏硬件，基本上是成不了砖的，官方很厚道，固件没有加密，可以直接读出来，这里备份了一个(Fw/Official_bootloader_and_app.bin)，
-
-重新刷回去就一切恢复原状了。
+不过也不必太担心，只要别搞坏硬件，基本上是成不了砖的，官方很厚道，固件没有加密，可以直接读出来，这里备份了一个(Fw/Official_bootloader_and_app.bin)，重新刷回去就恢复原厂状态了。
 
 
 
@@ -58,17 +56,17 @@ https://github.com/lingex/STM32L_DFU_Solution/tree/Branch_128k
 
 a.刷入bootloader
 
-  STM32 ST-LINK Utility : Bootloader.hex
+  STM32 ST-LINK Utility : Bootloader.hex       (需要调试工具，如ST-Link)
   
 b.刷入官方固件  
 
-  方法1 STM32 ST-LINK Utility : Official_no_tail.hex
+  方法1 STM32 ST-LINK Utility : Official_no_tail.hex    (需要调试工具，如ST-Link)
   
-  方法2 ST DfuSe Demo ：Official_app_only.dfu
+  方法2 ST DfuSe Demo ：Official_app_only.dfu    (无需额外工具)
 
 c.刷入自定义固件
 
-  ST DfuSe Demo : g610App.dfu
+  ST DfuSe Demo : g610App.dfu      (无需额外工具)
 
 
   
@@ -131,11 +129,11 @@ inside, can not download into device directly using MDK, and no debug, st-link u
 
 a.flash bootloader
 
-  STM32 ST-LINK Utility : Bootloader.hex
+  STM32 ST-LINK Utility : Bootloader.hex     (need a debug tool like ST-Link)
   
 b.flash official fw
 
-  STM32 ST-LINK Utility : Official_no_tail.hex
+  STM32 ST-LINK Utility : Official_no_tail.hex   (need a debug tool like ST-Link)
   
   or ST DfuSe Demo ：Official_app_only.dfu
 
