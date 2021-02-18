@@ -3,7 +3,7 @@
 ## CHS:
 这是适用于罗技G610机械键盘的非官方固件(注意: 刷入第三方固件可能会损坏你的键盘，如果你的键盘是健康的/你对它没什么不满的话不建议尝试)。
 
-不过也不必太担心，只要别搞坏硬件，基本上是成不了砖的，官方很厚道，固件没有加密，可以直接读出来，这里备份了一个(Fw/Official_bootloader_and_app.bin)，重新刷回去就恢复原厂状态了。
+其实也不必太担心，只要别搞坏硬件，基本上是成不了砖的，官方很厚道，固件并没有加密，可以直接读出来，这里备份了一个(Fw/Official_bootloader_and_app.bin)，重新刷回去就恢复原厂状态了。
 
 
 
@@ -11,7 +11,7 @@
 
 1.五档背光亮度调节，带记忆，设置完毕5S后保存。
 
-2.游戏模式下GUI键(WIN键)将背光将被关闭，同时启用nkro模式。
+2.游戏模式下 GUI键(WIN键)将被关闭，同时启用NKRO模式。
 
 3.Menu键功能取消了，作为 FN 功能键。
 
@@ -28,7 +28,7 @@
 9.默认开启拖尾等效，如不需要可把 main.h 中 #define TAILING_EFFECT 1 改为 #define TAILING_EFFECT 0
 
 
-# flash 分配图
+# Flash 分配图
 ![image](https://github.com/lingex/G610Rebuild/blob/master/PIC/flash%20mapping.png)
 
 
@@ -37,7 +37,7 @@
 a.使用 ./Src/usbd_hid.c 和 ./Inc/usbd_hid.h 
 文件组合而不是 ./Middlewares/ST/STM32_USB_Device_Library/Class/HID下的同名文件
 
-原因是基础项目是通过cubeMx生成的DEMO，这两个文件需要做很多的修改，每次修改都会被重新覆盖掉
+原因是基础项目是通过cubeMx生成的DEMO，这两个文件需要做很多的修改，每次用cubeMx重新生成都会被覆盖掉，所以我把它们从驱动库中移出来了。
 
 如果使用MDK编译，需要把./Middlewares/ST/STM32_USB_Device_Library/Class/HID/Src/usbd_hid.c文件从源文件列表中移除
 
@@ -53,6 +53,9 @@ https://github.com/lingex/STM32L_DFU_Solution/tree/Branch_128k
 
 
 ## 刷机步骤
+
+(除编译代码的IDE外，需要安装两个软件 STM32 ST-LINK Utility 和 ST DfuSe Demo)
+
 
 a.刷入bootloader
 
@@ -70,10 +73,19 @@ c.刷入自定义固件
 
 
   
-# 恢复回官方固件状态(同时将清除bootloader):
+# 恢复到官方固件状态(同时将清除bootloader):
 
 STM32 ST-LINK Utility : Official_bootloader_and_app.bin  (偏移地址: 0x8000000)
 
+
+# 已知问题
+
+1.音量滚轮体验大约能达到官方固件 80% 的水平，主要是低速下表现不佳，还可以改进；
+
+2.NKRO是通过增加一个USB端点(端点2)来实现，但是通过端点2发送不出去，原因未知。所以使用了端点1来发送，后续没发现什么问题就这样用吧；
+
+3.NKRO键值映射可能在linux等一些系统下有问题，参见https://static.wongcornall.com/ibm-capsense-usb-web/ibm-capsense-usb.html#x1-140003.3
+  实在碰到了就别开NKRO吧(事实上这键盘我用了多年其实也没用过全键无冲，为了支持这个功能花了太多时间)，暂时不管了。
 
 
 ## —————————————————————————————
@@ -112,7 +124,7 @@ A non-original firmware of Logitech G610 mechanical keyboard(Using non-original 
 
 Use ./Src/usbd_hid.c and ./Inc/usbd_hid.h instead of the pair in ./Middlewares/ST/STM32_USB_Device_Library/Class/HID
 
-coz every time the cubemx regenerate code they will be overwrite;
+coz every time the cubemx regenerate code they will be overwrite, so I move them out from the lib;
 
 And don't forget to remove ./Middlewares/ST/STM32_USB_Device_Library/Class/HID/Src/usbd_hid.c from MDK source list
 
@@ -126,6 +138,8 @@ inside, can not download into device directly using MDK, and no debug, st-link u
 
 
 # Flash steps
+
+(You will need to install 2 software (not include the IDE):  STM32 ST-LINK Utility  and  ST DfuSe Demo)
 
 a.flash bootloader
 
@@ -143,7 +157,7 @@ c.flash this fw
 
 
   
-# flash into official state(will also remove bootloader):
+# Flash into official state(will also remove bootloader):
 
   STM32 ST-LINK Utility : Official_bootloader_and_app.bin  (offset: 0x8000000)
 
