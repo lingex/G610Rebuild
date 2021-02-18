@@ -85,7 +85,7 @@ A non-original firmware of Logitech G610 mechanical keyboard(Using non-original 
 
 # Feature:
 
-1.Configs (brightness) save to eeprom.
+1.Configs (brightness) save to eeprom (delay 5 seconds).
 
 2.Game mode will turn off the two LED of the GUI key.
 
