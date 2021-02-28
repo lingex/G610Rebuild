@@ -1,4 +1,4 @@
-## G610Rebuild
+## Logitech G610 gaming keyboard firmware
 
 ## CHS:
 这是适用于罗技G610机械键盘的非官方固件(注意: 刷入第三方固件可能会损坏你的键盘，如果你的键盘是健康的/你对它没什么不满的话不建议尝试)。
