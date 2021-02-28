@@ -148,6 +148,11 @@ void MatrixDisplayOn(uint8_t p)
 	cmdBuff[2] = 0x01;			   //swctl en
 	cmdBuff[3] = p;
 	SpiTransmit(cmdBuff, len);
+
+	for (uint16_t i = 0; i < PATTERN_SIZE; i += 2)
+	{
+		matrixBuff[i] = brightness;
+	}
 }
 
 void MatrixDisplayOff(void)
@@ -159,6 +164,11 @@ void MatrixDisplayOff(void)
 	cmdBuff[2] = 0x00;			   //swctl en=0
 
 	SpiTransmit(cmdBuff, len);
+
+	for (uint16_t i = 0; i < PATTERN_SIZE; i += 2)
+	{
+		matrixBuff[i] = 0;
+	}
 }
 
 void MatrixSyncBuff(uint8_t p)
@@ -287,17 +297,19 @@ void MatrixBrightnessChange(void)
 
 void MatrixEffectTimer(uint32_t timeTick)
 {
-	WaveEffectTypeDef* pEffect = NULL;
+	static uint8_t taskIndex;
+	WaveEffectTypeDef* pEffect = &waveTask[taskIndex];
 
-	for (uint8_t i = 0; i < MAX_EFFECT_TASK; i++)
+	if (pEffect->nextTick > 0 && timeTick >= pEffect->nextTick)
 	{
-		pEffect = &waveTask[i];
-
-		if (pEffect->nextTick > 0 && timeTick >= pEffect->nextTick)
-		{
-			MatrixEffectNextMove(pEffect, timeTick);
-		}
+		MatrixEffectNextMove(pEffect, timeTick);
 	}
+
+	if (++taskIndex >= MAX_EFFECT_TASK)
+	{
+		taskIndex = 0;
+	}
+
 }
 
 void MatrixEffectNextMove(WaveEffectTypeDef* pEffect, uint32_t timeTick)

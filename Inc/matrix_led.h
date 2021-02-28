@@ -196,9 +196,9 @@ typedef struct
 	enum BRIGHTNESS_VALS
 	{
 		BL_VAL_0 = 0,
-		BL_VAL_1 = 35,
-		BL_VAL_2 = 75,
-		BL_VAL_3 = 125,
+		BL_VAL_1 = 20,
+		BL_VAL_2 = 55,
+		BL_VAL_3 = 115,
 		BL_VAL_4 = 185,
 		BL_VAL_5 = 250,
 	};
