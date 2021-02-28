@@ -5,7 +5,8 @@
 
 static uint16_t len = 0;
 
-static uint8_t matrixBuff[255] = {0}; //led buff
+static uint8_t gCmdBuff[255] = {0};
+static uint8_t* matrixBuff = &gCmdBuff[2]; //led buff
 									  /*
 	every 2 bytes controls dimming, slope and delay registers of one dot
 
@@ -62,9 +63,8 @@ void MatrixInit(void)
 	cmdBuff[0] = ST524_CMD_WRITE_CTL_REG;
 	cmdBuff[1] = 0x00; //from address
 	cmdBuff[2] = 0x83; //all reg default
-	HAL_SPI_Transmit(&hspi2, cmdBuff, len, SPI_TIMEOUT_PA * len);
-	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_SET);
 
+	SpiTransmit(cmdBuff, len);
 
 #if TAILING_EFFECT
 	WaveEffectTypeDef* pEffect = NULL;
@@ -144,31 +144,24 @@ void MatrixDisplayOn(uint8_t p)
 		return;
 	}
 
-	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_RESET);
-
 	len = 4;
 	uint8_t cmdBuff[4];
 	cmdBuff[0] = ST524_CMD_WRITE_CTL_REG;
 	cmdBuff[1] = ST524_ADDR_SWCTL; //from address
 	cmdBuff[2] = 0x01;			   //swctl en
 	cmdBuff[3] = p;
-	HAL_SPI_Transmit(&hspi2, cmdBuff, len, SPI_TIMEOUT_PA * len);
-
-	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_SET);
+	SpiTransmit(cmdBuff, len);
 }
 
 void MatrixDisplayOff(void)
 {
-	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_RESET);
-
 	len = 3;
-	uint8_t cmdBuff[4];
+	uint8_t cmdBuff[3];
 	cmdBuff[0] = ST524_CMD_WRITE_CTL_REG;
 	cmdBuff[1] = ST524_ADDR_SWCTL; //from address
 	cmdBuff[2] = 0x00;			   //swctl en=0
-	HAL_SPI_Transmit(&hspi2, cmdBuff, len, SPI_TIMEOUT_PA * len);
 
-	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_SET);
+	SpiTransmit(cmdBuff, len);
 }
 
 void MatrixSyncBuff(uint8_t p)
@@ -178,34 +171,25 @@ void MatrixSyncBuff(uint8_t p)
 		return;
 	}
 
-	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_RESET);
-
 	//write data to pattern 1
-	len = 2;
-	uint8_t cmdBuff[2];
-	cmdBuff[0] = p == DISP_P1 ? ST524_CMD_WRITE_P1_REG : ST524_CMD_WRITE_P2_REG;
-	cmdBuff[1] = 0x00; //address
-	HAL_SPI_Transmit(&hspi2, cmdBuff, len, SPI_TIMEOUT_PA * len);
+	len = PATTERN_SIZE + 2;
 
-	len = PATTERN_SIZE;
-	HAL_SPI_Transmit(&hspi2, matrixBuff, len, SPI_TIMEOUT_PA * len);
+	gCmdBuff[0] = p == DISP_P1 ? ST524_CMD_WRITE_P1_REG : ST524_CMD_WRITE_P2_REG;
+	gCmdBuff[1] = 0x00; //address
 
-	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_SET);
+	SpiTransmit(gCmdBuff, len);
 }
 
 void MatrixSyncByte(uint8_t p, uint8_t regAddr, uint8_t val)
 {
-	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_RESET);
-
 	//write data to pattern 1
 	len = 3;
 	uint8_t cmdBuff[3];
 	cmdBuff[0] = ST524_CMD_WRITE_P1_REG;
 	cmdBuff[1] = regAddr; //address
 	cmdBuff[2] = val;
-	HAL_SPI_Transmit(&hspi2, cmdBuff, len, SPI_TIMEOUT_PA * len);
 
-	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_SET);
+	SpiTransmit(cmdBuff, len);
 }
 
 void MatrixOnKeyPressed(uint8_t x, uint8_t y, uint8_t keyVal)
@@ -338,3 +322,27 @@ void MatrixEffectNextMove(WaveEffectTypeDef* pEffect, uint32_t timeTick)
 }
 
 #endif
+
+
+void SpiTransmit(uint8_t* pData, uint16_t len)
+{
+	while(HAL_SPI_GetState(&hspi2) != HAL_SPI_STATE_READY);
+
+	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_RESET);
+
+#if 1	//using DMA
+ 	NVIC_DisableIRQ(SPI2_IRQn);
+	HAL_SPI_Transmit_DMA(&hspi2, pData, len);
+
+	//HAL_SPI_IRQHandler(&hspi2);	//clear all interrupt flag
+	uint32_t unused = hspi2.Instance->SR;	//read SR and DR to clear all interrupt flag
+	unused = hspi2.Instance->DR;
+
+#else
+	//HAL_SPI_Transmit_IT(&hspi2, pData, len);
+
+	HAL_SPI_Transmit(&hspi2, pData, len, SPI_TIMEOUT_PA * len);
+	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_SET);
+#endif
+
+}

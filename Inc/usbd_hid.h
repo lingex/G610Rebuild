@@ -1,4 +1,4 @@
-﻿/**
+/**
   ******************************************************************************
   * @file    usbd_hid.h
   * @author  MCD Application Team
@@ -131,7 +131,11 @@ extern "C" {
 
 //#define HID_HS_BINTERVAL               0x07
 #define HID_HS_BINTERVAL               0x01 //lingex
+
+#ifndef  HID_FS_BINTERVAL
 #define HID_FS_BINTERVAL               0x0A
+
+#endif
 #define HID_POLLING_INTERVAL           0x0A
 
 #define HID_REQ_SET_PROTOCOL          0x0B

@@ -32,7 +32,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
- 
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -57,13 +57,15 @@
 
 /* External variables --------------------------------------------------------*/
 extern PCD_HandleTypeDef hpcd_USB_FS;
+extern DMA_HandleTypeDef hdma_spi2_tx;
+extern SPI_HandleTypeDef hspi2;
 extern TIM_HandleTypeDef htim6;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
 
 /******************************************************************************/
-/*           Cortex-M3 Processor Interruption and Exception Handlers          */ 
+/*           Cortex-M3 Processor Interruption and Exception Handlers          */
 /******************************************************************************/
 /**
   * @brief This function handles Non maskable interrupt.
@@ -199,6 +201,24 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
+  * @brief This function handles DMA1 channel5 global interrupt.
+  */
+void DMA1_Channel5_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Channel5_IRQn 0 */
+  if(__HAL_DMA_GET_FLAG(&hdma_spi2_tx, DMA_FLAG_TC5))
+  {
+    __HAL_SPI_ENABLE_IT(&hspi2, SPI_IT_TXE);	//enable tx empty interrupt
+    NVIC_EnableIRQ(SPI2_IRQn);  //DMA transmit done, be ready for the spi transmit complete
+  }
+  /* USER CODE END DMA1_Channel5_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_spi2_tx);
+  /* USER CODE BEGIN DMA1_Channel5_IRQn 1 */
+
+  /* USER CODE END DMA1_Channel5_IRQn 1 */
+}
+
+/**
   * @brief This function handles USB low priority interrupt.
   */
 void USB_LP_IRQHandler(void)
@@ -225,6 +245,26 @@ void EXTI9_5_IRQHandler(void)
   /* USER CODE BEGIN EXTI9_5_IRQn 1 */
 
   /* USER CODE END EXTI9_5_IRQn 1 */
+}
+
+/**
+  * @brief This function handles SPI2 global interrupt.
+  */
+void SPI2_IRQHandler(void)
+{
+  /* USER CODE BEGIN SPI2_IRQn 0 */
+  if (__HAL_SPI_GET_FLAG(&hspi2, SPI_FLAG_TXE))
+  {
+    __HAL_SPI_DISABLE_IT(&hspi2, SPI_IT_TXE);   //clear this flag before HAL_SPI_IRQHandler(&hspi2); to avoid Hard Fault
+    HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_SET);
+  }
+
+  /* USER CODE END SPI2_IRQn 0 */
+  HAL_SPI_IRQHandler(&hspi2);
+  /* USER CODE BEGIN SPI2_IRQn 1 */
+  //if (HAL_SPI_GetState(&hspi2) == HAL_SPI_STATE_READY)
+
+  /* USER CODE END SPI2_IRQn 1 */
 }
 
 /**

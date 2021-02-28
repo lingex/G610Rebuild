@@ -17,9 +17,9 @@
   *
   ******************************************************************************
   */
-  /* USER CODE END Header */
+/* USER CODE END Header */
 
-  /* Define to prevent recursive inclusion -------------------------------------*/
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __MAIN_H
 #define __MAIN_H
 
@@ -27,7 +27,7 @@
 extern "C" {
 #endif
 
-	/* Includes ------------------------------------------------------------------*/
+/* Includes ------------------------------------------------------------------*/
 #include "stm32l1xx_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -51,16 +51,16 @@ extern "C" {
 
 /* USER CODE END EM */
 
-	void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
+void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
-	/* Exported functions prototypes ---------------------------------------------*/
-	void Error_Handler(void);
+/* Exported functions prototypes ---------------------------------------------*/
+void Error_Handler(void);
 
-	/* USER CODE BEGIN EFP */
+/* USER CODE BEGIN EFP */
 
-	/* USER CODE END EFP */
+/* USER CODE END EFP */
 
-	/* Private defines -----------------------------------------------------------*/
+/* Private defines -----------------------------------------------------------*/
 #define ROW13_Pin GPIO_PIN_13
 #define ROW13_GPIO_Port GPIOC
 #define ROW14_Pin GPIO_PIN_14
@@ -194,7 +194,7 @@ extern "C" {
 
 #define TAILING_EFFECT 1
 
-	/* USER CODE END Private defines */
+/* USER CODE END Private defines */
 
 #ifdef __cplusplus
 }

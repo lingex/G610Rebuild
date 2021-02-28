@@ -23,7 +23,7 @@ extern "C"
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
-#define SPI_TIMEOUT_PA 		2
+#define SPI_TIMEOUT_PA 		1
 
 #define MAX_EFFECT_TASK		16
 #define MAX_EFFECT_STEP		10
@@ -216,6 +216,7 @@ typedef struct
 	extern const unsigned char KEYBOARD_LED_Map[MAX_COL][MAX_ROW];
 
 	extern SPI_HandleTypeDef hspi2;
+	extern DMA_HandleTypeDef hdma_spi2_tx;
 	extern UART_HandleTypeDef huart1;
 
 	extern void BrightnessSave(void);
@@ -238,6 +239,8 @@ typedef struct
 	void MatrixEffectTimer(uint32_t timeTick);
 
 	void MatrixEffectNextMove(WaveEffectTypeDef* pEffect, uint32_t timeTick);
+
+	void SpiTransmit(uint8_t* pData, uint16_t len);
 
 #ifdef __cplusplus
 }
