@@ -12,7 +12,8 @@
 			"matrix_led.h": "c",
 			"stm32l1xx_hal.h": "c",
 			"limits": "c",
-			"memory": "c"
+			"memory": "c",
+			"state_led.h": "c"
 		},
 		"C_Cpp.default.compilerPath": "/bin/arm-none-eabi-gcc.exe",
 		"C_Cpp.default.defines": [],
