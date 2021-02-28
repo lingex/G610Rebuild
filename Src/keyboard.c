@@ -1,4 +1,4 @@
-#include "keyboard.h"
+﻿#include "keyboard.h"
 #include "usbhid.h"
 #include "state_led.h"
 #include "matrix_led.h"
@@ -141,7 +141,14 @@ void OnKeyDown(uint8_t x, uint8_t y, uint8_t keyVal)
 	break;
 	case KC_BACKLIGHT:
 	{
-		MatrixBrightnessChange();
+		if (keyFnDown)
+		{
+			SmearLightEnableSw();
+		}
+		else
+		{
+			MatrixBrightnessChange();
+		}
 	}
 	break;
 	case KC_FN:

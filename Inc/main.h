@@ -166,6 +166,7 @@ void Error_Handler(void);
 #define BL_SETTING_ADDR (FLASH_EEPROM_BASE + 0x00)
 #define MODE_SETTING_ADDR (FLASH_EEPROM_BASE + 0x04)
 #define INSERT_SETTING_ADDR (FLASH_EEPROM_BASE + 0x08)
+#define SMEAR_SETTING_ADDR (FLASH_EEPROM_BASE + 0x0c)
 
 	struct kbReportSt
 	{
@@ -191,8 +192,6 @@ void Error_Handler(void);
 		MK_STATE_REPORTED,
 		MK_STATE_UP,
 	};
-
-#define TAILING_EFFECT 1
 
 /* USER CODE END Private defines */
 

@@ -212,6 +212,7 @@ typedef struct
 	extern uint8_t brightness;
 	extern uint8_t insertEnable;
 	extern uint8_t gameMode;
+	extern uint8_t smearLight;
 
 	extern const unsigned char KEYBOARD_LED_Map[MAX_COL][MAX_ROW];
 

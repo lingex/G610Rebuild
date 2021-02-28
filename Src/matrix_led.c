@@ -44,9 +44,8 @@ const unsigned char MATRIX_Abs_Map[7][22] =
 	{MLI_LCTRL,		MLI_LGUI,	MLI_LALT,	MLI_SPACEBAR,	MLI_SPACEBAR,	MLI_SPACEBAR,	MLI_SPACEBAR,	MLI_SPACEBAR,	MLI_SPACEBAR,	MLI_RALT,	MLI_RGUI,	MLI_FN,				MLI_RCTRL,			MLI_LEFT,			MLI_DOWN,		MLI_RIGHT,	MLI_KP_0,		MLI_KP_0,	MLI_KP_DOT,		MLI_KP_ENTER,	MLI_NONE,		MLI_NONE,},
 };
 
-#if TAILING_EFFECT
+
 WaveEffectTypeDef waveTask[MAX_EFFECT_TASK];
-#endif
 
 void MatrixInit(void)
 {
@@ -66,14 +65,12 @@ void MatrixInit(void)
 
 	SpiTransmit(cmdBuff, len);
 
-#if TAILING_EFFECT
 	WaveEffectTypeDef* pEffect = NULL;
 	for (uint8_t i = 0; i < MAX_EFFECT_TASK; i++)
 	{
 		pEffect = &waveTask[i];
 		pEffect->nextTick = 0;
 	}
-#endif
 
 #if 0
 	//clear buff
@@ -197,27 +194,28 @@ void MatrixOnKeyPressed(uint8_t x, uint8_t y, uint8_t keyVal)
 	WaveEffectTypeDef* pEffect = NULL;
 	uint8_t index = MATRIX_LED_Map[x][y];
 
-#if TAILING_EFFECT
-	for (uint8_t i = 0; i < MAX_EFFECT_TASK; i++)
+	if (smearLight != 0)
 	{
-		pEffect = &waveTask[i];
-		if (pEffect->nextTick == 0)
+		for (uint8_t i = 0; i < MAX_EFFECT_TASK; i++)
 		{
-			pEffect->nextTick = HAL_GetTick() + MAX_EFFECT_INTERVAL;
-			pEffect->step = 0;
-			pEffect->x = x;
-			pEffect->y = y;
-			pEffect->dotIndex = index;
+			pEffect = &waveTask[i];
+			if (pEffect->nextTick == 0)
+			{
+				pEffect->nextTick = HAL_GetTick() + MAX_EFFECT_INTERVAL;
+				pEffect->step = 0;
+				pEffect->x = x;
+				pEffect->y = y;
+				pEffect->dotIndex = index;
 
-			MatrixSyncByte(DISP_P1, index, 0xff);
-			break;
-		}
-		else if (pEffect->dotIndex == index)
-		{
-			pEffect->step = 0;
+				MatrixSyncByte(DISP_P1, index, 0xff);
+				break;
+			}
+			else if (pEffect->dotIndex == index)
+			{
+				pEffect->step = 0;
+			}
 		}
 	}
-#endif
 
 	switch (keyVal)
 	{
@@ -287,9 +285,6 @@ void MatrixBrightnessChange(void)
 	BrightnessSave();
 }
 
-
-#if TAILING_EFFECT
-
 void MatrixEffectTimer(uint32_t timeTick)
 {
 	WaveEffectTypeDef* pEffect = NULL;
@@ -320,8 +315,6 @@ void MatrixEffectNextMove(WaveEffectTypeDef* pEffect, uint32_t timeTick)
 		MatrixSyncByte(DISP_P1, pEffect->dotIndex, (EFFECT_VAL_HI - pEffect->step * EFFECT_STEP_VAL));
 	}
 }
-
-#endif
 
 
 void SpiTransmit(uint8_t* pData, uint16_t len)

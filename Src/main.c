@@ -83,6 +83,7 @@ struct nkroReportSt nkroReport;
 uint8_t brightness = 0;
 uint8_t gameMode = 0;
 uint8_t insertEnable = 0;
+uint8_t smearLight = 0;
 volatile bool time_1ms = false;
 
 uint16_t intPin = 0;
@@ -115,6 +116,7 @@ void WriteEEPROM(uint32_t addr, uint32_t val);
 
 void GameModeSw(void);
 void InsertEnableSw(void);
+void SmearLightEnableSw(void);
 void BrightnessSave(void);
 void MediaKeyDown(uint8_t key);
 void MediaKeyUp(void);
@@ -212,6 +214,7 @@ int main(void)
 	brightness = *(uint32_t*)BL_SETTING_ADDR;
 	//gameMode = *(uint32_t*)MODE_SETTING_ADDR;
 	insertEnable = *(uint32_t*)INSERT_SETTING_ADDR;
+  smearLight = *(uint32_t*)SMEAR_SETTING_ADDR;
 
 	SetModeLED(gameMode);
 
@@ -224,9 +227,7 @@ int main(void)
 	zt_bind(EncoderCheck, 10, 1);
 	zt_bind(KeyCheck, 1, 1);
 
-#if TAILING_EFFECT
 	zt_bind(MatrixTimer, 10, 1);
-#endif
 
 	kbReport.id = 1;		//report id
 	nkroReport.id = NKRO_REPORT_ID;		//report id
@@ -617,6 +618,12 @@ void InsertEnableSw(void)
 	SetConfigSaveTask();
 }
 
+void SmearLightEnableSw(void)
+{
+  smearLight = smearLight > 0 ? 0 : 1;
+  SetConfigSaveTask();
+}
+
 void BrightnessSave(void)
 {
 	//WriteEEPROM(BL_SETTING_ADDR, brightness);
@@ -634,9 +641,10 @@ void DfuMode(void)
 
 void MatrixTimer(void)
 {
-#if TAILING_EFFECT
-	MatrixEffectTimer(HAL_GetTick());
-#endif
+  if (smearLight != 0)
+  {
+    MatrixEffectTimer(HAL_GetTick());
+  }
 }
 
 void MediaKeyDown(uint8_t key)
@@ -720,6 +728,7 @@ void ConfigSave(void)
 	WriteEEPROM(MODE_SETTING_ADDR, gameMode);
 	WriteEEPROM(INSERT_SETTING_ADDR, insertEnable);
 	WriteEEPROM(BL_SETTING_ADDR, brightness);
+	WriteEEPROM(SMEAR_SETTING_ADDR, smearLight);
 }
 
 void USBD_HID_GetReport(uint8_t * report, int len)
