@@ -25,7 +25,7 @@ extern "C"
 
 #define SPI_TIMEOUT_PA 		1
 
-#define MAX_EFFECT_TASK		16
+#define MAX_EFFECT_TASK		8
 #define MAX_EFFECT_STEP		10
 #define MAX_EFFECT_INTERVAL	100
 #define EFFECT_STEP_VAL		(EFFECT_VAL_HI - brightness)/MAX_EFFECT_STEP
