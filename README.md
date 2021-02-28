@@ -50,6 +50,10 @@ b.本项目依赖于以下Bootloader:
 
 https://github.com/lingex/STM32L_DFU_Solution/tree/Branch_128k
 
+这里是编译好的:
+
+https://github.com/lingex/G610Rebuild/blob/master/Fw/Bootloader.hex
+
 
 从flash分配图可以看出，这是一种非常规用法，flash标准容量是64KB，实际上采用的是128KB的晶圆，所以总共有128KB的容量可以使用，从产品的角度是不推荐这样使用的。
 
