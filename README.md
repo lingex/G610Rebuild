@@ -1,4 +1,4 @@
-## G610Rebuild
+## Logitech G610 gaming keyboard firmware
 
 ## CHS:
 这是适用于罗技G610机械键盘的非官方固件(注意: 刷入第三方固件可能会损坏你的键盘，如果你的键盘是健康的/你对它没什么不满的话不建议尝试)。
@@ -34,6 +34,7 @@
 # Flash 分配图
 ![image](https://github.com/lingex/G610Rebuild/blob/master/PIC/flash%20mapping.png)
 
+固件取巧使用了 MCU 标准容量之后的 64K flash (正式产品中不建议这样使用) 来存放我们自己写的键盘App, 这样就可以跟原厂的 App 共存了。
 
 # 注意事项：
 
@@ -50,8 +51,10 @@ b.本项目依赖于以下Bootloader:
 
 https://github.com/lingex/STM32L_DFU_Solution/tree/Branch_128k
 
+这里是编译好的:
 
-从flash分配图可以看出，这是一种非常规用法，flash标准容量是64KB，实际上采用的是128KB的晶圆，所以总共有128KB的容量可以使用，从产品的角度是不推荐这样使用的。
+https://github.com/lingex/G610Rebuild/blob/master/Fw/Bootloader.hex
+
 
 
 
@@ -63,6 +66,15 @@ https://github.com/lingex/STM32L_DFU_Solution/tree/Branch_128k
 a.刷入bootloader
 
   STM32 ST-LINK Utility : Bootloader.hex       (需要调试工具，如ST-Link)
+  
+  这里是SWD调试口
+  
+  ![image](https://github.com/lingex/G610Rebuild/blob/master/PIC/downloading/STLINK%20IO.png)
+  
+  可以这样下载而不需要焊接排针
+  
+  ![image](https://github.com/lingex/G610Rebuild/blob/master/PIC/downloading/bootloader.png)
+  
   
 b.刷入官方固件  
 
@@ -85,10 +97,10 @@ STM32 ST-LINK Utility : Official_bootloader_and_app.bin  (偏移地址: 0x800000
 
 1.音量滚轮体验大约能达到官方固件 80% 的水平，主要是低速下表现不佳，还可以改进；
 
-2.NKRO是通过增加一个USB端点(端点2)来实现，但是通过端点2发送不出去，原因未知。所以使用了端点1来发送，后续没发现什么问题就这样用吧；
+2.NKRO是通过增加一个USB端点(端点2)来实现，但是通过端点2发送不出去，原因未知。所以使用了端点1来发送，改进方向是通过多个interface来实现；
 
 3.NKRO键值映射可能在linux等一些系统下有问题，参见https://static.wongcornall.com/ibm-capsense-usb-web/ibm-capsense-usb.html#x1-140003.3
-  实在碰到了就别开NKRO吧(事实上这键盘我用了多年其实也没用过全键无冲，为了支持这个功能花了太多时间)，暂时不管了。
+  实在碰到了就别开NKRO吧。
 
 
 ## —————————————————————————————
@@ -140,7 +152,7 @@ Bootloader:
 https://github.com/lingex/STM32L_DFU_Solution/tree/Branch_128k
 
 # Important:
-This branch is a non-standard use of STM32L100R8, by using the 64k~128k internal flash, to keep both official firmware and this firmware
+This branch is a non-standard use of STM32L100R8, by using the 64k~128k internal flash, to keep both official firmware and our firmware
 inside, can not download into device directly using MDK, and no debug, st-link utility and dfu are feasible.
 
 
@@ -151,6 +163,12 @@ inside, can not download into device directly using MDK, and no debug, st-link u
 a.flash bootloader
 
   STM32 ST-LINK Utility : Bootloader.hex     (need a debug tool like ST-Link)
+  
+  this are the SWD pins
+  
+  ![image](https://github.com/lingex/G610Rebuild/blob/master/PIC/downloading/STLINK%20IO.png)
+  
+  ![image](https://github.com/lingex/G610Rebuild/blob/master/PIC/downloading/bootloader.png)
   
 b.flash official fw
 
