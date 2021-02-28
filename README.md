@@ -26,7 +26,9 @@
 
 8.按住背光键上电，键盘进入官方固件。
 
-9.拖尾灯效，可通过 FN + Light 键切换
+9.拖尾灯效，可通过 FN + Light 键切换开关。
+
+10.NumLock 守卫，妈妈再也不用担心某操作系统瞎控制我的 NumLock 了，可通过 FN + Light 键切换开关。
 
 
 # Flash 分配图
@@ -116,7 +118,9 @@ You'll need to disassemble the keyboard and flash the bootloader with a ST-Link 
 
 8.Holding backlight when plug in the usb cable, will run the official firmware.
 
-9.Smearing light effect switch by FN + Light
+9.Smearing light effect switch by FN + Light.
+
+10.NumLock guard, 'don't touch my NumLock', switch by FN + NumLock.
 
 
 # flash mapping
