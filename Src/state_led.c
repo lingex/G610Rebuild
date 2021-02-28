@@ -3,6 +3,14 @@
 void SetNumLockLED(uint8_t on)
 {
 	HAL_GPIO_WritePin(NUM_LED_GPIO_Port, NUM_LED_Pin, on == 0 ? GPIO_PIN_RESET : GPIO_PIN_SET);
+	if (on == 0)
+	{
+		NumLockTaskActive();
+	}
+	else
+	{
+		NumLockTaskDeActive();
+	}
 }
 
 void SetCapsLockLED(uint8_t on)

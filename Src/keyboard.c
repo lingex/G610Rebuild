@@ -205,6 +205,11 @@ void OnKeyDown(uint8_t x, uint8_t y, uint8_t keyVal)
 		{
 			RunOfficialApp();
 		}
+		if (keyFnDown && keyVal == KC_KP_NUM_LOCK)
+		{
+			NumLockGuardEnableSw();
+			break;
+		}
 
 
 		keyChange = 1;

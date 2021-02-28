@@ -84,6 +84,8 @@ uint8_t brightness = 0;
 uint8_t gameMode = 0;
 uint8_t insertEnable = 0;
 uint8_t smearLight = 0;
+uint8_t numLockGuard = 0;
+
 volatile bool time_1ms = false;
 
 uint16_t intPin = 0;
@@ -93,6 +95,9 @@ volatile int16_t encoderCount = 0;
 int zt_bindIdEncoder = 0; //encoder task restore bind id
 int zt_bindIdCfgSave = 0;
 int zt_bindIdEcDebounce = 0;
+int zt_bindIdNumLockUp = 0;
+int zt_bindIdNumLockDown = 0;
+int zt_bindIdNumLockGuard = 0;
 
 typedef void(*pFunction)(void);
 pFunction JumpToApplication;
@@ -117,6 +122,8 @@ void WriteEEPROM(uint32_t addr, uint32_t val);
 void GameModeSw(void);
 void InsertEnableSw(void);
 void SmearLightEnableSw(void);
+void NumLockGuardEnableSw(void);
+
 void BrightnessSave(void);
 void MediaKeyDown(uint8_t key);
 void MediaKeyUp(void);
@@ -131,6 +138,11 @@ void ConfigSave(void);
 
 void EncoderCheck(void);
 void EncoderDebounce(void);
+void NumLockTaskActive(void);
+void NumLockTaskDeActive(void);
+void NumLockDown(void);
+void NumLockUp(void);
+void NumLockGuard(void);
 void DfuMode(void);
 void MatrixTimer(void);
 
@@ -159,7 +171,11 @@ int main(void)
 	chs: 重要提示！
 	如果未使用bootloader，必须注释掉下面这行代码: SCB->VTOR = APP_ADDR;
 	*/
+#ifndef _DEBUG_
+
 	SCB->VTOR = APP_ADDR;
+
+#endif
 
 
 	//char debugBuff[64] = {'0'};
@@ -215,6 +231,7 @@ int main(void)
 	//gameMode = *(uint32_t*)MODE_SETTING_ADDR;
 	insertEnable = *(uint32_t*)INSERT_SETTING_ADDR;
   smearLight = *(uint32_t*)SMEAR_SETTING_ADDR;
+  numLockGuard = *(uint32_t*)NUM_LOCK_GUARD_SETTING_ADDR;
 
 	SetModeLED(gameMode);
 
@@ -224,6 +241,9 @@ int main(void)
 	zt_bindIdEncoder = zt_bind(VolumeKeyUp, 20, 0);		//Volume adj key hold time
 	zt_bindIdCfgSave = zt_bind(ConfigSave, 5000, 0);   //configs save delay when changed
 	zt_bindIdEcDebounce = zt_bind(EncoderDebounce, 1, 0);
+	zt_bindIdNumLockDown = zt_bind(NumLockDown, (int)(((uint8_t)HAL_GetTick()) + 100), 0);
+	zt_bindIdNumLockUp = zt_bind(NumLockUp, 20, 0);
+	zt_bindIdNumLockGuard = zt_bind(NumLockGuard, 25, 0);
 	zt_bind(EncoderCheck, 10, 1);
 	zt_bind(KeyCheck, 1, 1);
 
@@ -625,6 +645,12 @@ void SmearLightEnableSw(void)
   SetConfigSaveTask();
 }
 
+void NumLockGuardEnableSw(void)
+{
+  numLockGuard = numLockGuard > 0 ? 0 : 1;
+  SetConfigSaveTask();
+}
+
 void BrightnessSave(void)
 {
 	//WriteEEPROM(BL_SETTING_ADDR, brightness);
@@ -730,6 +756,7 @@ void ConfigSave(void)
 	WriteEEPROM(INSERT_SETTING_ADDR, insertEnable);
 	WriteEEPROM(BL_SETTING_ADDR, brightness);
 	WriteEEPROM(SMEAR_SETTING_ADDR, smearLight);
+	WriteEEPROM(NUM_LOCK_GUARD_SETTING_ADDR, numLockGuard);
 }
 
 void USBD_HID_GetReport(uint8_t * report, int len)
@@ -793,6 +820,84 @@ void EncoderDebounce(void)
 	intPin = 0;
 	zt_stop(zt_bindIdEcDebounce);
 	HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
+}
+
+void NumLockDown(void)
+{
+  struct kbReportSt tmpReport;
+  tmpReport.id = 1;
+  tmpReport.modify = 0;
+  tmpReport.keys[0] = KC_KP_NUM_LOCK;
+  tmpReport.keys[1] = 0;
+  tmpReport.keys[2] = 0;
+  tmpReport.keys[3] = 0;
+  tmpReport.keys[4] = 0;
+  tmpReport.keys[5] = 0;
+
+  USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*)&tmpReport, 9);	//6kro report
+
+  zt_stop(zt_bindIdNumLockDown);
+  zt_start(zt_bindIdNumLockUp, 1);
+}
+
+void NumLockUp(void)
+{
+  struct kbReportSt tmpReport;
+  tmpReport.id = 1;
+  tmpReport.modify = 0;
+  tmpReport.keys[0] = 0;
+  tmpReport.keys[1] = 0;
+  tmpReport.keys[2] = 0;
+  tmpReport.keys[3] = 0;
+  tmpReport.keys[4] = 0;
+  tmpReport.keys[5] = 0;
+
+  USBD_HID_SendReport(&hUsbDeviceFS, (uint8_t*)&tmpReport, 9);	//6kro report
+  zt_stop(zt_bindIdNumLockUp);
+}
+
+void NumLockTaskActive(void)
+{
+  if (numLockGuard == 0)
+  {
+    return;
+  }
+
+  for (uint8_t i = 0; i < 6; i++)
+  {
+    if (kbReport.keys[i] == KC_KP_NUM_LOCK)
+    {
+      //still pressing, active guard
+      zt_start(zt_bindIdNumLockGuard, 1);
+      return;
+    }
+  }
+
+  zt_start(zt_bindIdNumLockDown, 1);
+}
+
+void NumLockTaskDeActive(void)
+{
+  if (numLockGuard == 0)
+  {
+    return;
+  }
+  zt_stop(zt_bindIdNumLockGuard);
+  zt_stop(zt_bindIdNumLockDown);
+}
+
+void NumLockGuard(void)
+{
+  for (uint8_t i = 0; i < 6; i++)
+  {
+    if (kbReport.keys[i] == KC_KP_NUM_LOCK)
+    {
+      //still pressing
+      return;
+    }
+  }
+  zt_stop(zt_bindIdNumLockGuard);
+  zt_start(zt_bindIdNumLockDown, 1);
 }
 
 //encoder interrupt

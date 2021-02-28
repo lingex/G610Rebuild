@@ -9,9 +9,9 @@ extern "C" {
 	/* Includes ------------------------------------------------------------------*/
 #include  "main.h"
 
-
 	extern TIM_HandleTypeDef htim3;
-	extern void WriteEEPROM(uint32_t addr, uint32_t val);
+	extern void NumLockTaskActive(void);
+	extern void NumLockTaskDeActive(void);
 
 
 	void SetNumLockLED(uint8_t on);
