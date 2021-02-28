@@ -5,6 +5,7 @@
 
 其实也不必太担心，只要别搞坏硬件，基本上是成不了砖的，官方很厚道，固件并没有加密，可以直接读出来，这里备份了一个(Fw/Official_bootloader_and_app.bin)，重新刷回去就恢复原厂状态了。
 
+首次刷机需要拆开键盘外壳，使用ST-Link下载bootloader, 此后升级就不再需要拆了。
 
 
 # 特性:
@@ -25,7 +26,7 @@
 
 8.按住背光键上电，键盘进入官方固件。
 
-9.默认开启拖尾等效，如不需要可把 main.h 中 #define TAILING_EFFECT 1 改为 #define TAILING_EFFECT 0
+9.拖尾灯效，可通过 FN + Light 键切换
 
 
 # Flash 分配图
@@ -95,6 +96,8 @@ STM32 ST-LINK Utility : Official_bootloader_and_app.bin  (偏移地址: 0x800000
 
 A non-original firmware of Logitech G610 mechanical keyboard(Using non-original firmware may damage your keyboard).
 
+You'll need to disassemble the keyboard and flash the bootloader with a ST-Link for the first time,
+
 # Feature:
 
 1.Configs (brightness) save to eeprom (delay 5 seconds).
@@ -113,7 +116,7 @@ A non-original firmware of Logitech G610 mechanical keyboard(Using non-original 
 
 8.Holding backlight when plug in the usb cable, will run the official firmware.
 
-9.Using tailing light effect by default, turn off: in main.h : #define TAILING_EFFECT 1 --> #define TAILING_EFFECT 0
+9.Smearing light effect switch by FN + Light
 
 
 # flash mapping
