@@ -339,10 +339,13 @@ void SpiTransmit(uint8_t* pData, uint16_t len)
  	NVIC_DisableIRQ(SPI2_IRQn);
 	HAL_SPI_Transmit_DMA(&hspi2, pData, len);
 
-	//HAL_SPI_IRQHandler(&hspi2);	//clear all interrupt flag
 	uint32_t unused = hspi2.Instance->SR;	//read SR and DR to clear all interrupt flag
 	unused = hspi2.Instance->DR;
-
+	UNUSED(unused);
+	//__HAL_SPI_CLEAR_CRCERRFLAG(&hspi2);
+	//__HAL_SPI_CLEAR_FREFLAG(&hspi2);
+	//__HAL_SPI_CLEAR_MODFFLAG(&hspi2);
+	//__HAL_SPI_CLEAR_OVRFLAG(&hspi2);
 #else
 	//HAL_SPI_Transmit_IT(&hspi2, pData, len);
 
