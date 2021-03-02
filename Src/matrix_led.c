@@ -234,7 +234,7 @@ void MatrixOnKeyPressed(uint8_t x, uint8_t y, uint8_t keyVal)
 		//uint8_t index = MATRIX_LED_Map[x][y];
 
 		//matrixBuff[index] = insertEnable > 0 ? DEFAULT_DIMMING : 0;
-		matrixBuff[MLI_INSERT] = insertEnable > 0 ? DEFAULT_DIMMING : 0;
+		matrixBuff[MLI_INSERT] = insertEnable > 0 ? brightness : 0;
 
 		MatrixSyncByte(DISP_P1, MLI_INSERT, matrixBuff[MLI_INSERT]);
 	}
@@ -243,8 +243,8 @@ void MatrixOnKeyPressed(uint8_t x, uint8_t y, uint8_t keyVal)
 	{
 		if (gameMode == 0)
 		{
-			matrixBuff[MLI_LGUI] = DEFAULT_DIMMING;
-			matrixBuff[MLI_RGUI] = DEFAULT_DIMMING;
+			matrixBuff[MLI_LGUI] = brightness;
+			matrixBuff[MLI_RGUI] = brightness;
 		}
 		else
 		{
