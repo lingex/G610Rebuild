@@ -209,7 +209,7 @@ void MatrixOnKeyPressed(uint8_t x, uint8_t y, uint8_t keyVal)
 		for (uint8_t i = 0; i < MAX_EFFECT_TASK; i++)
 		{
 			pEffect = &waveTask[i];
-			if (pEffect->nextTick == 0)
+			if (pEffect->nextTick == 0)	//first empty task
 			{
 				pEffect->nextTick = HAL_GetTick() + MAX_EFFECT_INTERVAL;
 				pEffect->step = 0;
@@ -220,7 +220,7 @@ void MatrixOnKeyPressed(uint8_t x, uint8_t y, uint8_t keyVal)
 				MatrixSyncByte(DISP_P1, index, 0xff);
 				break;
 			}
-			else if (pEffect->dotIndex == index)
+			else if (pEffect->dotIndex == index)//press again, restart task
 			{
 				pEffect->step = 0;
 			}
@@ -286,12 +286,7 @@ void MatrixBrightnessChange(void)
 		break;
 	}
 
-	//SetLogoLED(brightness);
-
 	MatrixSetBrightness(brightness);
-
-	//MatrixSyncBuff(DISP_P1);
-
 	BrightnessSave();
 }
 
