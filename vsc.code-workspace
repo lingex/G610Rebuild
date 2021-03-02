@@ -13,7 +13,8 @@
 			"stm32l1xx_hal.h": "c",
 			"limits": "c",
 			"memory": "c",
-			"state_led.h": "c"
+			"state_led.h": "c",
+			"ztask.h": "c"
 		},
 		"C_Cpp.default.compilerPath": "/bin/arm-none-eabi-gcc.exe",
 		"C_Cpp.default.defines": [],
