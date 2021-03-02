@@ -163,14 +163,6 @@ void RunOfficialApp(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
-	/*en: IMPORTANT!
-	if you are not using a bootloader
-	you have to comment the following line: SCB->VTOR = APP_ADDR;
-
-	chs: 重要提示！
-	如果未使用bootloader，必须注释掉下面这行代码: SCB->VTOR = APP_ADDR;
-	*/
 #ifndef _DEBUG_
 
 	SCB->VTOR = APP_ADDR;
