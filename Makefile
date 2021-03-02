@@ -20,7 +20,8 @@ TARGET = G610Rebuild
 # building variables
 ######################################
 # debug build?
-DEBUG = 0
+#DEBUG = 0
+DEBUG = $(debug)
 # debug flag
 ifeq ($(DEBUG), 1)
 DEBUG_MARK = -D_DEBUG_
@@ -28,7 +29,7 @@ else
 DEBUG_MARK = 
 endif
 # generate .dfu? (need hex2dfu)
-DFU_OUTPUT = 0
+DFU_OUTPUT = $(dfu)
 # optimization
 OPT = -Og
 
