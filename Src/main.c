@@ -77,8 +77,8 @@ extern USBD_HandleTypeDef hUsbDeviceFS;
 
 uint8_t keyChange = 0;
 
-struct kbReportSt kbReport;
-struct nkroReportSt nkroReport;
+struct kbReportSt kbReport = {0};
+struct nkroReportSt nkroReport = {0};
 
 uint8_t brightness = 0;
 uint8_t gameMode = 0;
@@ -169,17 +169,7 @@ int main(void)
 
 #endif
 
-
 	//char debugBuff[64] = {'0'};
-
-	for (size_t i = 0; i < 6; i++)
-	{
-		kbReport.keys[i] = 0;
-	}
-	for (size_t i = 0; i < 23; i++)
-	{
-		nkroReport.keys[i] = 0;
-	}
 
   /* USER CODE END 1 */
 
