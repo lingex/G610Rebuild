@@ -168,8 +168,8 @@ int main(void)
 	if you are not using a bootloader
 	you have to comment the following line: SCB->VTOR = APP_ADDR;
 
-	chs: ÖØÒªÌáÊ¾£¡
-	Èç¹ûÎ´Ê¹ÓÃbootloader£¬±ØÐë×¢ÊÍµôÏÂÃæÕâÐÐ´úÂë: SCB->VTOR = APP_ADDR;
+	chs: é‡è¦æç¤ºï¼
+	å¦‚æžœæœªä½¿ç”¨bootloaderï¼Œå¿…é¡»æ³¨é‡ŠæŽ‰ä¸‹é¢è¿™è¡Œä»£ç : SCB->VTOR = APP_ADDR;
 	*/
 #ifndef _DEBUG_
 
