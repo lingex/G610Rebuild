@@ -30,7 +30,7 @@ DEBUG_MARK =
 endif
 # generate .dfu? (need hex2dfu)
 DFU_OUTPUT = $(dfu)
-# optimization
+# optimization ( O0 O1 O2 O3 Og Os Ofast )
 OPT = -Og
 
 

@@ -8,9 +8,7 @@ extern struct nkroReportSt nkroReport;
 
 bool keyFnDown = false;
 
-#define MAX_QUEUE 6
-
-uint8_t queueBuff[MAX_QUEUE];
+static uint8_t queueBuff[MAX_QUEUE];
 
 void KeyCheck(void)
 {
@@ -153,7 +151,7 @@ void OnKeyDown(uint8_t x, uint8_t y, uint8_t keyVal)
 	break;
 	case KC_FN:
 	{
-		keyFnDown = 1;
+		keyFnDown = true;
 	}
 	break;
 	case KC_MEDIA_PLAY:
@@ -189,7 +187,7 @@ void OnKeyDown(uint8_t x, uint8_t y, uint8_t keyVal)
 	{
 		if (keyVal == KC_INSERT)
 		{
-			if (keyFnDown == true)
+			if (keyFnDown)
 			{
 				InsertEnableSw();
 				MatrixOnKeyPressed(x, y, KC_INSERT_SW);
@@ -293,7 +291,7 @@ void OnKeyUp(uint8_t x, uint8_t y, uint8_t keyVal)
 	break;
 	case KC_FN:
 	{
-		keyFnDown = 0;
+		keyFnDown = false;
 	}
 	break;
 	case KC_MEDIA_PLAY:
@@ -348,4 +346,5 @@ void OnKeyUp(uint8_t x, uint8_t y, uint8_t keyVal)
 	}
 	break;
 	}
+	MatrixOnKeyReleased(x, y, keyVal);
 }

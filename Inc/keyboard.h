@@ -10,6 +10,7 @@ extern "C"
 	/* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #define DEBOUNCE_MS 8
+#define MAX_QUEUE 6
 
 	extern uint8_t gameMode;
 	extern uint8_t insertEnable;

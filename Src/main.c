@@ -267,8 +267,8 @@ int main(void)
 			time_1ms = false;
 			zt_poll();    //task execute
 		}
-		//disconnect
-		//other flag that can be use is dev_config = 0
+		//on usb disconnect
+		//another flag that can be use is dev_config = 0
 		if (hUsbDeviceFS.dev_state != USBD_STATE_CONFIGURED)
 		{
 			//reset

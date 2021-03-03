@@ -60,6 +60,7 @@ extern "C"
 
 #define DEFAULT_DIMMING 0xf0
 
+#define IS_ST524_PATTERN(p) ((p) == 1 || (p) ==2)
 
 enum
 {
@@ -234,6 +235,7 @@ typedef struct
 	void MatrixSyncByte(uint8_t p, uint8_t regAddr, uint8_t val);
 
 	void MatrixOnKeyPressed(uint8_t x, uint8_t y, uint8_t keyVal);
+	void MatrixOnKeyReleased(uint8_t x, uint8_t y, uint8_t keyVal);
 
 	void MatrixBrightnessChange(void);
 
