@@ -92,11 +92,29 @@ void MatrixInit(void)
 #endif
 
 	//MatrixSyncBuff(DISP_P1);
+#ifdef _DEBUG_
+	uint32_t start = HAL_GetTick();
+#endif
 
-	//TODO fixme     these two while are not safe, data transmit may not complete.
+	volatile int loop = 3;
 	while(HAL_SPI_GetState(&hspi2) != HAL_SPI_STATE_READY);
+	while (loop-- > 0);
+
 	MatrixSetBrightness(brightness);
 	while(HAL_SPI_GetState(&hspi2) != HAL_SPI_STATE_READY);
+	loop = 3;
+	while (loop-- > 0);
+
+	MatrixDisplayOn(DISP_P1);
+	while(HAL_SPI_GetState(&hspi2) != HAL_SPI_STATE_READY);
+	loop = 3;
+	while (loop-- > 0);
+
+#ifdef _DEBUG_
+	char debugBuff[64] = {0};
+	sprintf(debugBuff, "Matrix init cost: %lu.\n", HAL_GetTick() - start);
+	HAL_UART_Transmit(&huart1, (uint8_t *)debugBuff, 64, 100);
+#endif
 }
 
 void MatrixSetBrightness(uint8_t val)
@@ -270,6 +288,7 @@ void MatrixBrightnessChange(void)
 
 	MatrixSetBrightness(brightness);
 	BrightnessSave();
+	while(HAL_SPI_GetState(&hspi2) != HAL_SPI_STATE_READY);
 }
 
 void MatrixEffectTimer(uint32_t timeTick)
@@ -307,17 +326,8 @@ void MatrixEffectNextMove(WaveEffectTypeDef* pEffect, uint32_t timeTick)
 
 void SpiTransmit(uint8_t* pData, uint16_t len)
 {
-	//if (HAL_DMA_GetState(&hdma_spi2_tx) != HAL_DMA_STATE_READY)
-	if (HAL_SPI_GetState(&hspi2) != HAL_SPI_STATE_READY)	//batter than dma state
-	{
-#ifdef _DEBUG_
-		//char debugBuff[64];
-		//sprintf(debugBuff, "Spi transmit abort, drop: %d byte(s).\n", len);
-		//HAL_UART_Transmit(&huart1, (uint8_t *)debugBuff, len, len);
-		//SetLogoLED(0);
-#endif
-		return;	//abort transmit, data loss is acceptable in this case
-	}
+	//while (HAL_DMA_GetState(&hdma_spi2_tx) != HAL_DMA_STATE_READY);
+	while (HAL_SPI_GetState(&hspi2) != HAL_SPI_STATE_READY);
 
 	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_RESET);
 

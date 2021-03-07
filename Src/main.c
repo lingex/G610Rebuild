@@ -167,9 +167,11 @@ int main(void)
 
 	SCB->VTOR = APP_ADDR;
 
-#endif
+#else
 
-	//char debugBuff[64] = {'0'};
+	char debugBuff[64] = {'0'};
+
+#endif
 
   /* USER CODE END 1 */
 
@@ -206,8 +208,10 @@ int main(void)
 		HAL_Delay(100);
 	}
 
-	//sprintf(debugBuff, "x=%u,y=%u,name=%s,val=%x\n", 1, 2, "ax", 9);
-	//HAL_UART_Transmit(&huart1, (uint8_t *)debugBuff, 64, 100);
+#ifdef _DEBUG_
+	sprintf(debugBuff, "keyboard: usb connected\n");
+	HAL_UART_Transmit(&huart1, (uint8_t *)debugBuff, 64, 100);
+#endif
 
 	brightness = *(uint32_t*)BL_SETTING_ADDR;
 	//gameMode = *(uint32_t*)MODE_SETTING_ADDR;
@@ -218,7 +222,6 @@ int main(void)
 	SetModeLED(gameMode);
 
 	MatrixInit();
-	MatrixDisplayOn(1);
 
 	zt_bindIdEncoder = zt_bind(VolumeKeyUp, 20, 0);		//Volume adj key hold time
 	zt_bindIdCfgSave = zt_bind(ConfigSave, 5000, 0);   //configs save delay when changed
@@ -272,6 +275,10 @@ int main(void)
 		if (hUsbDeviceFS.dev_state != USBD_STATE_CONFIGURED)
 		{
 			//reset
+#ifdef _DEBUG_
+      sprintf(debugBuff, "keyboard: usb disconnected\n");
+	    HAL_UART_Transmit(&huart1, (uint8_t *)debugBuff, 64, 100);
+#endif
 			HAL_Delay(500);
 			DfuMode();
 		}

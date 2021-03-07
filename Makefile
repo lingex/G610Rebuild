@@ -26,12 +26,17 @@ DEBUG = $(debug)
 ifeq ($(DEBUG), 1)
 DEBUG_MARK = -D_DEBUG_
 else
-DEBUG_MARK = 
+DEBUG_MARK =
 endif
 # generate .dfu? (need hex2dfu)
 DFU_OUTPUT = $(dfu)
 # optimization ( O0 O1 O2 O3 Og Os Ofast )
+ifeq ($(DEBUG), 1)
 OPT = -Og
+else
+OPT = -Os
+endif
+
 
 
 #######################################
@@ -110,7 +115,7 @@ ifeq ($(DFU_OUTPUT), 1)
 DFU = hex2dfu -o $@ -h
 endif
 
- 
+
 #######################################
 # CFLAGS
 #######################################
@@ -128,7 +133,7 @@ MCU = $(CPU) -mthumb $(FPU) $(FLOAT-ABI)
 
 # macros for gcc
 # AS defines
-AS_DEFS = 
+AS_DEFS =
 
 # C defines
 C_DEFS =  \
@@ -138,7 +143,7 @@ $(DEBUG_MARK)
 
 
 # AS includes
-AS_INCLUDES = 
+AS_INCLUDES =
 
 # C includes
 C_INCLUDES =  \
@@ -177,8 +182,8 @@ LDSCRIPT = STM32L100R8Tx_FLASH_WITH_BOOTLOADER.ld
 endif
 
 # libraries
-LIBS = -lc -lm -lnosys 
-LIBDIR = 
+LIBS = -lc -lm -lnosys
+LIBDIR =
 LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 
 # default action: build all
@@ -198,7 +203,7 @@ vpath %.c $(sort $(dir $(C_SOURCES)))
 OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES:.s=.o)))
 vpath %.s $(sort $(dir $(ASM_SOURCES)))
 
-$(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR) 
+$(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
 
 $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
@@ -210,9 +215,9 @@ $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 
 $(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(HEX) $< $@
-	
+
 $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
-	$(BIN) $< $@	
+	$(BIN) $< $@
 
 ifeq ($(DFU_OUTPUT), 1)
 $(BUILD_DIR)/%.dfu: $(BUILD_DIR)/%.hex | $(BUILD_DIR)
@@ -220,14 +225,14 @@ $(BUILD_DIR)/%.dfu: $(BUILD_DIR)/%.hex | $(BUILD_DIR)
 endif
 
 $(BUILD_DIR):
-	mkdir $@		
+	mkdir $@
 
 #######################################
 # clean up
 #######################################
 clean:
 	-rm -fR $(BUILD_DIR)
-  
+
 #######################################
 # dependencies
 #######################################
