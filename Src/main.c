@@ -76,6 +76,7 @@ UART_HandleTypeDef huart1;
 extern USBD_HandleTypeDef hUsbDeviceFS;
 
 uint8_t keyChange = 0;
+uint8_t brightnessChange = 0;
 
 struct kbReportSt kbReport = {0};
 struct nkroReportSt nkroReport = {0};
@@ -264,6 +265,11 @@ int main(void)
 			//sprintf(debugBuff, "report modify[%u], [%u][%u][%u][%u][%u][%u]\n", kbReport.modify, kbReport.keys[0], kbReport.keys[1], kbReport.keys[2], kbReport.keys[3], kbReport.keys[4], kbReport.keys[5]);
 			//HAL_UART_Transmit(&huart1, (uint8_t *)debugBuff, 64, 100);
 		}
+    if (brightnessChange != 0)
+    {
+      brightnessChange = 0;
+      MatrixBrightnessChange();
+    }
 
 		if (time_1ms)
 		{

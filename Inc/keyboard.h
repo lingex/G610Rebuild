@@ -15,6 +15,7 @@ extern "C"
 	extern uint8_t gameMode;
 	extern uint8_t insertEnable;
 	extern uint8_t keyChange;
+	extern uint8_t brightnessChange;
 	extern uint8_t smearLight;
 	extern uint8_t numLockGuard;
 	extern const char *KEYBOARD_Name_Map[MAX_COL][MAX_ROW];

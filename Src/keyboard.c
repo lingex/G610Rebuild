@@ -142,7 +142,8 @@ void OnKeyDown(uint8_t x, uint8_t y, uint8_t keyVal)
 		}
 		else
 		{
-			MatrixBrightnessChange();
+			//MatrixBrightnessChange();
+			brightnessChange = 1;
 		}
 	}
 	break;
