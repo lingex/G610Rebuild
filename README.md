@@ -51,11 +51,6 @@ b.本项目依赖于以下Bootloader:
 
 https://github.com/lingex/STM32L_DFU_Solution/tree/Branch_128k
 
-这里是编译好的:
-
-https://github.com/lingex/G610Rebuild/blob/master/Fw/Bootloader.hex
-
-
 
 
 ## 刷机步骤
@@ -88,6 +83,9 @@ c.刷入自定义固件
 
   方法2 ST DfuSe Demo : G610Rebuild.dfu      (无需额外工具)
 
+
+DFU 工具
+https://github.com/lingex/ST-DFUSe/releases
 
   
 # 恢复到官方固件状态(同时将清除bootloader):
@@ -184,6 +182,9 @@ c.flash this fw
   
   or ST DfuSe Demo : G610Rebuild.dfu
 
+
+DFU Tool
+https://github.com/lingex/ST-DFUSe/releases
 
   
 # Flash into official state(will also remove bootloader):
