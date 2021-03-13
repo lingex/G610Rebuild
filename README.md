@@ -28,7 +28,7 @@
 
 9.拖尾灯效，可通过 FN + Light 键切换开关。
 
-10.NumLock 守卫，妈妈再也不用担心某操作系统瞎控制我的 NumLock 了，可通过 FN + Light 键切换开关。
+10.NumLock 守卫，妈妈再也不用我的 NumLock 被关了，可通过 FN + Light 键切换开关。
 
 
 # Flash 分配图
@@ -83,8 +83,10 @@ b.刷入官方固件
   方法2 ST DfuSe Demo ：Official_app_only.dfu    (无需额外工具)
 
 c.刷入自定义固件
+  
+  方法1 STM32 ST-LINK Utility : G610Rebuild.hex (需要调试工具，如ST-Link)
 
-  ST DfuSe Demo : g610App.dfu      (无需额外工具)
+  方法2 ST DfuSe Demo : G610Rebuild.dfu      (无需额外工具)
 
 
   
@@ -177,8 +179,10 @@ b.flash official fw
   or ST DfuSe Demo ：Official_app_only.dfu
 
 c.flash this fw
-
-  ST DfuSe Demo : g610App.dfu
+  
+  STM32 ST-LINK Utility : G610Rebuild.hex   (need a debug tool like ST-Link)
+  
+  or ST DfuSe Demo : G610Rebuild.dfu
 
 
   
