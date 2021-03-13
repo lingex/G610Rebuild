@@ -26,11 +26,12 @@ extern "C"
 #define SPI_TIMEOUT_PA 		1
 
 #define MAX_EFFECT_TASK		16
-#define MAX_EFFECT_STEP		20
+#define MAX_EFFECT_STEP		30
 #define MAX_EFFECT_INTERVAL	60
 #define EFFECT_STEP_VAL		((EFFECT_VAL_HI - brightness)/MAX_EFFECT_STEP)
 #define EFFECT_VAL_HI		0xfe
 #define EFFECT_VAL_LO		0x0a
+#define MAX_MATRIX_TASK		MAX_EFFECT_TASK + 2
 
 
 #define ST524_ADDR_SWCTL 0x00
@@ -194,6 +195,13 @@ typedef struct
 	uint8_t dotIndex;
 }WaveEffectTypeDef;
 
+typedef struct
+{
+	uint8_t x;
+	uint8_t y;
+	uint8_t keyVal;
+}MatrixTaskTypeDef;
+
 	enum BRIGHTNESS_VALS
 	{
 		BL_VAL_0 = 0,
@@ -242,6 +250,10 @@ typedef struct
 	void MatrixEffectTimer(uint32_t timeTick);
 
 	void MatrixEffectNextMove(WaveEffectTypeDef* pEffect, uint32_t timeTick);
+
+	bool MatrixTaskPush(uint8_t x, uint8_t y, uint8_t keyVal);
+
+	void MatrixTaskTimer(uint32_t timeTick);
 
 	void SpiTransmit(uint8_t* pData, uint16_t len);
 

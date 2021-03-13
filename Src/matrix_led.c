@@ -6,6 +6,9 @@
 static uint8_t gCmdBuff[255] = {0};
 static uint8_t* matrixBuff = &gCmdBuff[2]; //led buff
 
+static MatrixTaskTypeDef matrixTask[MAX_MATRIX_TASK] = {0};
+
+
 /*
 	about the STLED524 led driver
 
@@ -323,6 +326,41 @@ void MatrixEffectNextMove(WaveEffectTypeDef* pEffect, uint32_t timeTick)
 	}
 }
 
+bool MatrixTaskPush(uint8_t x, uint8_t y, uint8_t keyVal)
+{
+	MatrixTaskTypeDef* pTask = NULL;
+
+	for (uint8_t i = 0; i < MAX_MATRIX_TASK; i++)
+	{
+		pTask = &matrixTask[i];
+		if (pTask->keyVal == 0)	//first free task
+		{
+			pTask->x = x;
+			pTask->y = y;
+			pTask->keyVal = keyVal;
+			return true;
+			break;
+		}
+	}
+	return false;
+}
+
+void MatrixTaskTimer(uint32_t timeTick)
+{
+	static uint8_t taskIndex;
+	MatrixTaskTypeDef* pTask = &matrixTask[taskIndex];
+
+	if (pTask->keyVal > 0 && timeTick >= pTask->keyVal)
+	{
+		MatrixOnKeyPressed(pTask->x, pTask->y, pTask->keyVal);
+		pTask->keyVal = 0;	//free this task
+	}
+
+	if (++taskIndex >= MAX_MATRIX_TASK)
+	{
+		taskIndex = 0;
+	}
+}
 
 void SpiTransmit(uint8_t* pData, uint16_t len)
 {

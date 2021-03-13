@@ -24,34 +24,29 @@ void KeyCheck(void)
 	{
 		KeyColPrepare(x);
 		portVal = ~ReadGpioPort(ROW_GPIO_Port);
-		//if (portVal > 0)
+		for (uint8_t y = 0; y < MAX_ROW; y++)
 		{
-			for (uint8_t y = 0; y < MAX_ROW; y++)
+			checkingRow = 0x8000 >> y;
+			debounce = &(debounceCount[x][y]);
+			keyVal = KEYBOARD_Value_Map[x][y];
+			if (checkingRow & portVal)
 			{
-				checkingRow = 0x8000 >> y;
-				debounce = &(debounceCount[x][y]);
-				keyVal = KEYBOARD_Value_Map[x][y];
-				if (checkingRow & portVal)
+				if (*debounce < 100)
 				{
-					if (*debounce < 100)
-					{
-						(*debounce)++;
-					}
-					if (*debounce == DEBOUNCE_MS) //debounce
-					{
-						//MatrixOnKeyPressed(x, y, keyVal);
-						OnKeyDown(x, y, keyVal);
-					}
+					(*debounce)++;
 				}
-				else
+				if (*debounce == DEBOUNCE_MS) //debounce
 				{
-					if (keyVal > 0 && *debounce >= DEBOUNCE_MS)
-					{
-						OnKeyUp(x, y, keyVal);
-					}
-
-					*debounce = 0;
+					OnKeyDown(x, y, keyVal);
 				}
+			}
+			else
+			{
+				if (keyVal > 0 && *debounce >= DEBOUNCE_MS)
+				{
+					OnKeyUp(x, y, keyVal);
+				}
+				*debounce = 0;
 			}
 		}
 	}
@@ -142,7 +137,6 @@ void OnKeyDown(uint8_t x, uint8_t y, uint8_t keyVal)
 		}
 		else
 		{
-			//MatrixBrightnessChange();
 			brightnessChange = 1;
 		}
 	}
@@ -188,7 +182,7 @@ void OnKeyDown(uint8_t x, uint8_t y, uint8_t keyVal)
 			if (keyFnDown)
 			{
 				InsertEnableSw();
-				MatrixOnKeyPressed(x, y, KC_INSERT_SW);
+				MatrixTaskPush(x, y, KC_INSERT_SW);
 				break;
 			}
 			else if (insertEnable < 1 && kbReport.modify == 0)
@@ -241,7 +235,7 @@ void OnKeyDown(uint8_t x, uint8_t y, uint8_t keyVal)
 	}
 	break;
 	}
-	MatrixOnKeyPressed(x, y, keyVal);
+	MatrixTaskPush(x, y, keyVal);
 	//sprintf(debugBuff, "x=%u,y=%u,val=%x\n", x, y, keyVal);
 	//HAL_UART_Transmit(&huart1, (uint8_t *)debugBuff, 64, 100);
 }

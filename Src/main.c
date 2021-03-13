@@ -233,8 +233,10 @@ int main(void)
 	zt_bind(EncoderCheck, 10, 1);
 	zt_bind(KeyCheck, 1, 1);
 
+  zt_bind(MatrixTaskTimer, 1, 1);
+
 	//zt_bind(MatrixTimer, 10, 1);
-	zt_bind(MatrixTimer, 1, 1);
+	zt_bind(MatrixTimer, 2, 1);
 
 	kbReport.id = 1;		//report id
 	nkroReport.id = NKRO_REPORT_ID;		//report id
