@@ -57,7 +57,7 @@ https://github.com/lingex/STM32L_DFU_Solution/tree/Branch_128k
 
 (除编译代码的IDE外，需要安装两个软件 STM32 ST-LINK Utility 和 ST DfuSe Demo)
 
-其中ST DfuSe Demo是 ST 开源的，我在其基础上做了些修改，也可以用我修改的: https://github.com/lingex/ST-DFUSe/releases
+其中ST DfuSe Demo是 ST 开源的，我在其基础上做了些修改更方便使用: https://github.com/lingex/ST-DFUSe/releases
 
 
 a.刷入bootloader
@@ -94,7 +94,7 @@ STM32 ST-LINK Utility : Official_bootloader_and_app.bin  (偏移地址: 0x800000
 
 # 已知问题
 
-1.音量滚轮体验大约能达到官方固件 80% 的水平，主要是低速下表现不佳，还可以改进；
+1.音量滚轮体验相较官方固件还有些差距，主要是低转速下表现不佳；
 
 2.NKRO是通过增加一个USB端点(端点2)来实现，但是通过端点2发送不出去，原因未知。所以使用了端点1来发送，改进方向是通过多个interface来实现；
 
