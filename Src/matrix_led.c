@@ -345,12 +345,12 @@ bool MatrixTaskPush(uint8_t x, uint8_t y, uint8_t keyVal)
 	return false;
 }
 
-void MatrixTaskTimer(uint32_t timeTick)
+void MatrixTaskTimer()
 {
-	static uint8_t taskIndex;
+	static uint8_t taskIndex = 0;
 	MatrixTaskTypeDef* pTask = &matrixTask[taskIndex];
 
-	if (pTask->keyVal > 0 && timeTick >= pTask->keyVal)
+	if (pTask->keyVal > 0)
 	{
 		MatrixOnKeyPressed(pTask->x, pTask->y, pTask->keyVal);
 		pTask->keyVal = 0;	//free this task

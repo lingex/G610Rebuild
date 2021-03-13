@@ -253,7 +253,7 @@ typedef struct
 
 	bool MatrixTaskPush(uint8_t x, uint8_t y, uint8_t keyVal);
 
-	void MatrixTaskTimer(uint32_t timeTick);
+	void MatrixTaskTimer();
 
 	void SpiTransmit(uint8_t* pData, uint16_t len);
 
