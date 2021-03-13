@@ -57,6 +57,8 @@ https://github.com/lingex/STM32L_DFU_Solution/tree/Branch_128k
 
 (除编译代码的IDE外，需要安装两个软件 STM32 ST-LINK Utility 和 ST DfuSe Demo)
 
+其中ST DfuSe Demo是 ST 开源的，我在其基础上做了些修改，也可以用我修改的: https://github.com/lingex/ST-DFUSe/releases
+
 
 a.刷入bootloader
 
@@ -83,9 +85,6 @@ c.刷入自定义固件
 
   方法2 ST DfuSe Demo : G610Rebuild.dfu      (无需额外工具)
 
-
-DFU 工具
-https://github.com/lingex/ST-DFUSe/releases
 
   
 # 恢复到官方固件状态(同时将清除bootloader):
@@ -159,6 +158,8 @@ inside, can not download into device directly using MDK, and no debug, st-link u
 # Flash steps
 
 (You will need to install 2 software (not include the IDE):  STM32 ST-LINK Utility  and  ST DfuSe Demo)
+
+I did some modify on the DfuSe Demo, see here: https://github.com/lingex/ST-DFUSe/releases
 
 a.flash bootloader
 
