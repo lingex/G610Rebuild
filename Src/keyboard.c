@@ -64,7 +64,7 @@ void KeyColPrepare(uint8_t index)
 	HAL_GPIO_WritePin(COL_GPIO_Port, COL0_Pin | COL1_Pin | COL2_Pin | COL3_Pin | COL4_Pin | COL5_Pin | COL6_Pin | COL7_Pin | COL8_Pin, GPIO_PIN_SET);
 	HAL_GPIO_WritePin(COL_GPIO_Port, gpio_pin, GPIO_PIN_RESET);
 
-	volatile uint16_t delay = 2;	//important! code speed may faster than gpio speed
+	volatile uint16_t delay = 5;	//important! code speed may faster than gpio speed
 	while (delay-- > 0);
 }
 
