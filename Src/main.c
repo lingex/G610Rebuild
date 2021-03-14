@@ -276,6 +276,7 @@ int main(void)
 		if (time_1ms)
 		{
 			time_1ms = false;
+			zt_tick();
 			zt_poll();    //task execute
 		}
 		//on usb disconnect
@@ -916,7 +917,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if (htim->Instance == htim6.Instance)
 	{
-		zt_tick();
 		time_1ms = true;
 	}
 }

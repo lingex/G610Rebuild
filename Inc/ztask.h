@@ -1,7 +1,7 @@
 #ifndef _ZTASK_H
 #define _ZTASK_H
 
-#define ZT_MAX_TASKS 12
+#define ZT_MAX_TASKS 16
 
 typedef void(*zt_func_t)(void);
 

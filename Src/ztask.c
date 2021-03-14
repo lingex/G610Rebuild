@@ -14,8 +14,25 @@ static struct {
 
 void zt_tick(void)
 {
-	// overflow not handled. for 1ms tick, it could run 2^32 * 1ms = ~50 days.
 	g.ticks++;
+
+	//handle overflow
+	//if(g.ticks == (unsigned long)(-1))
+	if(g.ticks & 0x80000000)
+	{
+		for(int i = 0; i < g.num_tasks; i++)
+		{
+			if(g.tasks[i].timeout >= g.ticks)
+			{
+				g.tasks[i].timeout = g.tasks[i].repeat - (g.tasks[i].timeout - g.ticks);
+			}
+			else
+			{
+				g.tasks[i].timeout = g.tasks[i].repeat;
+			}
+		}
+		g.ticks = 0;
+	}
 }
 
 void zt_poll(void)
