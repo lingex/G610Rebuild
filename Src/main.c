@@ -609,6 +609,33 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
+/**
+  * @brief  Tx Transfer completed callback.
+  * @param  hspi: SPI handle
+  * @note   This example shows a simple way to report end of DMA Tx transfer, and
+  *         you can add your own implementation.
+  * @retval None
+  */
+void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi)
+{
+	if (hspi->Instance == SPI2)
+	{
+		SetSpiSSPin();
+	}
+}
+
+/**
+  * @brief  SPI error callbacks.
+  * @param  hspi: SPI handle
+  * @note   This example shows a simple way to report transfer error, and you can
+  *         add your own implementation.
+  * @retval None
+  */
+void HAL_SPI_ErrorCallback(SPI_HandleTypeDef *hspi)
+{
+
+}
+
 void WriteEEPROM(uint32_t addr, uint32_t val)
 {
 	HAL_FLASHEx_DATAEEPROM_Unlock();

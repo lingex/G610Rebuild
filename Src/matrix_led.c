@@ -8,7 +8,6 @@ static uint8_t* matrixBuff = &gCmdBuff[2]; //led buff
 
 static MatrixTaskTypeDef matrixTask[MAX_MATRIX_TASK] = {0};
 
-
 /*
 	about the STLED524 led driver
 
@@ -367,10 +366,9 @@ void SpiTransmit(uint8_t* pData, uint16_t len)
 	//while (HAL_DMA_GetState(&hdma_spi2_tx) != HAL_DMA_STATE_READY);
 	while (HAL_SPI_GetState(&hspi2) != HAL_SPI_STATE_READY);
 
-	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_RESET);
+	ResetSpiSSPin();
 
 #if 1	//using DMA
- 	NVIC_DisableIRQ(SPI2_IRQn);
 	HAL_SPI_Transmit_DMA(&hspi2, pData, len);
 
 	uint32_t unused = hspi2.Instance->SR;	//read SR and DR to clear all interrupt flag
@@ -387,4 +385,14 @@ void SpiTransmit(uint8_t* pData, uint16_t len)
 	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_SET);
 #endif
 
+}
+
+inline void SetSpiSSPin(void)
+{
+	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_SET);
+}
+
+inline void ResetSpiSSPin(void)
+{
+	HAL_GPIO_WritePin(MATRIX_SS_GPIO_Port, MATRIX_SS_Pin, GPIO_PIN_RESET);
 }
