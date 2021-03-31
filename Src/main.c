@@ -566,14 +566,21 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : CAP_LED_Pin SCR_LED_Pin MATRIX_SS_Pin NUM_LED_Pin
-                           MODE_LED_Pin MATRIX_RST_Pin PWR_EN_Pin */
-  GPIO_InitStruct.Pin = CAP_LED_Pin|SCR_LED_Pin|MATRIX_SS_Pin|NUM_LED_Pin
-                          |MODE_LED_Pin|MATRIX_RST_Pin|PWR_EN_Pin;
+  /*Configure GPIO pins : CAP_LED_Pin SCR_LED_Pin NUM_LED_Pin MODE_LED_Pin
+                           MATRIX_RST_Pin PWR_EN_Pin */
+  GPIO_InitStruct.Pin = CAP_LED_Pin|SCR_LED_Pin|NUM_LED_Pin|MODE_LED_Pin
+                          |MATRIX_RST_Pin|PWR_EN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : MATRIX_SS_Pin */
+  GPIO_InitStruct.Pin = MATRIX_SS_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  HAL_GPIO_Init(MATRIX_SS_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : USB_EN_Pin */
   GPIO_InitStruct.Pin = USB_EN_Pin;
