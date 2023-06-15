@@ -10,7 +10,7 @@ You'll need to disassemble the keyboard and flash the bootloader with a ST-Link 
 
 Warning: flashing a non-original firmware may broken your keyboard, be careful.
 
-# Feature:
+## Feature:
 
 1.Configs (brightness) save to eeprom (delay 5 seconds).
 
@@ -33,11 +33,11 @@ Warning: flashing a non-original firmware may broken your keyboard, be careful.
 10.NumLock guard, 'don't touch my NumLock', switch by FN + NumLock.
 
 
-# flash mapping
+## flash mapping
 ![image](./PIC/flash%20mapping.png)
 
 
-# Note:
+## Note:
 
 Use ./Src/usbd_hid.c and ./Inc/usbd_hid.h instead of the pair in ./Middlewares/ST/STM32_USB_Device_Library/Class/HID
 
@@ -49,12 +49,12 @@ Bootloader:
 
 https://github.com/lingex/STM32L_DFU_Solution/tree/Branch_128k
 
-# Important:
+## Important:
 This branch is a non-standard use of STM32L100R8, by using the 64k~128k internal flash, to keep both official firmware and our firmware
 inside, can not download into device directly using MDK, and no debug, st-link utility and dfu are feasible.
 
 
-# Flash steps
+## Flash steps
 
 (You will need to install 2 software (not include the IDE):  STM32 ST-LINK Utility  and  ST DfuSe Demo)
 
@@ -87,27 +87,30 @@ DFU Tool
 https://github.com/lingex/ST-DFUSe/releases
 
   
-# Flash back to official firmware (will also remove the bootloader):
+## Flash back to official firmware (will also remove the bootloader):
 
   STM32 ST-LINK Utility : Official_bootloader_and_app.bin  (offset: 0x8000000)
 
 
-# knowing issues
+## knowing issues
 
-1.The volume roller is not good enough compare to the official version, expecrially in low speed.
+ - The volume roller is not good enough compare to the official version, expecrially in low speed.
 
-2.NKRO required another endpoint, but can not send message through it, it may be soulved by using multi interfaces.
+ - NKRO required another endpoint, but can not send message through it, it may be soulved by using multi interfaces.
 
-3.NKRO may not work on some linux OS: https://static.wongcornall.com/ibm-capsense-usb-web/ibm-capsense-usb.html#x1-140003.3
+ - NKRO may not work on some linux OS: https://static.wongcornall.com/ibm-capsense-usb-web/ibm-capsense-usb.html#x1-140003.3
 
 
-# Thanks to:
+## Thanks to:
 
-media keys
-https://github.com/diabolo38/HidKbd.git
+ - media keys
+ 
+ https://github.com/diabolo38/HidKbd.git
 
-ztask
-https://github.com/tomzbj/ztask
+ - ztask
+ 
+ https://github.com/tomzbj/ztask
 
-hex2dfu
+ - hex2dfu
+ 
 https://github.com/nanoframework/hex2dfu

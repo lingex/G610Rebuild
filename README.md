@@ -13,7 +13,7 @@
 首次刷机需要拆开键盘外壳，使用ST-Link下载bootloader, 此后升级就不再需要拆了。
 
 
-# 特性:
+## 特性:
 
 1.五档背光亮度调节，带记忆，设置完毕5S后保存。
 
@@ -36,12 +36,12 @@
 10.NumLock 守卫，妈妈再也不用我的 NumLock 被关了，可通过 FN + Light 键切换开关。
 
 
-# Flash 分配表
+## Flash 分配表
 ![image](./PIC/flash%20mapping.png)
 
 固件取巧使用了 MCU 标准容量之后的 64K flash (正式产品中不建议这样使用) 来存放我们自己写的键盘App, 这样就可以跟原厂的 App 共存了。
 
-# 注意事项：
+## 注意事项：
 
 a.使用 ./Src/usbd_hid.c 和 ./Inc/usbd_hid.h 
 文件组合而不是 ./Middlewares/ST/STM32_USB_Device_Library/Class/HID下的同名文件
@@ -94,27 +94,30 @@ c.刷入自定义固件
 
 
   
-# 恢复到官方固件状态(同时将清除bootloader):
+## 恢复到官方固件状态(同时将清除bootloader):
 
 STM32 ST-LINK Utility : Official_bootloader_and_app.bin  (偏移地址: 0x8000000)
 
 
-# 已知问题
+## 已知问题
 
-1.音量滚轮体验相较官方固件还有些差距，主要是低转速下表现不佳；
+ - 音量滚轮体验相较官方固件还有些差距，主要是低转速下表现不佳；
 
-2.NKRO是通过增加一个USB端点(端点2)来实现，但是通过端点2发送不出去，原因未知。所以使用了端点1来发送，改进方向是通过多个interface来实现；
+ - NKRO是通过增加一个USB端点(端点2)来实现，但是通过端点2发送不出去，原因未知。所以使用了端点1来发送，改进方向是通过多个interface来实现；
 
-3.NKRO键值映射可能在linux等一些系统下有问题，参见https://static.wongcornall.com/ibm-capsense-usb-web/ibm-capsense-usb.html#x1-140003.3
+ - NKRO键值映射可能在linux等一些系统下有问题，参见https://static.wongcornall.com/ibm-capsense-usb-web/ibm-capsense-usb.html#x1-140003.3
   实在碰到了就别开NKRO吧。
 
-# 感谢
+## 感谢
 
-media keys
+ - media keys
+
 https://github.com/diabolo38/HidKbd.git
 
-ztask
+ - ztask
+
 https://github.com/tomzbj/ztask
 
-hex2dfu
+ - hex2dfu
+
 https://github.com/nanoframework/hex2dfu
