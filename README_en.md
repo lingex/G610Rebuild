@@ -4,36 +4,36 @@ English / [简体中文](./README.md)
 
 ## INTRO:
 
-This is a non-original firmware of Logitech G610 mechanical keyboard.
+This is a non-original firmware of the Logitech G610 mechanical keyboard.
 
-You'll need to disassemble the keyboard and flash the bootloader with a ST-Link for the first time.
+You'll need to disassemble the keyboard and flash the bootloader with an ST-Link for the first time.
 
-Warning: flashing a non-original firmware may broken your keyboard, be careful.
+Warning: flashing a non-original firmware may break your keyboard, be careful.
 
 ## Feature:
 
-1.Configs (brightness) save to eeprom (delay 5 seconds).
+1. Configs (brightness) save to EEPROM (delay 5 seconds).
 
-2.Game mode will turn off the two LED of the GUI key.
+2. Game mode will turn off the two LEDs of the GUI key.
 
-3.Menu(Application) key turn into be a "FN" key now.
+3. Menu(Application) key turn into an "FN" key now.
 
-4.Switchable Insert key, by pressing FN + Insert, combination key like Ctrl + Insert are not affected.
+4. Switchable Insert key, by pressing FN + Insert, combination key like Ctrl + Insert are not affected.
 
-5.DFU upgrade mode, by pressing FN + Game Mode.
+5. DFU upgrade mode, by pressing FN + Game Mode.
 
-6.Back to the official firmware by FN + F1.
+6. Back to the official firmware by FN + F1.
 
-7.Holding GameMode when plug in the usb cable, will go into DFU mode.
+7. Holding GameMode when plugging in the USB cable, will go into DFU mode.
 
-8.Holding backlight when plug in the usb cable, will run the official firmware.
+8. Holding the backlight when plugging in the USB cable, will run the official firmware.
 
-9.Smearing light effect switch by FN + Light.
+9. Smearing light effect switch by FN + Light.
 
 10.NumLock guard, 'don't touch my NumLock', switch by FN + NumLock.
 
 
-## flash mapping
+## Flash mapping
 ![image](./PIC/flash%20mapping.png)
 
 
@@ -41,7 +41,7 @@ Warning: flashing a non-original firmware may broken your keyboard, be careful.
 
 Use ./Src/usbd_hid.c and ./Inc/usbd_hid.h instead of the pair in ./Middlewares/ST/STM32_USB_Device_Library/Class/HID
 
-coz every time the cubemx regenerate code they will be overwrite, so I move them out from the lib;
+coz every time the STM32CubeMX regenerate code they will be overwritten, so I move them out from the lib;
 
 And don't forget to remove ./Middlewares/ST/STM32_USB_Device_Library/Class/HID/Src/usbd_hid.c from MDK source list
 
@@ -51,20 +51,20 @@ https://github.com/lingex/STM32L_DFU_Solution/tree/Branch_128k
 
 ## Important:
 This branch is a non-standard use of STM32L100R8, by using the 64k~128k internal flash, to keep both official firmware and our firmware
-inside, can not download into device directly using MDK, and no debug, st-link utility and dfu are feasible.
+inside, can not download into the device directly using MDK, and no debug, st-link utility and dfu are feasible.
 
 
 ## Flash steps
 
-(You will need to install 2 software (not include the IDE):  STM32 ST-LINK Utility  and  ST DfuSe Demo)
+(You will need to install 2 software (not including the IDE):  STM32 ST-LINK Utility  and  ST DfuSe Demo)
 
-I did some modify on the DfuSe Demo, see here: https://github.com/lingex/ST-DFUSe/releases
+I did some modifications to the DfuSe Demo, see here: https://github.com/lingex/ST-DFUSe/releases
 
 a.flash bootloader
 
-  STM32 ST-LINK Utility : Bootloader.hex     (need a debug tool like ST-Link)
+  STM32 ST-LINK Utility: Bootloader .hex     (need a debug tool like ST-Link)
   
-  this are the SWD pins
+  These are the SWD pins
   
   ![image](./PIC/downloading/STLINK%20IO.png)
   
@@ -72,31 +72,31 @@ a.flash bootloader
   
 b.flash official fw
 
-  STM32 ST-LINK Utility : Official_no_tail.hex   (need a debug tool like ST-Link)
+  STM32 ST-LINK Utility: Official_no_tail.hex   (need a debug tool like ST-Link)
   
-  or ST DfuSe Demo ：Official_app_only.dfu
+  or ST DfuSe Demo： Official_app_only.dfu
 
 c.flash this fw
   
-  STM32 ST-LINK Utility : G610Rebuild.hex   (need a debug tool like ST-Link)
+  STM32 ST-LINK Utility: G610Rebuild.hex   (need a debug tool like ST-Link)
   
-  or ST DfuSe Demo : G610Rebuild.dfu
+  or ST DfuSe Demo: G610Rebuild.dfu
 
 
 DFU Tool
 https://github.com/lingex/ST-DFUSe/releases
 
   
-## Flash back to official firmware (will also remove the bootloader):
+## Flashback to official firmware (will also remove the bootloader):
 
   STM32 ST-LINK Utility : Official_bootloader_and_app.bin  (offset: 0x8000000)
 
 
-## knowing issues
+## Knowing issues
 
- - The volume roller is not good enough compare to the official version, expecrially in low speed.
+ - The volume roller is not good enough compared to the official version, especially at low speed.
 
- - NKRO required another endpoint, but can not send message through it, it may be soulved by using multi interfaces.
+ - NKRO required another endpoint, but can not send messages through it, it may be solved by using multi interfaces.
 
  - NKRO may not work on some linux OS: https://static.wongcornall.com/ibm-capsense-usb-web/ibm-capsense-usb.html#x1-140003.3
 
