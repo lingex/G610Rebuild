@@ -2,7 +2,7 @@ English / [简体中文](./README.md)
 
 ## Logitech G610 gaming keyboard firmware
 
-## INTO:
+## INTRO:
 
 This is a non-original firmware of Logitech G610 mechanical keyboard.
 
