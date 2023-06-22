@@ -69,7 +69,7 @@ https://github.com/lingex/STM32L_DFU_Solution/tree/Branch_128k
 
 a.刷入bootloader
 
-  STM32 ST-LINK Utility : Bootloader.hex       (需要调试工具，如ST-Link)
+  STM32 ST-LINK Utility: Bootloader.hex       (需要调试工具，如ST-Link)
   
   这里是SWD调试口
   
