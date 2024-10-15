@@ -1,5 +1,9 @@
 English / [简体中文](./README.md)
 
+## 2024-10-15 note
+
+This keyboard is quite old. To be honest, I don't really like it. The keycaps are bad and non-standard, difficult to buy a third-party replacement. I haven't used it for a long time, so there may not be any updates in the future for this firmware.
+
 ## Logitech G610 gaming keyboard firmware
 
 ## INTRO:
